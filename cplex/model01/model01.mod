@@ -58,15 +58,18 @@ subject to {
 		
 	  	
 	//---> sn is the minimum hour that the nurse works
-	//---> this includes making sn 0 if zn is 0, 
+	//---> this includes making sn 0 if zn is 0,
+	//--->  this will not assure that s[n] is always the min, but it will be 
+	//---> between 0 and the min hour
 	forall(n in N, h in H){
 		s[n] <= (h - 24)*w[n,h] + 24*z[n];
-		s[n] >= (h - 24)*w[n,h] + 24*z[n];
 	}
+	forall(n in N)
+	  s[n] >= 0 ;
 			
 	//---> finally apply the maxPresence constraint
 	forall(n in N)
-		e[n] - s[n] <= maxPresence*z[n];
+		e[n] - s[n] + 1 <= maxPresence*z[n];
 		
 
 		
