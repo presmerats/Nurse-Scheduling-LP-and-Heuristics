@@ -1,0 +1,42 @@
+!SESSION 2017-11-04 21:42:11.496 -----------------------------------------------
+eclipse.buildId=Build 0
+java.fullversion=JRE 1.7.0 IBM J9 2.6 Linux amd64-64 Compressed References 20130617_152572 (JIT enabled, AOT enabled)
+J9VM - R26_Java726_SR5_20130617_1436_B152572
+JIT  - r11.b04_20130528_38954ifx1
+GC   - R26_Java726_SR5_20130617_1436_B152572_CMPRSS
+J9CL - 20130617_152572
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=ca_ES
+Command-line arguments:  -os linux -ws gtk -arch x86_64 -clean
+
+!ENTRY org.eclipse.equinox.ds 4 0 2017-11-04 21:42:27.342
+!MESSAGE FrameworkEvent ERROR
+!STACK 0
+org.osgi.framework.BundleException: The bundle "org.eclipse.equinox.ds_1.4.1.v20120926-201320 [4]" could not be resolved. Reason: Missing Constraint: Import-Package: org.eclipse.equinox.internal.util.event; version="1.0.0"
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolverError(AbstractBundle.java:1332)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.getResolutionFailureException(AbstractBundle.java:1316)
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:323)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.resume(AbstractBundle.java:390)
+	at org.eclipse.osgi.framework.internal.core.Framework.resumeBundle(Framework.java:1176)
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:559)
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.resumeBundles(StartLevelManager.java:544)
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.incFWSL(StartLevelManager.java:457)
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.doSetStartLevel(StartLevelManager.java:243)
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.dispatchEvent(StartLevelManager.java:438)
+	at org.eclipse.osgi.framework.internal.core.StartLevelManager.dispatchEvent(StartLevelManager.java:1)
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:230)
+	at org.eclipse.osgi.framework.eventmgr.EventManager$EventThread.run(EventManager.java:340)
+
+!ENTRY org.eclipse.equinox.registry 2 0 2017-11-04 21:42:47.122
+!MESSAGE The extensions and extension-points from the bundle "ilog.views.eclipse.framework.runtime" are ignored. The bundle is not marked as singleton. 
+
+!ENTRY org.eclipse.equinox.registry 2 0 2017-11-04 21:42:47.523
+!MESSAGE The extensions and extension-points from the bundle "ilog.views.eclipse.gantt.runtime" are ignored. The bundle is not marked as singleton. 
+
+!ENTRY org.eclipse.equinox.registry 2 0 2017-11-04 21:42:47.891
+!MESSAGE The extensions and extension-points from the bundle "ilog.views.eclipse.chart.runtime" are ignored. The bundle is not marked as singleton. 
+
+!ENTRY ilog.odms.ide.opllang 1 0 2017-11-04 21:50:04.480
+!MESSAGE concert_wrap.IloInitMT
+
+!ENTRY ilog.odms.ide.core 1 0 2017-11-04 21:57:07.080
+!MESSAGE ODM Bundle is OFF

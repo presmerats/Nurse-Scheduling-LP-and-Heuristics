@@ -13,6 +13,9 @@ AMMM Project
 - $ z_{n} (\mathbb{B})  : \text{ whether the nurse n works during the shift(24h) or not } $
  	- $ z{n} = 1  \Rightarrow \text{ The nurse n works at least 1 hour, } \exists h, w_{n,h} = 1 $
  	- $ z{n} = 0 \Rightarrow \forall h, w_{n,h} = 0 $
+- $  s_{n} (\mathbb{N}) : \text{hour in which the nurse n starts working, thus having $ w_{n,s_{n}}=1 $ and  $ w_{n,s_{n}-1}=0 $ (if $ s_{n} > 0 $ )} $
+- $  e_{n} (\mathbb{N}) : \text{hour in which the nurse n stops working, thus having $ w_{n,e_{n}}=1 $ and  $ w_{n,e_{n}+i}=0,\forall i : e_{n} < i \leq 24 $ (if $ e_{n} < 24 $ )} $
+
 
 ### Known instance variables
 
@@ -51,10 +54,10 @@ $ \forall n: 1 \leq n \leq nNurses \\\
 	\sum\limits_{1 \leq h \leq 24} w_{n,h} \leq maxHours \cdot z_{n}
 $
 
-* Each nurse works at most maxConsec consecutive hours:
+* Each nurse works at most maxConsec consecutive hours: 
 $	\forall n:  1 \leq n \leq nNurses, \\\
-	\forall h_{1}:  1 \leq h_{1} \leq 24 - maxConsec - 1 + 1, \\\
-	\sum\limits_{ h_{1} \leq h \leq h_{1} + macConsec -1 + 1} w_{n,h} \leq maxConsec $
+	\forall h_{1}:  1 \leq h_{1} \leq 24 - maxConsec, \\\
+	\sum\limits_{ h_{1} \leq h \leq h_{1} + maxConsec} w_{n,h} \leq maxConsec $
 
 * Each nurse can stay in the hospital at most maxPresence hours:
 
@@ -63,4 +66,6 @@ $  \forall n:  1 \leq n \leq nNurses, \forall h: 1 \leq h \leq 24, e_{n} \geq h 
   \forall n:  1 \leq n \leq nNurses, e_{n} - s_{n}  \leq maxPresence $
 
 * Each nurse can rest at most one consecutive hour:
-	* working on it..
+	$  \forall n:  1 \leq n \leq nNurses \\\
+		\forall h_{1}: s_{n} \leq h_{1} \leq e_{n} - 1  \\\ 
+		\sum\limits_{h_{1} \leq h \leq h_{1} + 1} w_{n,h} \geq 1 $
