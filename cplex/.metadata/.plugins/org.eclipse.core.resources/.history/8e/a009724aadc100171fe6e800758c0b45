@@ -55,9 +55,7 @@ subject to {
 	forall(n in N)
 		e[n] - s[n] <= maxPresence;
 		
-	//each nurse can rest at most one consecutive hour
-	forall(n in N, h1 in s[n]..(e[n]-1))
-		sum(h in h1..(h1+1)) w[n,h]>= 1;
+			
 
 
 

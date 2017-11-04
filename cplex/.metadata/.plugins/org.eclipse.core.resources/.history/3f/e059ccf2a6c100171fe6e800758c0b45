@@ -1,0 +1,31 @@
+/*********************************************
+ * OPL 12.6.0.0 Data
+ * Author: homero
+ * Creation Date: 04/11/2017 at 21:56:56
+ *********************************************/
+int nNurses=...;
+int minHours=...;
+int maxHours=...;
+int maxConsec=...;
+int maxPresence=...;
+range N=1..nNurses;
+range H=1..24;
+int demandh[n in N]=...;
+//decision vars
+dvar boolean w[n in N, h in H];
+dvar boolean z[n in N];
+dvar int sn[n in N];
+dvar int en[n in N];
+
+// minimize the number of nurses working
+minimize sum(n in N) z[n]
+
+subject to {
+
+	//set the zn values to 1, according to nurses that work any hour during the shift
+	forall(n in N){
+		24*z[n] >= sum(h in H) w[n,h];
+		z[n] <= sum(h in H) w[n,h]
+	
+
+}

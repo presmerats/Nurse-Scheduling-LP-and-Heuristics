@@ -25,8 +25,7 @@ subject to {
 	//set the zn values to 1, according to nurses that work any hour during the shift
 	forall(n in N){
 		24*z[n] >= sum(h in H) w[n,h];
-		z[n] <= sum(h in H) w[n,h];
-	}
+		z[n] <= sum(h in H) w[n,h]
 	
 
 	// at any hour h, at least demandh nurses should be working
@@ -37,28 +36,5 @@ subject to {
 	forall (n in N)
 		sum(h in H) w[n,h] >= minHours*z[n];
 	
-	//each nurse that works, should work at most maxHours
-	forall (n in N)
-		sum(h in H) w[n,h] <= maxHours*z[n];
-		
-	//each nurse works at most maxConsec consecutive hours
-	forall (n in N, h1 in 1..(24-maxConsec))
-		sum(h in h1..(h1+maxConsec)) w[n,h] <= maxConsec;
-		
-	//each nurse can stay in the hospital at most maxPresence hours
-	forall(n in N, h in H)
-		e[n] >= h*w[n,h];
-		
-	forall(n in N, h in H)
-		s[n] <= (h - 24)*w[n,h] + 24;
-		
-	forall(n in N)
-		e[n] - s[n] <= maxPresence;
-		
-	//each nurse can rest at most one consecutive hour
-	forall(n in N, h1 in s[n]..(e[n]-1))
-		sum(h in h1..(h1+1)) w[n,h]>= 1;
-
-
-
-}	
+	//
+}

@@ -1,0 +1,15 @@
+/*********************************************
+ * OPL 12.6.0.0 Data
+ * Author: homero
+ * Creation Date: 04/11/2017 at 21:56:56
+ *********************************************/
+int nNurses=...;
+int minHours=...;
+int maxHours=...;
+int maxConsec=...;
+int maxPresence=...;
+range N=1..nNurses;
+range H=1..24;
+int demandh[n in N]=...;
+//decision vars
+dvar boolean w_nh[n in N, h in H];

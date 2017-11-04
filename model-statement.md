@@ -25,7 +25,7 @@ AMMM Project
 * maxHours
 * maxConsec
 * maxPresence
-* maxConsecRest (=1)
+
 
 ### Objective function
 
