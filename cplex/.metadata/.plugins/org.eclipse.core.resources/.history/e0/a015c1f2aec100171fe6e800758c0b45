@@ -7,5 +7,7 @@ nNurses=5;
 minHours=2;
 maxHours=8;
 maxConsec=4;
-maxPresence=10;
-demand=[0 2 3 4 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0];
+maxPresence=20;
+demand=[
+		[0 2 3 4 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+];
