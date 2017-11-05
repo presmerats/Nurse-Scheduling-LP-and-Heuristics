@@ -74,7 +74,7 @@ $  \forall n:  1 \leq n \leq nNurses, \forall h: 1 \leq h \leq 24, e_{n} \geq h 
 	\forall n:  1 \leq n \leq nNurses, \forall h: 2 \leq h \leq 24, a_{n,h} = w_{n,h-1} - w_{n,h}  \\\
 	 \forall n:  1 \leq n \leq nNurses, \forall h: 1 \leq h \leq 22, b_{n,h} = f_{n,h} - f_{n,h+2}  \\\
 	 \forall n:  1 \leq n \leq nNurses, \forall h: 2 \leq h \leq 22, c_{n,h} = a_{n,h} + 25 \cdot(1 - a_{n,h}) + 25 \cdot b_{n,h}  \\\
-	 \forall n:  1 \leq n \leq nNurses, \forall h: 1 \leq h \leq 22, d_{n,h} = f_{n,h+1} \\\
+	 \forall n:  1 \leq n \leq nNurses, \forall h: 1 \leq h \leq 22, d_{n,h} = f_{n,h+1} + 1\\\
 	 \forall n:  1 \leq n \leq nNurses, \forall h: 2 \leq h \leq 22, c_{n,h} >= d_{n,h}  \\\
 	 $
 
@@ -91,7 +91,7 @@ $$
 \text{b(h)=f(h)-f(h+2)}  & 0 & 0 & 1 & 2 & 2 & 1 & 1 & 2 & 2 & 1 & 0 & 1 & 2 & 2 & 1 & 0 &   &  \\\
 \text{c(h)=a+(1-a)25+b25}     &   & 25 & 50 & 99 & 75 & 50 & 26 & 99 & 75 & 50 & 1 & 50 & 99 & 75 & 50 & 1 &   & \\\
 \text{d(h)=f(h+1)} 
-						 & 9 & 9 & 9 & 8 & 7 & 6 & 6 & 5 & 4 & 3 & 3 & 3 & 2 & 1 & 0 & 0 &  &  \\\
+						 & 10 & 10 & 10 & 9 & 8 & 7 & 7 & 6 & 5 & 4 & 4 & 4 & 3 & 2 & 1 & 1 &  &  \\\
 \text{c(h)>=d(h)}        &   & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 0 & 1 & 1 & 1 & 1 & 1 &  \\\
 \hline
 \end{array}

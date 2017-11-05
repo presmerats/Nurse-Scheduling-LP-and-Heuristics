@@ -4,7 +4,7 @@
 		<config category="opl" default="true" name="config01">
 			<ref name="model01.mod" type="model">
 			</ref>
-			<ref name="data03.dat" type="data">
+			<ref name="restConditions04.dat" type="data">
 			</ref>
 		</config>
 	</configs>

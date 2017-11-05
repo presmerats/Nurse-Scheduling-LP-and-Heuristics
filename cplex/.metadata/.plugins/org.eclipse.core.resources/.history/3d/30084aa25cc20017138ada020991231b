@@ -1,0 +1,14 @@
+/*********************************************
+ * OPL 12.6.0.0 Data
+ * Author: homero
+ * Creation Date: 05/11/2017 at 20:03:43
+ *********************************************/
+nNurses=2;
+minHours=1;
+maxHours=12;
+maxConsec=24;
+maxPresence=12;
+
+// rest condition
+  //demand=[1 1 0 1 1 1 0 1 1 0 0 1 0 1 1 1 0 0 0 1 1 0 1 1];  //this instance works well
+  demand=[1 1 0 1 1 1 0 1 1 0 0 1 0 1 1 1 0 0 0 1 1 0 1 1];  // 

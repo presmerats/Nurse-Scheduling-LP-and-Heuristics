@@ -816,3 +816,138 @@ Command-line arguments:  -clean -nl ca_ES -configuration /home/homero/localgoogl
 
 !ENTRY ilog.odms.ide.opllang.remote 1 0 2017-11-05 01:38:42.377
 !MESSAGE Run config01 in /home/homero/localgoogledrive/MIRI-DS/AMMM-Project/cplex/model01
+!SESSION 2017-11-05 20:01:32.537 -----------------------------------------------
+eclipse.buildId=unknown
+java.fullversion=JRE 1.7.0 IBM J9 2.6 Linux amd64-64 Compressed References 20130617_152572 (JIT enabled, AOT enabled)
+J9VM - R26_Java726_SR5_20130617_1436_B152572
+JIT  - r11.b04_20130528_38954ifx1
+GC   - R26_Java726_SR5_20130617_1436_B152572_CMPRSS
+J9CL - 20130617_152572
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=ca_ES
+Command-line arguments:  -clean -nl ca_ES -configuration /home/homero/localgoogledrive/MIRI-DS/AMMM-Project/cplex/.metadata/workspace_oplrun
+
+!ENTRY ilog.odms.ide.opllang 1 0 2017-11-05 20:01:32.538
+!MESSAGE concert_wrap.IloInitMT
+
+!ENTRY ilog.odms.ide.opllang.remote 1 0 2017-11-05 20:01:32.794
+!MESSAGE Run config01 in /home/homero/localgoogledrive/MIRI-DS/AMMM-Project/cplex/model01
+!SESSION 2017-11-05 20:02:09.973 -----------------------------------------------
+eclipse.buildId=unknown
+java.fullversion=JRE 1.7.0 IBM J9 2.6 Linux amd64-64 Compressed References 20130617_152572 (JIT enabled, AOT enabled)
+J9VM - R26_Java726_SR5_20130617_1436_B152572
+JIT  - r11.b04_20130528_38954ifx1
+GC   - R26_Java726_SR5_20130617_1436_B152572_CMPRSS
+J9CL - 20130617_152572
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=ca_ES
+Command-line arguments:  -clean -nl ca_ES -configuration /home/homero/localgoogledrive/MIRI-DS/AMMM-Project/cplex/.metadata/workspace_oplrun
+
+!ENTRY ilog.odms.ide.opllang 1 0 2017-11-05 20:02:09.973
+!MESSAGE concert_wrap.IloInitMT
+
+!ENTRY ilog.odms.ide.opllang.remote 1 0 2017-11-05 20:02:10.145
+!MESSAGE Run config01 in /home/homero/localgoogledrive/MIRI-DS/AMMM-Project/cplex/model01
+!SESSION 2017-11-05 20:05:00.148 -----------------------------------------------
+eclipse.buildId=unknown
+java.fullversion=JRE 1.7.0 IBM J9 2.6 Linux amd64-64 Compressed References 20130617_152572 (JIT enabled, AOT enabled)
+J9VM - R26_Java726_SR5_20130617_1436_B152572
+JIT  - r11.b04_20130528_38954ifx1
+GC   - R26_Java726_SR5_20130617_1436_B152572_CMPRSS
+J9CL - 20130617_152572
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=ca_ES
+Command-line arguments:  -clean -nl ca_ES -configuration /home/homero/localgoogledrive/MIRI-DS/AMMM-Project/cplex/.metadata/workspace_oplrun
+
+!ENTRY ilog.odms.ide.opllang 1 0 2017-11-05 20:05:00.149
+!MESSAGE concert_wrap.IloInitMT
+
+!ENTRY ilog.odms.ide.opllang.remote 1 0 2017-11-05 20:05:00.255
+!MESSAGE Run config01 in /home/homero/localgoogledrive/MIRI-DS/AMMM-Project/cplex/model01
+!SESSION 2017-11-05 20:05:45.939 -----------------------------------------------
+eclipse.buildId=unknown
+java.fullversion=JRE 1.7.0 IBM J9 2.6 Linux amd64-64 Compressed References 20130617_152572 (JIT enabled, AOT enabled)
+J9VM - R26_Java726_SR5_20130617_1436_B152572
+JIT  - r11.b04_20130528_38954ifx1
+GC   - R26_Java726_SR5_20130617_1436_B152572_CMPRSS
+J9CL - 20130617_152572
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=ca_ES
+Command-line arguments:  -clean -nl ca_ES -configuration /home/homero/localgoogledrive/MIRI-DS/AMMM-Project/cplex/.metadata/workspace_oplrun
+
+!ENTRY ilog.odms.ide.opllang 1 0 2017-11-05 20:05:45.939
+!MESSAGE concert_wrap.IloInitMT
+
+!ENTRY ilog.odms.ide.opllang.remote 1 0 2017-11-05 20:05:46.070
+!MESSAGE Run config01 in /home/homero/localgoogledrive/MIRI-DS/AMMM-Project/cplex/model01
+!SESSION 2017-11-05 20:08:04.105 -----------------------------------------------
+eclipse.buildId=unknown
+java.fullversion=JRE 1.7.0 IBM J9 2.6 Linux amd64-64 Compressed References 20130617_152572 (JIT enabled, AOT enabled)
+J9VM - R26_Java726_SR5_20130617_1436_B152572
+JIT  - r11.b04_20130528_38954ifx1
+GC   - R26_Java726_SR5_20130617_1436_B152572_CMPRSS
+J9CL - 20130617_152572
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=ca_ES
+Command-line arguments:  -clean -nl ca_ES -configuration /home/homero/localgoogledrive/MIRI-DS/AMMM-Project/cplex/.metadata/workspace_oplrun
+
+!ENTRY ilog.odms.ide.opllang 1 0 2017-11-05 20:08:04.105
+!MESSAGE concert_wrap.IloInitMT
+
+!ENTRY ilog.odms.ide.opllang.remote 1 0 2017-11-05 20:08:04.361
+!MESSAGE Run config01 in /home/homero/localgoogledrive/MIRI-DS/AMMM-Project/cplex/model01
+!SESSION 2017-11-05 20:11:36.991 -----------------------------------------------
+eclipse.buildId=unknown
+java.fullversion=JRE 1.7.0 IBM J9 2.6 Linux amd64-64 Compressed References 20130617_152572 (JIT enabled, AOT enabled)
+J9VM - R26_Java726_SR5_20130617_1436_B152572
+JIT  - r11.b04_20130528_38954ifx1
+GC   - R26_Java726_SR5_20130617_1436_B152572_CMPRSS
+J9CL - 20130617_152572
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=ca_ES
+Command-line arguments:  -clean -nl ca_ES -configuration /home/homero/localgoogledrive/MIRI-DS/AMMM-Project/cplex/.metadata/workspace_oplrun
+
+!ENTRY ilog.odms.ide.opllang 1 0 2017-11-05 20:11:36.991
+!MESSAGE concert_wrap.IloInitMT
+
+!ENTRY ilog.odms.ide.opllang.remote 1 0 2017-11-05 20:11:37.255
+!MESSAGE Run config01 in /home/homero/localgoogledrive/MIRI-DS/AMMM-Project/cplex/model01
+!SESSION 2017-11-05 20:26:14.270 -----------------------------------------------
+eclipse.buildId=unknown
+java.fullversion=JRE 1.7.0 IBM J9 2.6 Linux amd64-64 Compressed References 20130617_152572 (JIT enabled, AOT enabled)
+J9VM - R26_Java726_SR5_20130617_1436_B152572
+JIT  - r11.b04_20130528_38954ifx1
+GC   - R26_Java726_SR5_20130617_1436_B152572_CMPRSS
+J9CL - 20130617_152572
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=ca_ES
+Command-line arguments:  -clean -nl ca_ES -configuration /home/homero/localgoogledrive/MIRI-DS/AMMM-Project/cplex/.metadata/workspace_oplrun
+
+!ENTRY ilog.odms.ide.opllang 1 0 2017-11-05 20:26:14.271
+!MESSAGE concert_wrap.IloInitMT
+
+!ENTRY ilog.odms.ide.opllang.remote 1 0 2017-11-05 20:26:14.511
+!MESSAGE Run config01 in /home/homero/localgoogledrive/MIRI-DS/AMMM-Project/cplex/model01
+!SESSION 2017-11-05 20:29:14.626 -----------------------------------------------
+eclipse.buildId=unknown
+java.fullversion=JRE 1.7.0 IBM J9 2.6 Linux amd64-64 Compressed References 20130617_152572 (JIT enabled, AOT enabled)
+J9VM - R26_Java726_SR5_20130617_1436_B152572
+JIT  - r11.b04_20130528_38954ifx1
+GC   - R26_Java726_SR5_20130617_1436_B152572_CMPRSS
+J9CL - 20130617_152572
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=ca_ES
+Command-line arguments:  -clean -nl ca_ES -configuration /home/homero/localgoogledrive/MIRI-DS/AMMM-Project/cplex/.metadata/workspace_oplrun
+
+!ENTRY ilog.odms.ide.opllang 1 0 2017-11-05 20:29:14.626
+!MESSAGE concert_wrap.IloInitMT
+
+!ENTRY ilog.odms.ide.opllang.remote 1 0 2017-11-05 20:29:14.689
+!MESSAGE Run config01 in /home/homero/localgoogledrive/MIRI-DS/AMMM-Project/cplex/model01
+!SESSION 2017-11-05 20:31:31.506 -----------------------------------------------
+eclipse.buildId=unknown
+java.fullversion=JRE 1.7.0 IBM J9 2.6 Linux amd64-64 Compressed References 20130617_152572 (JIT enabled, AOT enabled)
+J9VM - R26_Java726_SR5_20130617_1436_B152572
+JIT  - r11.b04_20130528_38954ifx1
+GC   - R26_Java726_SR5_20130617_1436_B152572_CMPRSS
+J9CL - 20130617_152572
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=ca_ES
+Command-line arguments:  -clean -nl ca_ES -configuration /home/homero/localgoogledrive/MIRI-DS/AMMM-Project/cplex/.metadata/workspace_oplrun
+
+!ENTRY ilog.odms.ide.opllang 1 0 2017-11-05 20:31:31.506
+!MESSAGE concert_wrap.IloInitMT
+
+!ENTRY ilog.odms.ide.opllang.remote 1 0 2017-11-05 20:31:31.575
+!MESSAGE Run config01 in /home/homero/localgoogledrive/MIRI-DS/AMMM-Project/cplex/model01
