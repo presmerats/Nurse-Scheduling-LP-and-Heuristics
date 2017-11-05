@@ -1103,10 +1103,44 @@ $   \forall n:  1 \leq n \leq nNurses, \\<br />
 </ul>
 <p>$  \forall n:  1 \leq n \leq nNurses, \forall h: 1 \leq h \leq 24, e_{n} \geq h \cdot w_{n,h} \\ <br />
  \forall n:  1 \leq n \leq nNurses, \forall h: 1 \leq h \leq 24, s_{n} \leq (h - 24) \cdot w_{n,h} + 24 \\<br />
-  \forall n:  1 \leq n \leq nNurses, e_{n} - s_{n}  \leq maxPresence $</p>
+  \forall n:  1 \leq n \leq nNurses, e_{n} - s_{n} + 1 \leq maxPresence $</p>
 <ul>
-<li>Each nurse can rest at most one consecutive hour:<br />
-    $  \forall n:  1 \leq n \leq nNurses \\<br />
-        \forall h_{1}: s_{n} \leq h_{1} \leq e_{n} - 1  \\ <br />
-        \sum\limits_{h_{1} \leq h \leq h_{1} + 1} w_{n,h} \geq 1 $</li>
-</ul></article></body></html>
+<li>
+<p>Each nurse can rest at most one consecutive hour:</p>
+<ul>
+<li>
+<p>this idea is not linear : $  \forall n:  1 \leq n \leq nNurses \\<br />
+    \forall h_{1}: s_{n} \leq h_{1} \leq e_{n} - 1  \\ <br />
+    \sum\limits_{h_{1} \leq h \leq h_{1} + 1} w_{n,h} \geq 1 $</p>
+</li>
+<li>
+<p>this is still under evaluation: $ \forall n:  1 \leq n \leq nNurses, \forall h: 1 \leq h \leq 24, f_{n,h} = \sum\limits_{h \leq h_{1} \leq 24 } w_{n,h_{1}}   \\<br />
+\forall n:  1 \leq n \leq nNurses, \forall h: 2 \leq h \leq 24, a_{n,h} = w_{n,h-1} - w_{n,h}  \\<br />
+ \forall n:  1 \leq n \leq nNurses, \forall h: 1 \leq h \leq 22, b_{n,h} = f_{n,h} - f_{n,h+2}  \\<br />
+ \forall n:  1 \leq n \leq nNurses, \forall h: 2 \leq h \leq 22, c_{n,h} = a_{n,h} + 25 \cdot(1 - a_{n,h}) + 25 \cdot b_{n,h}  \\<br />
+ \forall n:  1 \leq n \leq nNurses, \forall h: 1 \leq h \leq 22, d_{n,h} = f_{n,h+1} \\<br />
+ \forall n:  1 \leq n \leq nNurses, \forall h: 2 \leq h \leq 22, c_{n,h} &gt;= d_{n,h}  \\<br />
+ $</p>
+</li>
+<li>
+<p>an example scenario</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>$$<br />
+\begin{array}{|c|cccccccccccccccccc|}<br />
+\hline<br />
+\text{wnh}               &amp; 0 &amp; 0 &amp; 0 &amp; 1 &amp; 1 &amp; 1 &amp; 0 &amp; 1 &amp; 1 &amp; 1 &amp; 0 &amp; 0 &amp; 1 &amp; 1 &amp; 1 &amp; 0 &amp; 0 &amp; 0 \\<br />
+\hline<br />
+\text{f(h)=wnh+..+wn(24)} <br />
+                         &amp; 9 &amp; 9 &amp; 9 &amp; 9 &amp; 8 &amp; 7 &amp; 6 &amp; 6 &amp; 5 &amp; 4 &amp; 3 &amp; 3 &amp; 3 &amp; 2 &amp; 1 &amp; 0 &amp; 0 &amp; 0 \\<br />
+\text{a(h)=wn(h-1)-wnh}  &amp;   &amp; 0 &amp; 0 &amp;-1 &amp; 0 &amp; 0 &amp; 1 &amp;-1 &amp; 0 &amp; 0 &amp; 1 &amp; 0 &amp;-1 &amp; 0 &amp; 0 &amp; 1 &amp; 0 &amp; 0 \\<br />
+\text{b(h)=f(h)-f(h+2)}  &amp; 0 &amp; 0 &amp; 1 &amp; 2 &amp; 2 &amp; 1 &amp; 1 &amp; 2 &amp; 2 &amp; 1 &amp; 0 &amp; 1 &amp; 2 &amp; 2 &amp; 1 &amp; 0 &amp;   &amp;  \\<br />
+\text{c(h)=a+(1-a)25+b25}     &amp;   &amp; 25 &amp; 50 &amp; 99 &amp; 75 &amp; 50 &amp; 26 &amp; 99 &amp; 75 &amp; 50 &amp; 1 &amp; 50 &amp; 99 &amp; 75 &amp; 50 &amp; 1 &amp;   &amp; \\<br />
+\text{d(h)=f(h+1)} <br />
+                         &amp; 9 &amp; 9 &amp; 9 &amp; 8 &amp; 7 &amp; 6 &amp; 6 &amp; 5 &amp; 4 &amp; 3 &amp; 3 &amp; 3 &amp; 2 &amp; 1 &amp; 0 &amp; 0 &amp;  &amp;  \\<br />
+\text{c(h)&gt;=d(h)}        &amp;   &amp; 1 &amp; 1 &amp; 1 &amp; 1 &amp; 1 &amp; 1 &amp; 1 &amp; 1 &amp; 1 &amp; 0 &amp; 1 &amp; 1 &amp; 1 &amp; 1 &amp; 1 &amp;  \\<br />
+\hline<br />
+\end{array}<br />
+$$</p></article></body></html>

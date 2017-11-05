@@ -17,6 +17,8 @@ dvar boolean w[n in N, h in H];
 dvar boolean z[n in N];
 dvar int s[n in N];
 dvar int e[n in N];
+dvar int d[n in N, h in H];
+dvar int a[n in N, h in H];
 
 // minimize the number of nurses working
 minimize sum(n in N) z[n];
@@ -72,12 +74,29 @@ subject to {
 		e[n] - s[n] + 1 <= maxPresence*z[n];
 		
 
-		
-	
-		
-//	//each nurse can rest at most one consecutive hour
-//	forall(n in N, h1 in 1..(24-1))
-//		sum(h in h1..(h1+1)) w[n,h]>= 1;
+			
+	//each nurse can rest at most one consecutive hour
+	forall(n in N, h in 2..24)
+	  d[n,h] == w[n,h-1] - w[n,h];
+	 
+	forall(n in N, h in 1..24)
+	  a[n,h] == -1 + sum(h1 in h..24) w[n,h1];
+//	  
+//	forall(n in N, h in 2..23)
+//	  	d[n,h] + d[n,h+1] - a[n,h] <= 1;
+
+	forall(n in N, h in 2..22)
+	  	d[n,h] <= a[n,h] - a[n,h+2];
+
+	// grouped in only one constrant
+//	forall(n in N, h in 2..23)
+//	  	w[n,h-1] - w[n,h] + w[n,h] - w[n,h+1] - a[n,h] <= 1;
+	 	 
+//	forall(n in N, h in 2..23)
+//	  	w[n,h-1] - w[n,h+1] - a[n,h] <= 1;
+
+	 
+	  	 
 
 
 
