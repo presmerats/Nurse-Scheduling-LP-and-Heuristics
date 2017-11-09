@@ -78,6 +78,17 @@ $  \forall n:  1 \leq n \leq nNurses, \forall h: 1 \leq h \leq 24, e_{n} \geq h 
 	 \forall n:  1 \leq n \leq nNurses, \forall h: 2 \leq h \leq 22, c_{n,h} >= d_{n,h}  \\\
 	 $
 
+	 - Oneliner simplification: $ \forall n:  1 \leq n \leq nNurses, \forall h: 2 \leq h \leq 22,  a_{n,h} + 25 \cdot(1 - a_{n,h}) + 25 \cdot b_{n,h} >= f_{n,h+1} + 1  \\\
+	 \forall n:  1 \leq n \leq nNurses, \forall h: 2 \leq h \leq 22,  a_{n,h} + 25 \cdot(1 - a_{n,h}) + 25 \cdot \( f_{n,h} - f_{n,h+2} \) >= f_{n,h+1} + 1  \\\
+	 \forall n:  1 \leq n \leq nNurses, \forall h: 2 \leq h \leq 22,  \\\ w_{n,h-1} - w_{n,h} + 25 \cdot(1 - w_{n,h-1} + w_{n,h}) + 25 \cdot \( f_{n,h} - f_{n,h+2} \) >= f_{n,h+1} + 1  \\\
+	 \forall n:  1 \leq n \leq nNurses, \forall h: 2 \leq h \leq 22,  \\\ w_{n,h-1} - w_{n,h} + 25 \cdot(1 - w_{n,h-1} + w_{n,h}) + 25 \cdot \( \sum_\limits{h \leq h_{i} \leq 24 } \( w_{n,h_{i}} \) - \sum\limits_{h+2 \leq h_{i} \leq 24 } \( w_{n,h_{i}} \) \) >= \sum\limits_{h+1 \leq h_{i} \leq 24 } \( w_{n,h_{i}} \) + 1  \\\
+	 \forall n:  1 \leq n \leq nNurses, \forall h: 2 \leq h \leq 22,  \\\ w_{n,h-1} - w_{n,h} + 25 \cdot(1 - w_{n,h-1} + w_{n,h}) + 25 \cdot \( w_{n,h} + w_{n,h+1}\) >= \sum\limits_{h+1 \leq h_{i} \leq 24 } \( w_{n,h_{i}} \) + 1  \\\
+	 \forall n:  1 \leq n \leq nNurses, \forall h: 2 \leq h \leq 22,  \\\ w_{n,h-1} - w_{n,h} + 24 - 25 \cdot w_{n,h-1} + 25 \cdot w_{n,h}  + 25 \cdot w_{n,h} + 25 \cdot w_{n,h+1}  >= \sum\limits_{h+1 \leq h_{i} \leq 24 } \( w_{n,h_{i}} \)  \\\
+	 \forall n:  1 \leq n \leq nNurses, \forall h: 2 \leq h \leq 22,  \\\ 24 - 24 \cdot w_{n,h-1} + 49 \cdot w_{n,h} + 25 \cdot w_{n,h+1}  >= \sum\limits_{h+1 \leq h_{i} \leq 24 } \( w_{n,h_{i}} \)  \\\
+	 \forall n:  1 \leq n \leq nNurses, \forall h: 2 \leq h \leq 22,  \\\ (M-1) - (M-1) \cdot w_{n,h-1} + \( 2M - 1\) \cdot w_{n,h} + M \cdot w_{n,h+1}  >= \sum\limits_{h+1 \leq h_{i} \leq 24 } \( w_{n,h_{i}} \)  \\\
+	 \forall n:  1 \leq n \leq nNurses, \forall h: 2 \leq h \leq 22,  \\\ M - M \cdot w_{n,h-1} + \( 2M + 1\) \cdot w_{n,h} + (M+1) \cdot w_{n,h+1}  >= \sum\limits_{h+1 \leq h_{i} \leq 24 } \( w_{n,h_{i}} \)  \\\
+	 $
+
 	  - an example scenario
 
 $$
@@ -90,13 +101,12 @@ $$
 \text{a(h)=wn(h-1)-wnh}  &   & 0 & 0 &-1 & 0 & 0 & 1 &-1 & 0 & 0 & 1 & 0 &-1 & 0 & 0 & 1 & 0 & 0 \\\
 \text{b(h)=f(h)-f(h+2)}  & 0 & 0 & 1 & 2 & 2 & 1 & 1 & 2 & 2 & 1 & 0 & 1 & 2 & 2 & 1 & 0 &   &  \\\
 \text{c(h)=a+(1-a)25+b25}     &   & 25 & 50 & 99 & 75 & 50 & 26 & 99 & 75 & 50 & 1 & 50 & 99 & 75 & 50 & 1 &   & \\\
-\text{d(h)=f(h+1)} 
+\text{d(h)=f(h+1) + 1} 
 						 & 10 & 10 & 10 & 9 & 8 & 7 & 7 & 6 & 5 & 4 & 4 & 4 & 3 & 2 & 1 & 1 &  &  \\\
 \text{c(h)>=d(h)}        &   & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 0 & 1 & 1 & 1 & 1 & 1 &  \\\
 \hline
 \end{array}
 $$
-
 
 
 
