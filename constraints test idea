@@ -1,0 +1,121 @@
+# maxPresence test
+
+###1 FAILURE
+nNurse=1;
+minHours=1;
+maxHours=24;
+maxConsec=24;
+maxPresence = 4;
+demand = [1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+
+###2  SUCCESS
+nNurse=2;
+minHours=1;
+maxHours=24;
+maxConsec=24;
+maxPresence = 4;
+demand = [1 0 0 2 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+
+
+
+## maxConsec test
+
+### 1 FAILURE
+nNurse=1;
+minHours=1;
+maxHours=24;
+maxConsec=4;
+maxPresence = 24;
+demand = [1 1 1 1 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+
+### 2 SUCCESS
+nNurse=1;
+minHours=1;
+maxHours=24;
+maxConsec=4;
+maxPresence = 24;
+demand = [1 0 1 1 1 0 1 1 1 0 1 1 1 0 1 1 0 0 0 0 0 0 0 0]
+
+
+## maxHours test
+
+### 1 FAILURE
+nNurse=1;
+minHours=1;
+maxHours=4;
+maxConsec=24;
+maxPresence = 24;
+demand = [1 1 1 1 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+
+### 2 SUCCESS
+nNurse=1;
+minHours=1;
+maxHours=4;
+maxConsec=24;
+maxPresence = 24;
+demand = [1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+
+
+## minHours test
+
+### 1 SUCCESS (force to 2 hours)
+nNurse=1;
+minHours=2;
+maxHours=24;
+maxConsec=24;
+maxPresence = 24;
+demand = [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+
+### 2 FAILURE (unfeasible) 
+nNurse=1;
+minHours=24;
+maxHours=4;
+maxConsec=24;
+maxPresence = 24;
+demand = [1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+
+
+## max rest test
+
+### 1 SUCCESS (forces to put working hours in between)
+nNurse=1;
+minHours=1;
+maxHours=24;
+maxConsec=24;
+maxPresence = 24;
+demand = [1 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+
+### 2 SUCCESS (forces  the 2 nurses to work according to the problem)
+nNurse=2;
+minHours=1;
+maxHours=4;
+maxConsec=24;
+maxPresence = 5;
+demand = [1 1 0 0 1 0 0 0 0 1 1 0 0 1 0 0 0 0 0 0 0 0 0 0]
+
+
+
+## basic easy solution test
+
+nNurse=4;
+minHours=1;
+maxHours=4;
+maxConsec=3;
+maxPresence = 6;
+demand = [2 1 0 0 4 4 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+
+/* manual solution
+
+w = [
+[1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+[1 0 1 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+[0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+[0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+];
+
+*/
+
+## upper bounds
+
+demand[i] <= nNurses
+sum(demand) <= nNurses*maxHours
