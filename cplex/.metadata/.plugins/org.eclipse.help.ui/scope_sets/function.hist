@@ -1,0 +1,4 @@
+#Thu Nov 09 15:42:17 CET 2017
+__DEFAULT__=false
+org.eclipse.help.ui.localSearch.master=true
+expression=function

@@ -1,0 +1,53 @@
+/*********************************************
+ * OPL 12.6.0.0 Model
+ * Author: homero
+ * Creation Date: 09/11/2017 at 14:53:13
+ *********************************************/
+
+ 
+ main {
+
+
+function myTest(def, cplex, filename) {
+
+ var model = new IloOplModel(def,cplex);
+ var data = new IloOplDataSource(filename);
+ model.addDataSource(data);
+ model.generate();
+ cplex.epgap=0.01;
+ if (cplex.solve()) {
+ 	writeln(filename+" ------------- SOLVED : "+cplex.getSolvedTime());
+} else {
+	writeln(filename+" ------------- FAILED");
+} 	
+ data.end();
+ model.end();
+  return true;
+}
+
+
+ var src = new IloOplModelSource("model01.mod");
+ var def = new IloOplModelDefinition(src);
+ var cplex = new IloCplex();
+ 
+ myTest(def, cplex,"basicTest-minHours01.dat" );
+ myTest(def, cplex,"basicTest-minHours02.dat");
+ myTest(def, cplex,"basicTest-maxRest01.dat");
+ myTest(def, cplex,"basicTest-maxRest02.dat");
+ myTest(def, cplex,"basicTest-maxPresence01.dat");
+ myTest(def, cplex,"basicTest-maxPresence02.dat");
+ myTest(def, cplex,"basicTest-maxHours01.dat");
+ myTest(def, cplex,"basicTest-maxHours02.dat");
+ myTest(def, cplex,"basicTest-maxConsec01.dat");
+ myTest(def, cplex,"basicTest-maxConsec02.dat");
+ myTest(def, cplex,"basicTest-manual-solution01.dat");
+ 
+
+
+ 
+ 
+ def.end();
+ cplex.end();
+ src.end(); 
+ 
+};
