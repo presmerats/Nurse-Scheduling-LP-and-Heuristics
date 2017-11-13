@@ -79,9 +79,11 @@ $	\forall n:  1 \leq n \leq nNurses, \\
 	\sum\limits_{ h_{1} \leq h \leq h_{1} + maxConsec} w_{n,h} \leq maxConsec $
 
 \item  Each nurse can stay in the hospital at most maxPresence hours: \\
-$  \forall n:  1 \leq n \leq nNurses, \forall h: 1 \leq h \leq 24, e_{n} \geq h \cdot w_{n,h} \\ 
- \forall n:  1 \leq n \leq nNurses, \forall h: 1 \leq h \leq 24, s_{n} \leq (h - 24) \cdot w_{n,h} + 24 \\
-  \forall n:  1 \leq n \leq nNurses, e_{n} - s_{n} + 1 \leq maxPresence $ \\
+$ \forall n:  1 \leq n \leq nNurses, e_{n} \leq 24 \cdot z_{n} \\
+ \forall n:  1 \leq n \leq nNurses, \forall h: 1 \leq h \leq 24, e_{n} \geq h \cdot w_{n,h} \\ 
+ \forall n:  1 \leq n \leq nNurses, s_{n} \geq 0 \\
+ \forall n:  1 \leq n \leq nNurses, \forall h: 1 \leq h \leq 24, s_{n} \leq (h - 24) \cdot w_{n,h} + 24 \cdot z_{n} \\
+  \forall n:  1 \leq n \leq nNurses, e_{n} - s_{n} + 1 \leq maxPresence \cdot z_{n} $ \\
 
 \item  Each nurse can rest at most one consecutive hour:
 
