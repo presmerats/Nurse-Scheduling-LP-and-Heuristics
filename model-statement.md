@@ -20,11 +20,11 @@ AMMM Project
 ### Known instance variables
 
 * $ demand_h $
-* nNurses
-* minHours
-* maxHours
-* maxConsec
-* maxPresence
+* $ nNurses  $
+* $minHours $
+* $maxHours $
+* $maxConsec $
+* $maxPresence $
 
 
 ### Objective function
