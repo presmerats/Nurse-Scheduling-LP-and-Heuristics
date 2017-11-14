@@ -4,7 +4,7 @@
 # cplex project metadata
 *.metadata*
 *.metadata.*
-cplex/.metadata/*
+cplex/.metadata/
 
 # Compiled Object files
 *.slo
