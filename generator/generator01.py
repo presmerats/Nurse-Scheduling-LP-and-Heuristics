@@ -4,6 +4,8 @@ import pprint
 from datetime import datetime
 #import matplotlib.pyplot as plt
 
+import os, sys
+
 
 def write(instance, instance_type=""):
     
@@ -30,6 +32,30 @@ def write(instance, instance_type=""):
         f.close()
 
 
+def writeTestModel(dat_files_folder='.'):
+
+    filename = 'Test-'  + '{0:%Y%m%d_%H-%M-%S}'.format(datetime.now()) + '.mod' 
+    with open(filename,'w') as f:
+
+        with open('Test-header.template','r') as h:
+            for line in h:
+                f.write(line)
+
+
+        # walk dir for .dat files
+        dirs = os.listdir( dat_files_folder )
+
+
+        # for each of the files write a line like this one
+        for file in dirs:
+            if file.endswith('.dat'):
+                f.write('myTest(def, cplex,"' + file +'","SUCCESS" );\n')
+
+        with open('Test-footer.template','r') as h:
+            for line in h:
+                f.write(line)
+
+    # Pending create folder and move model and dat files there, to ease the import to cplex
 
 def generate2(i):
 
@@ -269,3 +295,5 @@ if __name__ == '__main__':
 
     instances = generate3(100)
     write(instances,"manual")
+
+    writeTestModel()

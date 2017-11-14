@@ -11,6 +11,10 @@
 			<ref name="BasicTests.mod" type="model">
 			</ref>
 		</config>
+		<config category="opl" default="false" name="GeneratorTests">
+			<ref name="GeneratorTests.mod" type="model">
+			</ref>
+		</config>
 	</configs>
 	
 </project>
