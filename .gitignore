@@ -1,6 +1,11 @@
 # Prerequisites
 *.d
 
+# cplex project metadata
+*.metadata*
+*.metadata.*
+cplex/.metadata/
+
 # Compiled Object files
 *.slo
 *.lo

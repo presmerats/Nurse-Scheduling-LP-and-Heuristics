@@ -4,7 +4,11 @@
 		<config category="opl" default="true" name="config01">
 			<ref name="model01.mod" type="model">
 			</ref>
-			<ref name="restConditions04.dat" type="data">
+			<ref name="basicTest-manual-solution03.dat" type="data">
+			</ref>
+		</config>
+		<config category="opl" default="false" name="BasicTests">
+			<ref name="BasicTests.mod" type="model">
 			</ref>
 		</config>
 	</configs>

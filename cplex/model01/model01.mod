@@ -17,11 +17,7 @@ dvar boolean w[n in N, h in H];
 dvar boolean z[n in N];
 dvar int s[n in N];
 dvar int e[n in N];
-dvar int f[n in N, h in H];
-dvar int a[n in N, h in H];
-dvar int b[n in N, h in H];
-dvar int c[n in N, h in H];
-dvar int d[n in N, h in H];
+
 
 
 // minimize the number of nurses working
@@ -53,26 +49,25 @@ subject to {
 		sum(h in h1..(h1+maxConsec)) w[n,h] <= maxConsec;
 		
 	//each nurse can stay in the hospital at most maxPresence hours
+	
 	//----> en is the highest hour that the nurse works.
 	//----> this includes making en 0 if zn is 0
-	forall(n in N, h in H)
-		e[n] >= h*w[n,h];
-		
 	//----> make en=0 if zn=0 (the nurse does not work) and at most 24
 	forall(n in N)
 		24*z[n] >= e[n];
-		
-	  	
+	forall(n in N, h in H)
+		e[n] >= h*w[n,h];
+		  	
 	//---> sn is the minimum hour that the nurse works
 	//---> this includes making sn 0 if zn is 0,
 	//--->  this will not assure that s[n] is just the min, but it will be 
 	//---> between 0 and the min hour
+	forall(n in N)
+	  s[n] >= 0 ;
 	forall(n in N, h in H){
 		s[n] <= (h - 24)*w[n,h] + 24*z[n];
 	}
-	forall(n in N)
-	  s[n] >= 0 ;
-			
+
 	//---> finally apply the maxPresence constraint
 	forall(n in N)
 		e[n] - s[n] + 1 <= maxPresence*z[n];
@@ -80,23 +75,8 @@ subject to {
 
 			
 	//each nurse can rest at most one consecutive hour
-	forall(n in N, h in 1..24)
-	  f[n,h] == sum(h1 in h..24) w[n,h1];
-	  
-	forall(n in N, h in 2..24)
-	  a[n,h] == w[n,h-1] - w[n,h];
-	 
-	forall(n in N, h in 1..22)
-	  b[n,h] == f[n,h] - f[n,h+2];
-
 	forall(n in N, h in 2..22)
-	  c[n,h] == a[n,h] + 25*(1 - a[n,h])+ 25*b[n,h];
-	  
-	forall(n in N, h in 1..22)
-	  	d[n,h] == f[n,h+1] + 1;
-
-	forall(n in N, h in 2..22)
-	  	c[n,h] >= d[n,h];
+	  25 - 25*w[n,h-1] + 25*w[n,h] + 25*w[n,h+1]  >= sum(h1 in (h+1)..24) w[n,h1];
 
 
 
