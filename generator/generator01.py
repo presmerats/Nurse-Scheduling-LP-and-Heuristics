@@ -5,12 +5,12 @@ from datetime import datetime
 #import matplotlib.pyplot as plt
 
 
-def write(instance):
+def write(instance, instance_type=""):
     
     pp = pprint.PrettyPrinter(indent=2)
     pp.pprint(instance)
 
-    filename = 'instance-' + str(instance["nNurses"]) +'-' + '{0:%Y%m%d_%H-%M-%S}'.format(datetime.now()) + '.dat' 
+    filename = 'instance-' +instance_type+ '-' + str(instance["nNurses"]) +'-' + '{0:%Y%m%d_%H-%M-%S}'.format(datetime.now()) + '.dat' 
     with open(filename,'w') as f:
 
         f.write('/*********************************************\n')
@@ -31,7 +31,7 @@ def write(instance):
 
 
 
-def generate(i):
+def generate2(i):
 
 
     # parameteres definition
@@ -77,6 +77,7 @@ def generate(i):
     n2_sigma=10
 
 
+
     # final computations
 
     instance={}
@@ -99,6 +100,7 @@ def generate(i):
 
 
 
+
     # get the histogram and save it as demandh
     demand_samples.extend(demand_samples2)
     demand_samples.extend(demand_samples3)
@@ -113,7 +115,157 @@ def generate(i):
 
     return instance
 
+
+def gen3Concentrated(start, maxConsec, maxHours, maxPresence):
+
+    # init w
+    w = [ 0 for i in range(1,25) ]
+    #print(w)
+
+    # choose a start point
+    i = start
+
+    # put maxConsec+rest+maxConsec until maxHours or maxPresence is over
+    while ( i<= 24 and  maxHours >0 and maxPresence>0):
+        
+        # work hours
+        maxConsecSave=maxConsec
+        while(i<=24 and maxConsec>0):
+            w[i-1] = 1
+            maxConsec -=1
+            maxHours -=1
+            maxPresence -=1
+            i+=1
+
+        #print(w)
+        #print(i)
+
+        # rest
+        if(i<=24):
+            w[i-1]=0
+            maxPresence -=1
+            i+=1
+            maxConsec=maxConsecSave
+
+    #print(w)
+    return w
+
+def gen3Sparse(start,maxConsec, maxHours, maxPresence):
+
+    # init w
+    w = [ 0 for i in range(1,25) ]
+    #print(w)
+
+    # choose a start point
+    i = start
+
+    # put 1hour+rest until maxPresence or maxHours
+    while ( i<= 24 and  maxHours >0 and maxPresence>0):
+        
+        # work hours
+        maxConsecSave=maxConsec
+        if(i<=24 and maxConsec>0):
+            w[i-1] = 1
+            maxConsec -=1
+            maxHours -=1
+            maxPresence -=1
+            i+=1
+
+        # rest
+        if(i<=24):
+            w[i-1]=0
+            maxPresence -=1
+            i+=1
+            maxConsec=maxConsecSave
+
+    #print(w)
+    return w
+
+
+def generate3(nNurses):
+
+    # constraints parameters
+    maxConsec_base = 2
+    maxConsec_variability = 8
+    maxPresence_base = 7
+    maxPresence_base_variability = 4
+    maxHours_base  = 5
+    maxHours_base_variability = 2
+    minHours_base = 1
+    minHours_base_variability = maxHours_base/2
+    
+    instance={}
+    instance["nNurses"] = nNurses
+    instance["maxConsec"] = maxConsec_base + randrange(maxConsec_variability)
+    instance["maxPresence"] = maxPresence_base + randrange(maxPresence_base_variability)
+    instance["maxHours"] = maxHours_base + randrange(maxHours_base_variability)
+    instance["minHours"] = minHours_base + randrange(int(minHours_base_variability))
+
+    instance["nNurses"] = nNurses
+    instance["maxConsec"] = maxConsec_base 
+    instance["maxPresence"] = maxPresence_base 
+    instance["maxHours"] = maxHours_base 
+    instance["minHours"] = minHours_base 
+
+
+    # init demand
+    demand = [ 0 for i in range(1,24+1) ]
+
+    # init w matrix
+    w=[]
+
+    for i in range(0,nNurses):
+        
+        # select the type
+        select = randrange(10)
+
+        if select<5:
+            # generate concentrated schedule
+            start=2+randrange(4)-2 
+            w.append(
+                gen3Concentrated(start=start, 
+                    maxConsec=instance["maxConsec"],
+                    maxHours=instance["maxHours"],
+                    maxPresence=instance["maxPresence"])
+                )
+
+        elif select<9:
+            # generate concentrated schedule
+            start=22+randrange(2)-1 
+            w.append(
+                gen3Concentrated(start=start, 
+                    maxConsec=instance["maxConsec"],
+                    maxHours=instance["maxHours"],
+                    maxPresence=instance["maxPresence"])
+                )
+        else:
+            # generate sparse schedule
+            start=12+randrange(8)-4
+            w.append(gen3Sparse(start=start, 
+                    maxConsec=instance["maxConsec"],
+                    maxHours=instance["maxHours"],
+                    maxPresence=instance["maxPresence"])
+                )
+
+    
+    # mix
+    for i in range(0,len(w)):
+        print(w[i])
+        for j in range(1,24+1):
+            demand[j-1]+=w[i][j-1]
+
+
+    print("")
+    print(demand)
+    instance["demand"] = demand
+    return instance
+
+
+
 if __name__ == '__main__':
 
-    instances = generate(100)
-    write(instances)
+    #instances = generate2(100)
+    #write(instances,"distr")
+
+    instances = generate3(100)
+    write(instances,"manual")
