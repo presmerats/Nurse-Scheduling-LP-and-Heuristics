@@ -1,6 +1,6 @@
 /*********************************************
  * OPL 12.6.0.0 Model
- * Author: homero
+ * Author: Adrian Rodriguez Bazaga, Pau Rodriguez Esmerats
  * Creation Date: 09/11/2017 at 14:53:13
  *********************************************/
 
@@ -10,28 +10,35 @@
 
 function myTest(def, cplex, filename, goal, showsol) {
 
+ var ofile = new IloOplOutputFile("modelRun.txt", true);
+ 
  var model = new IloOplModel(def,cplex);
  var data = new IloOplDataSource(filename);
  model.addDataSource(data);
  model.generate();
  cplex.epgap=0.01;
  if (cplex.solve() && goal == "SUCCESS") {
- 	writeln("SUCCESS/SUCCESS ---------------------- ok: "+filename + " time: "+cplex.getSolvedTime());
+ 	ofile.writeln("SUCCESS/SUCCESS ---------------------- ok: "+filename + " time: "+cplex.getSolvedTime());
  	if (showsol == "y")
  		model.printSolution();
 } else if (!cplex.solve() && goal == "FAIL") {
- 	writeln("FAIL/FAIL       ---------------------- ok: "+filename);
+ 	ofile.writeln("FAIL/FAIL       ---------------------- ok: "+filename);
 } else {
-	writeln("FAIL/SUCCESS    ------------------- ERROR: "+filename);
+	ofile.writeln("FAIL/SUCCESS    ------------------- ERROR: "+filename);
 } 	
+
+ ofile.close();
  data.end();
  model.end();
   return true;
 }
 
+// clean log file
+var ofile = new IloOplOutputFile("modelRun.txt");
+writeln("");
+ofile.close();
+
 
  var src = new IloOplModelSource("model01.mod");
  var def = new IloOplModelDefinition(src);
  var cplex = new IloCplex();
- 
- 
