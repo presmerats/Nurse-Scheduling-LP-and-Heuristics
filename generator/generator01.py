@@ -2,17 +2,41 @@ import numpy as np
 from random import randrange
 import pprint
 from datetime import datetime
+from pathlib import Path, PurePath
 #import matplotlib.pyplot as plt
 
 import os, sys
 
 
-def write(instance, instance_type=""):
+import re
+
+
+def sort_nicely( l, reverse=False ):
+    """ Sort the given list in the way that humans expect.
+    """
+    convert = lambda text: int(text) if text.isdigit() else text
+    alphanum_key = lambda key: [ convert(c) for c in re.split('([0-9]+)', key) ]
+    l.sort( key=alphanum_key, reverse=reverse )
+
+
+
+
+
+def write(instance, instance_type="", path='.'):
     
     pp = pprint.PrettyPrinter(indent=2)
     pp.pprint(instance)
 
-    filename = 'instance-' +instance_type+ '-' + str(instance["nNurses"]) +'-' + '{0:%Y%m%d_%H-%M-%S}'.format(datetime.now()) + '.dat' 
+    # i-percentage-nNurses-nlimit-date.dat
+    filename = 'i-' + \
+        instance_type + '-' + \
+        str(instance["surplus"]) +'-' + \
+        str(instance["nNurses"]) +'-' + \
+        str(instance["nNurses-limit"]) +'-' + \
+        '{0:%Y%m%d_%H-%M-%S}'.format(datetime.now()) + '.dat' 
+    filename = PurePath(path, filename)
+    filename = str(filename)
+
     with open(filename,'w') as f:
 
         f.write('/*********************************************\n')
@@ -27,14 +51,17 @@ def write(instance, instance_type=""):
                 for item in v:
                     f.write(str(item) + " ")
                 f.write(' ];\n')
+            elif k in ["nNurses-limit","surplus"]:
+                continue
             else:
                 f.write(k + '=' + str(v) +';\n')
         f.close()
 
 
-def writeTestModel(dat_files_folder='.'):
+def writeTestModel(path=Path()):
 
     filename = 'Test-'  + '{0:%Y%m%d_%H-%M-%S}'.format(datetime.now()) + '.mod' 
+    filename = PurePath(path,filename)
     with open(filename,'w') as f:
 
         with open('Test-header.template','r') as h:
@@ -43,7 +70,9 @@ def writeTestModel(dat_files_folder='.'):
 
 
         # walk dir for .dat files
-        dirs = os.listdir( dat_files_folder )
+        dirs = os.listdir( str(PurePath(path)) )
+        # sort files
+        sort_nicely(dirs, reverse=True)
 
 
         # for each of the files write a line like this one
@@ -208,7 +237,7 @@ def gen3Sparse(start,maxConsec, maxHours, maxPresence):
     return w
 
 
-def generate3(nNurses):
+def generate3(nNurses, extra):
 
     # constraints parameters
     maxConsec_base = 2
@@ -284,8 +313,26 @@ def generate3(nNurses):
     print("")
     print(demand)
     instance["demand"] = demand
+    instance["nNurses-limit"]=nNurses
+    instance["surplus"] = round((extra/nNurses - 1)*100)
+    instance["nNurses"] = extra
+
     return instance
 
+
+def metaGenerate3(n,extra, path):
+    instances = generate3(n, extra)
+    write(instances,"manual",path)
+
+def metaMetaGenerate3(path):
+
+    for j in range(100,200,10):
+        print("j="+str(j))
+        for i in range(100,120,1):
+            extra=int(j*float(120 - i + 100)/100.0)
+
+            print(extra)
+            metaGenerate3(n=j,extra=extra, path=p)
 
 
 if __name__ == '__main__':
@@ -293,7 +340,15 @@ if __name__ == '__main__':
     #instances = generate2(100)
     #write(instances,"distr")
 
-    instances = generate3(100)
-    write(instances,"manual")
 
-    writeTestModel()
+    p = Path(PurePath('.', '{0:instances_%Y%m%d_%H-%M-%S}'.format(datetime.now())))
+    p.mkdir()
+    metaMetaGenerate3(path=p)
+    writeTestModel(path=p)
+
+    """
+        ok-create a folder
+        ok-put instances and models in the folder
+        okname of instance: i-percentage-nNurses-nlimit-date.dat
+        ok-sort by file name
+    """

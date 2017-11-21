@@ -39,7 +39,17 @@ function myTest(def, cplex, filename, goal, showsol) {
  var def = new IloOplModelDefinition(src);
  var cplex = new IloCplex();
  
+myTest(def, cplex,"instance-manual-100-20171114_10-07-52-113.dat","SUCCESS" );
+
 myTest(def, cplex,"instance-manual-100-20171114_10-07-52.dat","SUCCESS" );
+myTest(def, cplex,"instance-manual-100-20171114_10-07-52-117.dat","SUCCESS" );
+myTest(def, cplex,"instance-manual-100-20171114_10-07-52-116.dat","SUCCESS" );
+myTest(def, cplex,"instance-manual-100-20171114_10-07-52-115.dat","SUCCESS" );
+myTest(def, cplex,"instance-manual-100-20171114_10-07-52-114.dat","SUCCESS" );
+
+
+
+/*
 myTest(def, cplex,"instance-100-20171108_14-40-00.dat","SUCCESS" );
 myTest(def, cplex,"instance-manual-100-20171114_09-47-46.dat","SUCCESS" );
 myTest(def, cplex,"instance-manual-100-20171114_10-12-18.dat","SUCCESS" );
@@ -54,6 +64,7 @@ myTest(def, cplex,"instance-distr-100-20171114_09-44-18.dat","SUCCESS" );
 myTest(def, cplex,"instance-distr-100-20171114_09-45-01.dat","SUCCESS" );
 myTest(def, cplex,"instance-100-20171108_14-40-15.dat","SUCCESS" );
 myTest(def, cplex,"datafile.dat","SUCCESS" );
+*/
  
  def.end();
  cplex.end();
