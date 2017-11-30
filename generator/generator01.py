@@ -75,10 +75,20 @@ def writeTestModel(path=Path()):
         sort_nicely(dirs, reverse=True)
 
 
+
+
         # for each of the files write a line like this one
         for file in dirs:
             if file.endswith('.dat'):
+                f.write('var src = new IloOplModelSource("model01.mod");\n')
+                f.write('var def = new IloOplModelDefinition(src);\n')
+                f.write('var cplex = new IloCplex();\n')
+
                 f.write('myTest(def, cplex,"' + file +'","SUCCESS" );\n')
+
+                f.write('def.end();\n')
+                f.write('cplex.end();\n')
+                f.write('src.end();\n\n')
 
         with open('Test-footer.template','r') as h:
             for line in h:
@@ -326,13 +336,17 @@ def metaGenerate3(n,extra, path):
 
 def metaMetaGenerate3(path):
 
-    for j in range(100,200,10):
+    for j in range(20,101,5):
         print("j="+str(j))
-        for i in range(100,120,1):
-            extra=int(j*float(120 - i + 100)/100.0)
+        lastIteration = 0
+        for i in range(110,120,1):
+            extra=int(j*float(120 - i + 110)/100.0)
 
-            print(extra)
-            metaGenerate3(n=j,extra=extra, path=p)
+            if extra!=lastIteration:
+                print(extra)
+                metaGenerate3(n=j,extra=extra, path=p)
+
+            lastIteration=extra
 
 
 if __name__ == '__main__':

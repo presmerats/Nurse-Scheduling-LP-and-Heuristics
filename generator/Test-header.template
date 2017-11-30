@@ -39,6 +39,4 @@ writeln("");
 ofile.close();
 
 
- var src = new IloOplModelSource("model01.mod");
- var def = new IloOplModelDefinition(src);
- var cplex = new IloCplex();
+ 
