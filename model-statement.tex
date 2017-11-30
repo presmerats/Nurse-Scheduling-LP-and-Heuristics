@@ -85,10 +85,34 @@ $ \forall n:  1 \leq n \leq nNurses, e_{n} \leq 24 \cdot z_{n} \\
  \forall n:  1 \leq n \leq nNurses, \forall h: 1 \leq h \leq 24, s_{n} \leq (h - 24) \cdot w_{n,h} + 24 \cdot z_{n} \\
   \forall n:  1 \leq n \leq nNurses, e_{n} - s_{n} + 1 \leq maxPresence \cdot z_{n} $ \\
 
+
+
+
+\item  Each nurse can rest at most one consecutive hour (exam hint version):
+
+$	
+\forall n:  1 \leq n \leq nNurses, \forall h: 2 \leq h \leq 23:  r_{n,h} = 1 - w_{n,h} \\
+\forall n:  1 \leq n \leq nNurses, \forall h: 2 \leq h \leq 23:  wa_{n,h} = w_{n,h+1} \\
+\forall n:  1 \leq n \leq nNurses, \forall h: 2 \leq h \leq 23:  wb_{n,h} = w_{n,h-1} \\
+\forall n:  1 \leq n \leq nNurses, \forall h: 2 \leq h \leq 23, \forall M: M \geq 24  \\  M \cdot ( 1 - r_{n,h} ) + M \cdot wb_{n,h} - 24 \cdot wa_{n,h} +  24 \cdot r_{n,h}   \geq \sum\limits_{1 \leq h_{i} \leq h }  w_{n,h_{i}}  $ \\
+which is equal to :  \\
+$
+2\cdot M \cdot ( 1 - r_{n,h} ) + M \cdot wb_{n,h} - M \cdot wa_{n,h} +  M \cdot r_{n,h}   \geq \sum\limits_{1 \leq h_{i} \leq h }  w_{n,h_{i}}  \\
+$
+
 \item  Each nurse can rest at most one consecutive hour:
 
 $	
-\forall n:  1 \leq n \leq nNurses, \forall h: 2 \leq h \leq 22, \forall M: M > 24  \\ M - M \cdot w_{n,h-1} + M \cdot w_{n,h} + M \cdot w_{n,h+1}  >= \sum\limits_{h+1 \leq h_{i} \leq 24 }  w_{n,h_{i}} 	 $	
+\forall n:  1 \leq n \leq nNurses, \forall h: 2 \leq h \leq 22, \forall M: M \geq 24  \\ M - M \cdot w_{n,h-1} + M \cdot w_{n,h} + M \cdot w_{n,h+1}  \geq \sum\limits_{h+1 \leq h_{i} \leq 24 }  w_{n,h_{i}} \\	 $	
+can be rewritten as : \\
+$	
+\forall n:  1 \leq n \leq nNurses, \forall h: 2 \leq h \leq 22, \forall M: M \geq 24  \\ 
+M - M \cdot wb_{n,h} + M \cdot w_{n,h} + M \cdot wa_{n,h}  \geq \sum\limits_{h+1 \leq h_{i} \leq 24 }  w_{n,h_{i}} \\
+M - M \cdot wb_{n,h} + M \cdot ( 1 - r_{n,h}) + M \cdot wa_{n,h}  \geq \sum\limits_{h+1 \leq h_{i} \leq 24 }  w_{n,h_{i}} \\
+M \cdot ( 2 - r_{n,h}) - M \cdot wb_{n,h} +  M \cdot wa_{n,h}  \geq \sum\limits_{h+1 \leq h_{i} \leq 24 }  w_{n,h_{i}} \\
+2 \cdot M \cdot ( 1 - r_{n,h}) - M \cdot wb_{n,h} +  M \cdot wa_{n,h} + M \cdot r_{n,h}  \geq \sum\limits_{h+1 \leq h_{i} \leq 24 }  w_{n,h_{i}} \\ 
+2 \cdot M \cdot ( 1 - r_{n,h}) - M \cdot wb_{n,h} +  M \cdot wa_{n,h} + M \cdot r_{n,h}  \geq \sum\limits_{h \leq h_{i} \leq 24 }  w_{n,h_{i}} \\ 
+$	
 
 
 \end{itemize}
