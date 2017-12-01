@@ -1,0 +1,6 @@
+nNurses=5;
+minHours=2;
+maxHours=8;
+maxConsec=4;
+maxPresence=10;
+demand=230420242131135250251311;

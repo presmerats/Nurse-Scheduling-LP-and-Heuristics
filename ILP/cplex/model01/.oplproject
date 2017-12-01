@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="ASCII"?><project>
+	<version>1.0</version>
+	<configs>
+		<config category="opl" default="true" name="config01">
+			<ref name="model01.mod" type="model">
+			</ref>
+			<ref name="basicTest-manual-solution03.dat" type="data">
+			</ref>
+		</config>
+		<config category="opl" default="false" name="BasicTests">
+			<ref name="BasicTests.mod" type="model">
+			</ref>
+		</config>
+	</configs>
+	
+</project>
