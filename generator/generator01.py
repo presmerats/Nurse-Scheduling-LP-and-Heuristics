@@ -80,15 +80,15 @@ def writeTestModel(path=Path()):
         # for each of the files write a line like this one
         for file in dirs:
             if file.endswith('.dat'):
-                f.write('var src = new IloOplModelSource("model01.mod");\n')
-                f.write('var def = new IloOplModelDefinition(src);\n')
-                f.write('var cplex = new IloCplex();\n')
+                # f.write('var src = new IloOplModelSource("model01.mod");\n')
+                # f.write('var def = new IloOplModelDefinition(src);\n')
+                # f.write('var cplex = new IloCplex();\n')
 
                 f.write('myTest(def, cplex,"' + file +'","SUCCESS" );\n')
 
-                f.write('def.end();\n')
-                f.write('cplex.end();\n')
-                f.write('src.end();\n\n')
+                # f.write('def.end();\n')
+                # f.write('cplex.end();\n')
+                # f.write('src.end();\n\n')
 
         with open('Test-footer.template','r') as h:
             for line in h:
@@ -334,13 +334,13 @@ def metaGenerate3(n,extra, path):
     instances = generate3(n, extra)
     write(instances,"manual",path)
 
-def metaMetaGenerate3(path):
+def metaMetaGenerate3(path, nmin=400,nmax=500, minpct=20, maxpct=30):
 
-    for j in range(20,101,5):
+    for j in range(nmin,nmax,5):
         print("j="+str(j))
         lastIteration = 0
-        for i in range(110,120,1):
-            extra=int(j*float(120 - i + 110)/100.0)
+        for i in range(100+minpct,100+maxpct,1):
+            extra=int(j*float((100 + maxpct) - i + (100 + minpct))/100.0)
 
             if extra!=lastIteration:
                 print(extra)
@@ -357,7 +357,12 @@ if __name__ == '__main__':
 
     p = Path(PurePath('.', '{0:instances_%Y%m%d_%H-%M-%S}'.format(datetime.now())))
     p.mkdir()
-    metaMetaGenerate3(path=p)
+    # 400 - 500, 25, 30
+    metaMetaGenerate3(path=p,
+            nmin=int(sys.argv[1]),
+            nmax=int(sys.argv[2]),
+            minpct=int(sys.argv[3]),
+            maxpct=int(sys.argv[4]))
     writeTestModel(path=p)
 
     """
