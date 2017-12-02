@@ -3,5 +3,5 @@
 using namespace std;
 
 class SolutionGenerator {
-    virtual NurseSchedulingSolution generate(int) = 0;
+    virtual NurseSchedulingSolution generate() = 0;
 };

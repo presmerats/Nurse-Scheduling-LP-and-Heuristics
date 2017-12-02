@@ -3,14 +3,23 @@
 using namespace std;
 
 class RandomSolution: public SolutionGenerator {
+    private:
+        int numNurses;
     public:
-        NurseSchedulingSolution generate(int);
+        RandomSolution(int);
+        NurseSchedulingSolution generate();
+        inline int getNumNurses() { return numNurses; }
+        inline void setNumNurses(int numNurses) { this->numNurses = numNurses; }
 };
 
-RandomSolution::generate(int numNurses) {
-    NurseSchedulingSolution randomSolution(numNurses,0);
+RandomSolution::RandomSolution(int numNurses) {
+    this->numNurses = numNurses;
+}
+
+RandomSolution::generate() {
+    NurseSchedulingSolution randomSolution(getNumNurses(),0);
     srand(time(0));
-    for(int i = 0; i < numNurses; ++i )
+    for(int i = 0; i < getNumNurses(); ++i )
     {
         for(int j = 0; j < 24; j++) {
             bool state = rand() % 2;
