@@ -3,5 +3,5 @@
 using namespace std;
 
 class Movement {
-    virtual NurseSchedulingSolution perform(const NurseSchedulingSolution&, int, int) = 0;
+    virtual NurseSchedulingSolution perform(NurseSchedulingSolution&, int, int) = 0;
 };
