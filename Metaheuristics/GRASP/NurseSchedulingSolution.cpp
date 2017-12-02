@@ -16,6 +16,7 @@ class NurseSchedulingSolution: public Solution {
     void addElement(int,int);
     void removeElement(int,int);
     void flipElement(int,int);
+    void setElement(int,int,bool);
     bool containsElement(int,int);
     bool operator ==(const Solution& s) override {
         auto other = dynamic_cast<const NurseSchedulingSolution*>(&s);
@@ -55,6 +56,10 @@ void NurseSchedulingSolution::removeElement(int nurse, int hour) {
 
 void NurseSchedulingSolution::flipElement(int nurse, int hour) {
     this->assignments[nurse][hour] = !this->assignments[nurse][hour];
+}
+
+void NurseSchedulingSolution::setElement(int nurse, int hour, bool state) {
+    this->assignments[nurse][hour] = state;
 }
 
 bool NurseSchedulingSolution::containsElement(int nurse, int hour) {

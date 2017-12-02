@@ -49,10 +49,10 @@ double NurseSchedulingProblem::evaluate(const Solution& s) {
     std::vector< std::vector<bool> > solutionAssignments = nurseSchedulingSolution->getAssignments();
     int workingNurses = 0;
     for(int i = 0; i < numNurses; i++) {
-         std::vector<bool>::iterator it = find (solutionAssignments.at(i).begin(), solutionAssignments.at(i).end(), true);
-          if(it != solutionAssignments.at(i).end()) {
+        std::vector<bool>::iterator it = find (solutionAssignments.at(i).begin(), solutionAssignments.at(i).end(), true);
+        if(it != solutionAssignments.at(i).end()) {
             workingNurses++;
-          }
+        }
     }
     return workingNurses;
 }
