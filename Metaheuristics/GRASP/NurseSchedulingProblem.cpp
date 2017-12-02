@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <algorithm>
 #include "Problem.cpp"
 using namespace std;
 
@@ -19,6 +20,7 @@ class NurseSchedulingProblem: public Problem {
     inline void setFilePath(string filePath) { this->filePath = filePath; };
     inline string getFilePath() const { return filePath; }
     void read();
+    double evaluate(const Solution& s);
 };
 
 NurseSchedulingProblem::NurseSchedulingProblem() {
@@ -39,4 +41,18 @@ NurseSchedulingProblem::NurseSchedulingProblem(string filePath) {
 }
 void NurseSchedulingProblem::read() {
     // Read from file
+}
+
+double NurseSchedulingProblem::evaluate(const Solution& s) {
+    auto nurseSchedulingSolution = dynamic_cast<const NurseSchedulingSolution*>(&s);
+    // The objective is to minimize the number of working nurses
+    std::vector< std::vector<bool> > solutionAssignments = nurseSchedulingSolution->getAssignments();
+    int workingNurses = 0;
+    for(int i = 0; i < numNurses; i++) {
+         std::vector<bool>::iterator it = find (solutionAssignments.at(i).begin(), solutionAssignments.at(i).end(), true);
+          if(it != solutionAssignments.at(i).end()) {
+            workingNurses++;
+          }
+    }
+    return workingNurses;
 }
