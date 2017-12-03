@@ -23,6 +23,11 @@ class NurseSchedulingProblem: public Problem {
     void read();
     double evaluate(const Solution& s);
     inline int getNumNurses() { return numNurses; }
+    inline int getMinHours() { return minHours; }
+    inline int getMaxHours() { return maxHours; }
+    inline int getMaxConsec() { return maxConsec; }
+    inline int getMaxPresence() { return maxPresence; }
+    inline std::vector<int> getDemand() { return demand; }
 };
 
 NurseSchedulingProblem::NurseSchedulingProblem() {

@@ -102,6 +102,61 @@ NurseSchedulingSolution* ConstructiveGRASP::constructSolution(float alpha) {
 }
 
 std::vector<CandidateAssignment> ConstructiveGRASP::updateCandidatesSet(NurseSchedulingSolution* solution, std::vector<CandidateAssignment> candidates) {
+    std::vector<int> unfeasibleNurses;
+    std::vector< std::vector<bool> > assignments = solution->getAssignments();
+
+    for(int i = 0; i < getProblem()->getNumNurses(); i++) {
+        int hoursWorked = 0;
+        bool nurseAlreadyStarted = false;
+        int nurseTotalPresence = 0;
+        std::vector<int> workingRunsLength;
+        for(int j = 0; j < 24; j++) {
+            if(assignments[i][j] == true) {
+                nurseAlreadyStarted = true;
+                hoursWorked++;
+                nurseTotalPresence++;
+            }
+
+            if(nurseAlreadyStarted == true) { nurseTotalPresence++; }
+
+            if(j > 0) {
+                // Get the working runs
+                int workingRun = 0;
+                for(int k = 0; k == j; k++) {
+                    if(assignments[i][k] == true) {
+                        workingRun++;
+                    } else {
+                        workingRunsLength.push_back(workingRun);
+                        workingRun = 0;
+                    }
+                }
+            }
+        }
+
+        // Check feasibility
+        // 1. Nurses must work at most maxHours
+        if(hoursWorked >= getProblem()->getMaxHours()) {
+            unfeasibleNurses.push_back(i);
+            continue;
+        }
+
+        // 2. Nurses must work at most maxConsec hours
+        auto maxWorkingRun = max_element(std::begin(workingRunsLength), std::end(workingRunsLength));
+        if(*maxWorkingRun >= getProblem()->getMaxConsec()) {
+            unfeasibleNurses.push_back(i);
+            continue;
+        }
+
+        // 3. Nurses must be at most maxPresence hours at the hospital
+        if(nurseTotalPresence >= getProblem()->getMaxPresence()) {
+            unfeasibleNurses.push_back(i);
+            continue;
+        }
+    }
+
+    // Remove unfeasible nurses from candidates
+    candidates.erase( std::remove_if( candidates.begin(), candidates.end(), [&](CandidateAssignment const& ca) { return std::find(unfeasibleNurses.begin(), unfeasibleNurses.end(), ca.nurse) != unfeasibleNurses.end(); }), candidates.end());
+
     return candidates;
 }
 
