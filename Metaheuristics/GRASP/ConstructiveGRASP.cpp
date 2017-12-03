@@ -3,8 +3,6 @@
 #include <algorithm>
 #include <vector>
 #include "SolutionMethod.cpp"
-#include "Movement.cpp"
-#include "AddMovement.cpp"
 using namespace std;
 
 struct CandidateAssignment {
@@ -18,7 +16,6 @@ class ConstructiveGRASP: public SolutionMethod {
     private:
         int RCLsize;
         NurseSchedulingSolution* currentSolution;
-        Movement* move = new AddMovement();
         NurseSchedulingProblem* problem;
         NurseSchedulingSolution* bestSolution;
     public:
@@ -31,7 +28,6 @@ class ConstructiveGRASP: public SolutionMethod {
         double computeGreedyCost(int,int,bool);
         inline void setRCLsize(int RCLsize) { this->RCLsize = RCLsize; }
         inline void setCurrentSolution(NurseSchedulingSolution* currentSolution) { this->currentSolution = currentSolution; }
-        inline void setMove(Movement* move) { this->move = move; }
         inline NurseSchedulingProblem* getProblem() const { return problem; }
         inline NurseSchedulingSolution* getSolution() const { return bestSolution; }
         inline void setProblem(NurseSchedulingProblem* problem) { this->problem = problem; }
@@ -43,7 +39,6 @@ ConstructiveGRASP::ConstructiveGRASP(NurseSchedulingProblem* problem, int RCLsiz
     this->RCLsize = RCLsize;
     this->currentSolution = new NurseSchedulingSolution(getProblem()->getNumNurses(), 0);
     this->problem->setMaxIterations(maxIterations);
-    this->move = new AddMovement();
 }
 
 void ConstructiveGRASP::performSearch() {
