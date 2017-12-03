@@ -10,5 +10,5 @@ class Problem {
     inline void setMaxIterations(int maxIterations) { this->maxIterations = maxIterations; }
     virtual ~Problem() {}
     virtual void read() = 0;
-    virtual double evaluate(const Solution& s) = 0;
+    virtual double evaluate(const Solution* s) = 0;
 };

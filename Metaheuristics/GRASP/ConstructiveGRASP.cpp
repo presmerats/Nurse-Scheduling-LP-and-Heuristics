@@ -22,7 +22,7 @@ class ConstructiveGRASP: public SolutionMethod {
         ConstructiveGRASP(NurseSchedulingProblem*,int,int);
         void performSearch();
         NurseSchedulingSolution* constructSolution(float alpha);
-        NurseSchedulingSolution* localSearch();
+        NurseSchedulingSolution* localSearch(NurseSchedulingSolution*);
         std::vector<CandidateAssignment> createAssignmentsNotInSolution(NurseSchedulingSolution*);
         std::vector<CandidateAssignment> updateCandidatesSet(NurseSchedulingSolution*,std::vector<CandidateAssignment>);
         std::vector<CandidateAssignment> initializeCandidatesSet();
@@ -97,11 +97,38 @@ NurseSchedulingSolution* ConstructiveGRASP::constructSolution(float alpha) {
     return solution;
 }
 
-NurseSchedulingSolution* ConstructiveGRASP::localSearch() {
+NurseSchedulingSolution* ConstructiveGRASP::localSearch(NurseSchedulingSolution* solution) {
     bool update = true;
-    while(update) {
+    NurseSchedulingSolution* solutionII;
 
+    while(update) {
+        update = false;
+        std::vector<CandidateAssignment> E = createAssignmentsNotInSolution(solution);
+        solutionII = solution;
+        for(int i = 0; i < getProblem()->getNumNurses(); i++) {
+            for(int j = 0; j < 24; j++) {
+                if(solution->getAssignments()[i][j] == true) {
+                    NurseSchedulingSolution* solutionAux = solution;
+                    solutionAux->removeElement(i,j);
+                    for(CandidateAssignment e : E) {
+                        NurseSchedulingSolution* solutionI = solutionAux;
+                        solutionI->addElement(e.nurse,e.hour);
+                        // if not isfeasible sol' then continue
+                        double solutionIvalue = getProblem()->evaluate(solutionI);
+                        double solutionIIvalue = getProblem()->evaluate(solutionII);
+                        if(solutionIvalue < solutionIIvalue) {
+                            solutionII = solutionI;
+                            update = true;
+                        }
+                    }
+                }
+            }
+        }
     }
+
+    // Return the solution
+    solution = solutionII;
+    return solution;
 }
 
 std::vector<CandidateAssignment> ConstructiveGRASP::updateCandidatesSet(NurseSchedulingSolution* solution, std::vector<CandidateAssignment> candidates) {

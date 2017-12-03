@@ -21,7 +21,7 @@ class NurseSchedulingProblem: public Problem {
     inline void setFilePath(string filePath) { this->filePath = filePath; };
     inline string getFilePath() const { return filePath; }
     void read();
-    double evaluate(const Solution& s);
+    double evaluate(const Solution* s);
     inline int getNumNurses() { return numNurses; }
     inline int getMinHours() { return minHours; }
     inline int getMaxHours() { return maxHours; }
@@ -50,8 +50,8 @@ void NurseSchedulingProblem::read() {
     // Read from file
 }
 
-double NurseSchedulingProblem::evaluate(const Solution& s) {
-    auto nurseSchedulingSolution = dynamic_cast<const NurseSchedulingSolution*>(&s);
+double NurseSchedulingProblem::evaluate(const Solution* s) {
+    auto nurseSchedulingSolution = dynamic_cast<const NurseSchedulingSolution*>(s);
     // The objective is to minimize the number of working nurses
     std::vector< std::vector<bool> > solutionAssignments = nurseSchedulingSolution->getAssignments();
     int workingNurses = 0;
