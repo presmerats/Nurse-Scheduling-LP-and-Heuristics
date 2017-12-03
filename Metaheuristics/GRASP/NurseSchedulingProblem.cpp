@@ -22,7 +22,7 @@ class NurseSchedulingProblem: public Problem {
     inline string getFilePath() const { return filePath; }
     void read();
     double evaluate(const Solution* s);
-    bool isFeasible(const Solution* s);
+    bool isFeasible(Solution* s);
     inline int getNumNurses() { return numNurses; }
     inline int getMinHours() { return minHours; }
     inline int getMaxHours() { return maxHours; }
@@ -65,12 +65,12 @@ double NurseSchedulingProblem::evaluate(const Solution* s) {
     return workingNurses;
 }
 
-bool NurseSchedulingProblem::isFeasible(const Solution* s) {
-    auto nurseSchedulingSolution = dynamic_cast<const NurseSchedulingSolution*>(s);
+bool NurseSchedulingProblem::isFeasible(Solution* s) {
+    auto nurseSchedulingSolution = dynamic_cast<NurseSchedulingSolution*>(s);
 
     std::vector< std::vector<bool> > assignments = nurseSchedulingSolution->getAssignments();
 
-    for(int i = 0; i < getProblem()->getNumNurses(); i++) {
+    for(int i = 0; i < getNumNurses(); i++) {
         int hoursWorked = 0;
         bool nurseAlreadyStarted = false;
         int nurseTotalPresence = 0;
@@ -79,12 +79,12 @@ bool NurseSchedulingProblem::isFeasible(const Solution* s) {
                 nurseAlreadyStarted = true;
                 hoursWorked++;
                 nurseTotalPresence++;
-                if(hoursWorked > getProblem()->getMaxHours()) return false;
+                if(hoursWorked > getMaxHours()) return false;
             }
 
             if(nurseAlreadyStarted == true) {
                 nurseTotalPresence++;
-                if(nurseTotalPresence > getProblem()->getMaxPresence()) return false;
+                if(nurseTotalPresence > getMaxPresence()) return false;
             }
 
             if(j > 0) {
@@ -95,7 +95,7 @@ bool NurseSchedulingProblem::isFeasible(const Solution* s) {
                     if(assignments[i][k] == true) {
                         restRun = 0;
                         workingRun++;
-                        if(workingRun > getProblem()->getMaxConsec()) return false;
+                        if(workingRun > getMaxConsec()) return false;
                     } else {
                         workingRun = 0;
                         restRun++;
@@ -107,7 +107,13 @@ bool NurseSchedulingProblem::isFeasible(const Solution* s) {
     }
 
     // Demand is accomplished
-    // ...
+    for(int j = 0; j < 24; j++) {
+        int totalNurses = 0;
+        for(int i = 0; i < getNumNurses(); i++) {
+            if(nurseSchedulingSolution->containsElement(i,j)) totalNurses++;
+        }
+        if(totalNurses < getDemand().at(j)) return false;
+    }
 
     return true;
 }

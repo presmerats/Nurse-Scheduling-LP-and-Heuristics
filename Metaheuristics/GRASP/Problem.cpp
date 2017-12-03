@@ -11,5 +11,5 @@ class Problem {
     virtual ~Problem() {}
     virtual void read() = 0;
     virtual double evaluate(const Solution* s) = 0;
-    virtual bool isFeasible(const Solution* s) = 0;
+    virtual bool isFeasible(Solution* s) = 0;
 };
