@@ -23,6 +23,7 @@ class ConstructiveGRASP: public SolutionMethod {
         void performSearch();
         NurseSchedulingSolution* constructSolution(float alpha);
         NurseSchedulingSolution* localSearch();
+        std::vector<CandidateAssignment> createAssignmentsNotInSolution(NurseSchedulingSolution*);
         std::vector<CandidateAssignment> updateCandidatesSet(NurseSchedulingSolution*,std::vector<CandidateAssignment>);
         std::vector<CandidateAssignment> initializeCandidatesSet();
         double computeGreedyCost(int,int,bool);
@@ -94,6 +95,13 @@ NurseSchedulingSolution* ConstructiveGRASP::constructSolution(float alpha) {
     }
 
     return solution;
+}
+
+NurseSchedulingSolution* ConstructiveGRASP::localSearch() {
+    bool update = true;
+    while(update) {
+
+    }
 }
 
 std::vector<CandidateAssignment> ConstructiveGRASP::updateCandidatesSet(NurseSchedulingSolution* solution, std::vector<CandidateAssignment> candidates) {
@@ -172,6 +180,22 @@ std::vector<CandidateAssignment> ConstructiveGRASP::initializeCandidatesSet() {
     }
 
     return candidates;
+}
+
+std::vector<CandidateAssignment> ConstructiveGRASP::createAssignmentsNotInSolution(NurseSchedulingSolution* solution) {
+    std::vector<CandidateAssignment> assignmentsNotInSolution;
+
+    for(int i = 0; i < getProblem()->getNumNurses(); i++) {
+        for(int j = 0; j < 24; j++) {
+            if(solution->getAssignments()[i][j] == true) continue;
+
+                double greedyCostOfAssignment = computeGreedyCost(i,j,true);
+                CandidateAssignment candidateAssignment = {i,j,true,greedyCostOfAssignment};
+                assignmentsNotInSolution.push_back(candidateAssignment);
+        }
+    }
+
+    return assignmentsNotInSolution;
 }
 
 double ConstructiveGRASP::computeGreedyCost(int nurse, int hour, bool state) {
