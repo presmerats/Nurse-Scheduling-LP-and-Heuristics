@@ -22,6 +22,7 @@ class NurseSchedulingProblem: public Problem {
     inline string getFilePath() const { return filePath; }
     void read();
     double evaluate(const Solution* s);
+    bool isFeasible(const Solution* s);
     inline int getNumNurses() { return numNurses; }
     inline int getMinHours() { return minHours; }
     inline int getMaxHours() { return maxHours; }
@@ -62,4 +63,51 @@ double NurseSchedulingProblem::evaluate(const Solution* s) {
         }
     }
     return workingNurses;
+}
+
+bool NurseSchedulingProblem::isFeasible(const Solution* s) {
+    auto nurseSchedulingSolution = dynamic_cast<const NurseSchedulingSolution*>(s);
+
+    std::vector< std::vector<bool> > assignments = nurseSchedulingSolution->getAssignments();
+
+    for(int i = 0; i < getProblem()->getNumNurses(); i++) {
+        int hoursWorked = 0;
+        bool nurseAlreadyStarted = false;
+        int nurseTotalPresence = 0;
+        for(int j = 0; j < 24; j++) {
+            if(assignments[i][j] == true) {
+                nurseAlreadyStarted = true;
+                hoursWorked++;
+                nurseTotalPresence++;
+                if(hoursWorked > getProblem()->getMaxHours()) return false;
+            }
+
+            if(nurseAlreadyStarted == true) {
+                nurseTotalPresence++;
+                if(nurseTotalPresence > getProblem()->getMaxPresence()) return false;
+            }
+
+            if(j > 0) {
+                // Get the working runs
+                int workingRun = 0;
+                int restRun = 0;
+                for(int k = 0; k == j; k++) {
+                    if(assignments[i][k] == true) {
+                        restRun = 0;
+                        workingRun++;
+                        if(workingRun > getProblem()->getMaxConsec()) return false;
+                    } else {
+                        workingRun = 0;
+                        restRun++;
+                        if(restRun > 1) return false;
+                    }
+                }
+            }
+        }
+    }
+
+    // Demand is accomplished
+    // ...
+
+    return true;
 }
