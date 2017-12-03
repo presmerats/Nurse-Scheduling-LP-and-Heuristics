@@ -17,6 +17,7 @@ class NurseSchedulingSolution: public Solution {
     void addElement(int,int);
     void removeElement(int,int);
     void flipElement(int,int);
+    void swapElement(int,int,int,int);
     void setElement(int,int,bool);
     bool containsElement(int,int);
     bool operator ==(const Solution& s) override {
@@ -57,6 +58,11 @@ void NurseSchedulingSolution::removeElement(int nurse, int hour) {
 
 void NurseSchedulingSolution::flipElement(int nurse, int hour) {
     this->assignments[nurse][hour] = !this->assignments[nurse][hour];
+}
+
+void NurseSchedulingSolution::swapElement(int nurse, int hour, int newNurse, int newHour) {
+    this->assignments[nurse][hour] = false;
+    this->assignments[newNurse][newHour] = false;
 }
 
 void NurseSchedulingSolution::setElement(int nurse, int hour, bool state) {
