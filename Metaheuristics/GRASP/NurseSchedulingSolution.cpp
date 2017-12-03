@@ -9,6 +9,7 @@ class NurseSchedulingSolution: public Solution {
     std::vector< std::vector<bool> > assignments;
   public:
     NurseSchedulingSolution();
+    NurseSchedulingSolution(const NurseSchedulingSolution &other);
     NurseSchedulingSolution(double);
     NurseSchedulingSolution(int, double);
     NurseSchedulingSolution(std::vector< std::vector<bool> >, double);
@@ -25,6 +26,11 @@ class NurseSchedulingSolution: public Solution {
         return other != 0 && getAssignments() == other->getAssignments() && getValue() == other->getValue();
     }
 };
+
+NurseSchedulingSolution::NurseSchedulingSolution(const NurseSchedulingSolution &other) {
+   this->value = other.value;
+   this->assignments = other.assignments; // copy the value
+}
 
 NurseSchedulingSolution::NurseSchedulingSolution() {
     this->value = 0;
