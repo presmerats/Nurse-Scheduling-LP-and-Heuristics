@@ -1,11 +1,12 @@
 #include <iostream>
 using namespace std;
+#pragma once
 
-class AddMovement {
+class AddMovement: public Movement {
     NurseSchedulingSolution perform(NurseSchedulingSolution&, int, int);
 };
 
-AddMovement::perform(NurseSchedulingSolution& solution, int nurse, int hour) {
+NurseSchedulingSolution AddMovement::perform(NurseSchedulingSolution& solution, int nurse, int hour) {
     solution.addElement(nurse,hour);
     return solution;
 }

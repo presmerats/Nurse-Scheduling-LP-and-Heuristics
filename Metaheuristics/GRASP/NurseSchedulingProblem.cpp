@@ -3,6 +3,7 @@
 #include <algorithm>
 #include "Problem.cpp"
 using namespace std;
+#pragma once
 
 class NurseSchedulingProblem: public Problem {
   private:
@@ -21,6 +22,7 @@ class NurseSchedulingProblem: public Problem {
     inline string getFilePath() const { return filePath; }
     void read();
     double evaluate(const Solution& s);
+    inline int getNumNurses() { return numNurses; }
 };
 
 NurseSchedulingProblem::NurseSchedulingProblem() {

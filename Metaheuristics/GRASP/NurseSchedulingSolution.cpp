@@ -2,6 +2,7 @@
 #include <vector>
 #include "Solution.cpp"
 using namespace std;
+#pragma once
 
 class NurseSchedulingSolution: public Solution {
   private:
