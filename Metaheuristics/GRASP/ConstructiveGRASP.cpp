@@ -44,10 +44,21 @@ ConstructiveGRASP::ConstructiveGRASP(NurseSchedulingProblem* problem, int RCLsiz
 
 void ConstructiveGRASP::performSearch() {
     int iteration = 0;
+    NurseSchedulingSolution* solution = new NurseSchedulingSolution(0);
 
     for(int i = 0; i < getProblem()->getMaxIterations(); i++) {
         //ConstructSolution
+        NurseSchedulingSolution* x = constructSolution(0.5);
+
         //LocalSearch
+        x = localSearch(x);
+
+        double valueOfCurrentSolution = getProblem()->evaluate(solution);
+        double valueOfCandidateSolution = getProblem()->evaluate(x);
+
+        if(valueOfCandidateSolution < valueOfCurrentSolution) {
+            solution = x;
+        }
     }
 }
 
