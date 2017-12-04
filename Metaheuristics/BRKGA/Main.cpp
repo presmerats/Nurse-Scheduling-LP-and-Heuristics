@@ -3,6 +3,7 @@
 #include "BRKGA_Decoder.cpp"
 #include "BRKGA_Configuration.cpp"
 #include "Individual.cpp"
+#include "BRKGA.cpp"
 using namespace std;
 
 int main(int argc, const char* argv[]) {

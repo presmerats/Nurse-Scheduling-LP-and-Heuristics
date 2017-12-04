@@ -11,6 +11,7 @@ class BRKGA_Configuration {
         float mutantProp;
         float inheritanceProb;
     public:
+        BRKGA_Configuration();
         BRKGA_Configuration(int,int,int,float,float,float);
         ~BRKGA_Configuration();
         inline int getChromosomeLength() { return chromosomeLength; }
@@ -26,6 +27,9 @@ class BRKGA_Configuration {
         inline void setMutantProp(float mutantProp) { this->mutantProp = mutantProp; }
         inline void setInheritanceProb(float inheritanceProb) { this->inheritanceProb = inheritanceProb; }
 };
+
+BRKGA_Configuration::BRKGA_Configuration() {
+}
 
 BRKGA_Configuration::BRKGA_Configuration(int chromosomeLength, int numberIndividuals, int maxNumGenerations, float eliteProp, float mutantProp, float inheritanceProb) {
     this->chromosomeLength = chromosomeLength;

@@ -11,6 +11,7 @@ class Individual {
         double fitness;
     public:
         Individual();
+        Individual(std::vector<float> chromosome);
         Individual(std::vector<float>, std::vector<NurseAssignment>, double);
         ~Individual();
         inline std::vector<float> getChromosome() { return this->chromosome; }
@@ -22,6 +23,11 @@ class Individual {
 };
 
 Individual::Individual() {
+    this->fitness = 0.0;
+}
+
+Individual::Individual(std::vector<float> chromosome) {
+    this->chromosome = chromosome;
     this->fitness = 0.0;
 }
 
