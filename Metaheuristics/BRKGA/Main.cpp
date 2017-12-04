@@ -1,6 +1,7 @@
 #include <iostream>
 #include <iomanip>
 #include "BRKGA_Decoder.cpp"
+#include "BRKGA_Configuration.cpp"
 using namespace std;
 
 int main(int argc, const char* argv[]) {
