@@ -1,6 +1,7 @@
 #include <iostream>
 #include <ctime>
 #include <algorithm>
+#include <cmath>
 #include "Individual.cpp"
 #include "BRKGA_Configuration.cpp"
 using namespace std;
@@ -15,7 +16,7 @@ class BRKGA {
         std::vector<Individual> initializePopulation();
         pair<std::vector<Individual>, std::vector<Individual> > classifyIndividuals(std::vector<Individual>,int);
         std::vector<Individual> generateMutantIndividuals(int);
-        std::vector<Individual> doCrossover(std::vector<Individual> elite,std::vector<Individual> nonElite,float,int);
+        std::vector<Individual> doCrossover(std::vector<Individual>,std::vector<Individual>,float,int);
         double getBestFitness(std::vector<Individual>);
         inline BRKGA_Configuration getConfig() { return this->config; }
 };
@@ -28,6 +29,45 @@ BRKGA::BRKGA(BRKGA_Configuration config)
 
 BRKGA::~BRKGA()
 {
+}
+
+std::vector<Individual> BRKGA::doCrossover(std::vector<Individual> elite,std::vector<Individual> nonElite,float ro,int numCrossover)
+{
+    std::vector<Individual> crossover;
+
+    for(int i = 0; i < numCrossover; i++) {
+        float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+        int indexElite = (int)floor(r * elite.size());
+
+        r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+        int indexNonElite = (int)floor(r * nonElite.size());
+
+        std::vector<float> eliteChromosome = elite.at(indexElite).getChromosome();
+        std::vector<float> nonEliteChromosome = nonElite.at(indexNonElite).getChromosome();
+
+        std::vector<float> randomChromosome;
+        randomChromosome.reserve(eliteChromosome.size());
+        for(int j = 0; j < eliteChromosome.size(); j++) {
+            float randomGene = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+            randomChromosome[j] = randomGene;
+        }
+
+        std::vector<float> crossedChromosome;
+        crossedChromosome.reserve(eliteChromosome.size());
+
+        for(int j = 0; j < eliteChromosome.size(); j++) {
+            if(randomChromosome.at(j) <= ro) {
+                crossedChromosome[j] = eliteChromosome[j];
+            } else {
+                crossedChromosome[j] = nonEliteChromosome[j];
+            }
+        }
+
+        Individual crossedIndividual(crossedChromosome);
+        crossover.push_back(crossedIndividual);
+    }
+
+    return crossover;
 }
 
 pair<std::vector<Individual>, std::vector<Individual> > BRKGA::classifyIndividuals(std::vector<Individual> population,int numElites)
