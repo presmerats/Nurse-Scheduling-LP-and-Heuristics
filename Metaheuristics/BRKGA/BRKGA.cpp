@@ -1,5 +1,6 @@
 #include <iostream>
 #include <ctime>
+#include <algorithm>
 #include "Individual.cpp"
 #include "BRKGA_Configuration.cpp"
 using namespace std;
@@ -27,6 +28,19 @@ BRKGA::BRKGA(BRKGA_Configuration config)
 
 BRKGA::~BRKGA()
 {
+}
+
+double BRKGA::getBestFitness(std::vector<Individual> population)
+{
+    std::vector<double> fitnessOfPopulationIndividuals;
+    //population.reserve(this->getConfig().getNumberIndividuals());
+
+    for(int i = 0; i < population.size(); i++) {
+        fitnessOfPopulationIndividuals.push_back(population.at(i).getFitness());
+        std::sort(fitnessOfPopulationIndividuals.begin(), fitnessOfPopulationIndividuals.end(), std::greater<float>());
+    }
+
+    return fitnessOfPopulationIndividuals.at(0);
 }
 
 std::vector<Individual> BRKGA::generateMutantIndividuals(int numMutants)
