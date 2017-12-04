@@ -13,7 +13,7 @@ class BRKGA {
         ~BRKGA();
         std::vector<Individual> initializePopulation();
         pair<std::vector<Individual>, std::vector<Individual> > classifyIndividuals(std::vector<Individual>);
-        std::vector<Individual> generateMutantIndividuals();
+        std::vector<Individual> generateMutantIndividuals(int);
         std::vector<Individual> doCrossover(std::vector<Individual> elite,std::vector<Individual> nonElite,float,int);
         double getBestFitness(std::vector<Individual>);
         inline BRKGA_Configuration getConfig() { return this->config; }
@@ -29,6 +29,25 @@ BRKGA::~BRKGA()
 {
 }
 
+std::vector<Individual> BRKGA::generateMutantIndividuals(int numMutants)
+{
+    std::vector<Individual> mutants;
+    //population.reserve(this->getConfig().getNumberIndividuals());
+
+    for(int i = 0; i < numMutants; i++) {
+        std::vector<float> chromosome;
+        chromosome.reserve(this->getConfig().getChromosomeLength());
+        for(int j = 0; j < this->getConfig().getChromosomeLength(); j++) {
+            float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+            chromosome[j] = r;
+        }
+        Individual mutant(chromosome);
+        mutants.push_back(mutant);
+    }
+
+    return mutants;
+}
+
 std::vector<Individual> BRKGA::initializePopulation()
 {
     std::vector<Individual> population;
@@ -42,7 +61,7 @@ std::vector<Individual> BRKGA::initializePopulation()
             chromosome[j] = r;
         }
         Individual ind(chromosome);
-        population.push_back(chromosome);
+        population.push_back(ind);
     }
 
     return population;
