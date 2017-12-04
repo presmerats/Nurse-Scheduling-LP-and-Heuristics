@@ -11,8 +11,8 @@ class BRKGA_Decoder {
 std::vector<Individual> BRKGA_Decoder::decode(std::vector<Individual> population)
 {
    for(auto i : population) {
-       population[0].setValue(0);
-       population[1].setValue(1);
+       population[0].setFitness(0);
+       population[1].setFitness(1);
    }
 
    return population;
