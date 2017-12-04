@@ -13,7 +13,7 @@ class BRKGA {
         BRKGA(BRKGA_Configuration);
         ~BRKGA();
         std::vector<Individual> initializePopulation();
-        pair<std::vector<Individual>, std::vector<Individual> > classifyIndividuals(std::vector<Individual>);
+        pair<std::vector<Individual>, std::vector<Individual> > classifyIndividuals(std::vector<Individual>,int);
         std::vector<Individual> generateMutantIndividuals(int);
         std::vector<Individual> doCrossover(std::vector<Individual> elite,std::vector<Individual> nonElite,float,int);
         double getBestFitness(std::vector<Individual>);
@@ -28,6 +28,44 @@ BRKGA::BRKGA(BRKGA_Configuration config)
 
 BRKGA::~BRKGA()
 {
+}
+
+pair<std::vector<Individual>, std::vector<Individual> > BRKGA::classifyIndividuals(std::vector<Individual> population,int numElites)
+{
+    std::vector<double> fitnessOfPopulationIndividuals;
+    for(int i = 0; i < population.size(); i++) {
+        fitnessOfPopulationIndividuals.push_back(population.at(i).getFitness());
+        std::sort(fitnessOfPopulationIndividuals.begin(), fitnessOfPopulationIndividuals.end(), std::greater<float>());
+    }
+
+    std::vector<double> whichElite(fitnessOfPopulationIndividuals.begin(), fitnessOfPopulationIndividuals.begin() + numElites);
+    std::vector<double> whichNonElite(fitnessOfPopulationIndividuals.begin() + numElites, fitnessOfPopulationIndividuals.begin() + numElites + fitnessOfPopulationIndividuals.size());
+
+    std::vector<Individual> elite;
+    std::vector<Individual> nonElite;
+
+    for(int i = 0; i < whichElite.size(); i++) {
+        for(int j = 0; j < population.size(); j++) {
+            if(population.at(j).getFitness() == whichElite.at(i)) {
+                elite.push_back(population.at(j));
+                population.erase(population.begin() + j);
+                break;
+            }
+        }
+    }
+
+    for(int i = 0; i < whichNonElite.size(); i++) {
+            for(int j = 0; j < population.size(); j++) {
+                if(population.at(j).getFitness() == whichNonElite.at(i)) {
+                    nonElite.push_back(population.at(j));
+                    population.erase(population.begin() + j);
+                    break;
+                }
+            }
+        }
+
+    pair<std::vector<Individual>, std::vector<Individual> > classification(elite, nonElite);
+    return classification;
 }
 
 double BRKGA::getBestFitness(std::vector<Individual> population)
