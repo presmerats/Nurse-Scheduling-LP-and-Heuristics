@@ -1,0 +1,8 @@
+desiredZ=[1];
+nNurses = 112;
+hours = 42;
+demand = [26 15 9 15 26 19 23 15 17 3 23 17 18 8 21 14 8 27 21 19 23 19 10 26 25 18 12 14 1 24 23 16 13 22 0 11 7 17 9 16 25 11];
+minHours = 6;
+maxHours = 12;
+maxConsec = 10;
+maxPresence = 13;
