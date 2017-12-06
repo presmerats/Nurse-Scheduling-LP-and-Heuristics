@@ -1,4 +1,4 @@
-numNurses = 3;
+nNurses = 3;
 hours =  5;
 demand = [ 0 1 1 1 1];
 minHours = 1;

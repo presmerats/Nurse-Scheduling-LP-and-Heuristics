@@ -9,13 +9,13 @@
  * Creation Date: 04/11/2017 at 21:56:39
  *********************************************/
 
-int numNurses=...;
+int nNurses=...;
 int minHours=...;
 int maxHours=...;
 int maxConsec=...;
 int maxPresence=...;
 int hours=...;
-range N=1..numNurses;
+range N=1..nNurses;
 range H=1..hours;
 int demand[h in H]=...;
 //decision vars

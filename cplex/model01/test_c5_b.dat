@@ -3,7 +3,7 @@
  * Author: homero
  * Creation Date: 06/12/2017 at 10:19:14
  *********************************************/
-numNurses = 3;
+nNurses = 3;
 hours =  5;
 demand = [ 1 0 1 0 1];
 minHours = 1;
