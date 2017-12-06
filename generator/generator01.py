@@ -76,7 +76,8 @@ def writeTestModel(path=Path()):
 
 
 
-
+        # objective function expected value (should be extracted from filename)
+        expected = 1
         # for each of the files write a line like this one
         for file in dirs:
             if file.endswith('.dat'):
@@ -84,7 +85,7 @@ def writeTestModel(path=Path()):
                 # f.write('var def = new IloOplModelDefinition(src);\n')
                 # f.write('var cplex = new IloCplex();\n')
 
-                f.write('myTest(def, cplex,"' + file +'","SUCCESS" );\n')
+                f.write('myTest(def, cplex,"' + file +'", logname, "SUCCESS", '+expected+' );\n')
 
                 # f.write('def.end();\n')
                 # f.write('cplex.end();\n')
