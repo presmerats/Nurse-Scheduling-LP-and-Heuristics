@@ -1,0 +1,34 @@
+/*
+nNurses = 2;
+//hours =  24;
+demand = [ 0 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0];
+minHours = 3;
+maxHours = 5;
+maxConsec = 4;
+maxPresence = 4;
+*/
+
+numNurses = 2;
+hours =  5;
+demand = [ 0 1 1 1 1];
+minHours = 3;
+maxHours = 5;
+maxConsec = 4;
+maxPresence = 4;
+desiredZ = [1 0];
+/**/
+
+/*
+
+z = 
+[ 1 1];
+w = [
+[ 0 0 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+[ 0 1 0 0 0 1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0]];
+demand = 
+[ 0 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0];
+
+w = [
+[ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 1]
+[ 0 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]];
+*/
