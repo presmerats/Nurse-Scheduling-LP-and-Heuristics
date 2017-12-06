@@ -18,24 +18,30 @@ function myTest(def, cplex, filename, goal, objf, showsol) {
  var ofile = new IloOplOutputFile("log-tests-x_16.txt", true);
  
  var model = new IloOplModel(def,cplex);
+ 
  var data = new IloOplDataSource(filename);
  model.addDataSource(data);
  model.generate();
  cplex.epgap=0.01;
- if (cplex.solve() && goal == "SUCCESS") {
- 	ofile.writeln("SUCCESS/SUCCESS ---------------------- ok: "+filename + " time: "+cplex.getSolvedTime());
-
-} else if (!cplex.solve() && goal == "FAIL") {
- 	ofile.writeln("FAIL/FAIL       ---------------------- ok: "+filename);
-} else {
-
-	if(cplex.solve()){
-		ofile.writeln("FAIL/SUCCESS    ------------------- ERROR: "+filename);
+ cplex.DetTiLim=100.0;
+ //model.setParam(IloCplex.Param.tune.DetTimeLimit,10.0);
+ 
+ //try {
+  
+	if (cplex.solve() && goal == "SUCCESS") {
+	 	ofile.writeln("SUCCESS/SUCCESS ---------------------- ok: "+filename + " time: "+cplex.getSolvedTime());
+	
+	} else if (!cplex.solve() && goal == "FAIL") {
+	 	ofile.writeln("FAIL/FAIL       ---------------------- ok: "+filename);
 	} else {
-		ofile.writeln("FAIL/SUCCESS    ------------------- ERROR: "+filename+" objfunc=UNSOLVED != "+objf);
-	}	
-} 	
-
+	
+		if(cplex.solve()){
+			ofile.writeln("FAIL/SUCCESS    ------------------- ERROR: "+filename);
+		} else {
+			ofile.writeln("FAIL/SUCCESS    ------------------- ERROR: "+filename+" objfunc=UNSOLVED != "+objf);
+		}	
+	} 	
+	
 	if (cplex.solve()){
 	 	//ofile.writeln("                --- int vars: "+cplex.getNintVars());
 	 	//ofile.writeln("                --- lower bound: "+cplex.getLb());
@@ -53,6 +59,13 @@ function myTest(def, cplex, filename, goal, objf, showsol) {
 
  	//if (showsol == "y")
  	//	model.printSolution();
+	  
+	  
+// } catch (IloException e){
+//  	ofile.writeln("                --- Exception Occurred for : "+filename )
+//	ofile.writeln(model.printExternalData());	
+//	ofile.writeln(e.printStackTrace());
+// }
 
  ofile.close();
  data.end();
@@ -64,10 +77,13 @@ function myTest(def, cplex, filename, goal, objf, showsol) {
 
 
 var src = new IloOplModelSource("model01-hfree.mod");
+
 var def = new IloOplModelDefinition(src);
+
 var cplex = new IloCplex();
 
 
+myTest(def, cplex,"x_15_0.dat","SUCCESS" ,1);
 myTest(def, cplex,"x_16_0.dat","SUCCESS" ,1);
 myTest(def, cplex,"x_16_1.dat","SUCCESS" ,1);
 
