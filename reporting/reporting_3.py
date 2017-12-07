@@ -1,57 +1,54 @@
 import json
 import math
 import matplotlib.pyplot as plt
-import os
 import sys
+import os
 
 filename="../cplex/model01/log-tests-model01-hfree-1512596874.242562.txt"
 if len(sys.argv) >1:
     filename=sys.argv[1]
-
-
 
 if not os.path.exists(filename):
     exit()
 
 log = json.load(open(filename))
 
-#print(log)
-#exit()
 
 results = {}
 for elem in log:
     for k,v in elem.items():
-        if "int_vars" in v and "time" in v:
-            nNurses = v["Data"]
-            i1 = nNurses.find("nNurses = ")
-            i1 = i1 + 10
-            i2 = i1 + nNurses[i1:].find(";")
-            #print(i1)
-            #print(i2)
-            #print(nNurses[i1:])
-            #if i2 == -1 or i1 == -1:
-            #    continue
-            nNurses = nNurses[i1:i2]
-            results[int(nNurses)]= v["time"]
+        if  "time" in v:
+            results[k[:-4]]= float(v["time"])
 
 results_list = sorted(results.items())
 x,y = zip(*results_list)
-print(results_list)
+
+print(results)
 print(x)
 print(y)
 
-
 # csv file
-f = open(filename+".report2.csv","w")
+f = open(filename+".report3.csv","w")
 f.write("instance,solve_time(s)\n")
 for k,v in results.items():
     f.write(str(k)+","+str(v)+"\n")
 
 f.close()
 
-#plot
-plt.plot(x,y)
-plt.xlabel('instance size')
-plt.ylabel('Solve time')
+# plot 
+fig, ax = plt.subplots() 
+plt.plot(range(len(x)),y)
+#plt.bar(range(len(y)),y, align='center')
+plt.xticks(range(len(x)),x)
+
+#plt.xticks(rotation='vertical')
+plt.xticks(rotation=45, ha='right')
+
+plt.xlabel('instance name')
+plt.ylabel('Solve time(s)')
+
+#fig.subplots_adjust(bottom=0.9)
+fig.tight_layout()
 #plt.axis([0, len(results), 0, max(y)])
+
 plt.show()
