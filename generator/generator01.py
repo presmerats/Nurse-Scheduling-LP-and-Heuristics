@@ -521,14 +521,20 @@ def new_instance4(hours, nNurses, maxPresence, maxConsec, minHours, maxHours, nu
     if numCentroides == 0:
         # numcentroides is 0
         print(" centroides:  0 , flat schedule")
-        hstart = randrange(1,hours - 2*minHours + 1)
+        hstart_top = max(2,hours - 2*minHours + 1)
+        hstart = randrange(1,hstart_top)
         w, minHours, maxHours, maxPresence, maxConsec = gen4Sparse(w, hstart,hours, maxConsec,maxConsecSave,minHours, maxHours, maxPresence)
 
     else:
         # place centroides in [1, hours] (with some variability)
 
         centroides_separation = int(math.ceil(hours/(numCentroides+1)))
-        centroides = [x+round(randrange(-int(math.ceil(std/3.0)),int(math.ceil(std/3.0)), int(math.ceil(std/3.0))),0) for x in range(centroides_separation,hours, centroides_separation)]
+        centroides = [x for x in range(
+                                    1 + int(randrange(0,std)) ,
+                                    hours, 
+                                    centroides_separation + randrange(0, int(math.ceil(std/3.0))),
+                                    ) 
+                        ]
         print(" centroides:")
         print(centroides)
 
@@ -605,16 +611,16 @@ def Generate4(hours, nNurses, pct_extra, maxPresence, maxConsec, minHours, maxHo
                 
                 ok-updating minHours, and adding some if not satisfied 
                  
-                updating maxPresence
+                ok-updating maxPresence
 
-                centroides not in the same place? 
+                ok-centroides not in the same place? 
 
-                centroides in the 1 or in the extremes      
+                ok-centroides in the 1 or in the extremes      
 
     """
 
     # init extra params
-    prob = 0.8 # the prob of generating the desired shape of schedule
+    prob = 0.6 # the prob of generating the desired shape of schedule
     std = 4 # std in the placing of the centroides of the shape
 
 
@@ -667,35 +673,39 @@ def metaGenerate4(path):
             - play with the params randomly or exhaustively...
             - add a percentage to nNurses from 10% to 60%? (adjust)
 
+        population
+            hours fixed (easy like 5 or 6)
+            for nNurses in range(1,10,):
+                for maxPresence in range(4, hours):
+                    for maxConsec in range(maxPresence,2):
+                        for maxHours in range(4, maxPresence):
+                            for minHours in range(1, maxHours):
+                                for numCentroides in range (0,4):
+                                    #generate 10 or 5 instances...
+
     """
 
-    # for j in range(nmin,nmax,5):
-    #     print("j="+str(j))
-    #     lastIteration = 0
-    #     for i in range(100+minpct,100+maxpct,1):
-    #         extra=int(j*float((100 + maxpct) - i + (100 + minpct))/100.0)
-
-    #         if extra!=lastIteration:
-    #             print(extra)
-    #             metaGenerate3(n=j,extra=extra, path=p)
-                
-
-
-    #         lastIteration=extra
-
-    instance = Generate4(
-        hours=8, 
-        nNurses=1, 
-        pct_extra=0, 
-        maxPresence=8, 
-        maxConsec=3, 
-        minHours=5, 
-        maxHours=8, 
-        numCentroides=1)
-    write(instance,"ng",path)
+    hours=6
+    for pct_extra in range (20,40,5):
+        for nNurses in range(1,10):
+            for maxPresence in range(3, hours):
+                for maxConsec in range(maxPresence,2,-1):
+                    for maxHours in range(2, maxPresence):
+                        for minHours in range(1, maxHours):
+                            for numCentroides in range (0,4):
+                                instance = Generate4(
+                                    hours=hours, 
+                                    nNurses=nNurses, 
+                                    pct_extra=pct_extra, 
+                                    maxPresence=maxPresence, 
+                                    maxConsec=maxConsec, 
+                                    minHours=minHours, 
+                                    maxHours=maxHours, 
+                                    numCentroides=numCentroides)
+                                write(instance,"ng",path)
 
 
-    
+
 
 if __name__ == '__main__':
 
