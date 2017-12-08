@@ -28,10 +28,13 @@ print(x)
 print(y)
 
 # csv file
+# csv file
 f = open(filename+".report3.csv","w")
-f.write("instance,solve_time(s)\n")
-for k,v in results.items():
-    f.write(str(k)+","+str(v)+"\n")
+f.write("instance,objective_fuction, solve_time(s)\n")
+for elem in log:
+    for k,v in elem.items():
+        if "time" in v and "ObjectiveFunction" in v:
+            f.write(str(k)+","+str(v["ObjectiveFunction"])+","+str(v["time"])+"\n")
 
 f.close()
 
