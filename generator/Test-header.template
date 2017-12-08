@@ -37,7 +37,7 @@ function myTest(def, cplex, filename, logname, goal, objf, showsol) {
  var data = new IloOplDataSource(filename);
  model.addDataSource(data);
  model.generate();
- cplex.epgap=0.01;
+ //cplex.epgap=0.01;
  // 540000.0 1h
  // 245000.0 30m
  // 122500.0 15m
