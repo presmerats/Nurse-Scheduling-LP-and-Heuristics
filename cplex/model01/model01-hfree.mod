@@ -24,7 +24,7 @@ dvar boolean z[n in N];
 dvar int s[n in N];
 dvar int e[n in N];
 // debugging vars
-int desiredZ[n in N]=...;
+//int desiredZ[n in N]=...;
 
 
 // minimize the number of nurses working
