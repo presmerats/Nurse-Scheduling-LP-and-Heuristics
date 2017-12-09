@@ -38,21 +38,23 @@ function myTest(def, cplex, filename, logname, goal, objf, showsol) {
  model.addDataSource(data);
  model.generate();
  //cplex.epgap=0.01;
- // 540000.0 1h
- // 245000.0 30m
- // 122500.0 15m
- // 061250.0 7m
- //   9000.0 1m
- cplex.DetTiLim=245000.0;
+ // 
+ // 3600.0 1h
+ // 1800.0 30m
+ // 900.0 15m
+ // 300.0 5m
+ //  60.0 1m
+ cplex.TiLim=300.0;
  //model.setParam(IloCplex.Param.tune.DetTimeLimit,10.0);
  
  //try {
-  
+
+  var solved = cplex.solve();  
   ofile.writeln("\"expected_output\" : \""+goal+"\",");
-  ofile.writeln("\"computed_output\" : \""+cplex.solve()+"\",");
+  ofile.writeln("\"computed_output\" : \""+solved+"\",");
   ofile.writeln("\"desired_objfunc\" : \""+objf+"\",");
 	
-	if (cplex.solve()){
+	if (solved){
 	 	
 	 	ofile.writeln("\"time\" : \""+cplex.getSolvedTime()+"\",");
 	 	ofile.writeln("\"int_vars\" : \""+cplex.getNintVars()+"\",");
