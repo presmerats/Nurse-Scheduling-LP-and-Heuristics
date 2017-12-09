@@ -6,4 +6,3 @@ minHours = 3;
 maxHours = 6;
 maxConsec = 2;
 maxPresence = 10;
-desiredZ=[1];

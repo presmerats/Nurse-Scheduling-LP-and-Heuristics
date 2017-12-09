@@ -1,4 +1,4 @@
-desiredZ=[1];
+
 nNurses = 42;
 hours = 16;
 demand = [6 4 7 9 1 6 8 4 5 10 0 5 1 8 10 5];
