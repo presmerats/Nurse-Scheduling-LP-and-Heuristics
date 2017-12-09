@@ -50,7 +50,8 @@ for k,v in results.items():
 f.close()
 
 #plot
-plt.plot(x,y)
+plt.plot(x,y, marker='+', color='r', ls='')
+
 plt.xlabel('instance size')
 plt.ylabel('Solve time')
 #plt.axis([0, len(results), 0, max(y)])
