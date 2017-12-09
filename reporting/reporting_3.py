@@ -40,7 +40,8 @@ f.close()
 
 # plot 
 fig, ax = plt.subplots() 
-plt.plot(range(len(x)),y)
+plt.plot(range(len(x)),y, marker='+', color='b', ls='')
+
 #plt.bar(range(len(y)),y, align='center')
 plt.xticks(range(len(x)),x)
 
