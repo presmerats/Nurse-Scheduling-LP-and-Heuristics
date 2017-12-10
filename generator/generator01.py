@@ -39,7 +39,8 @@ def write(instance, instance_type="", path='.'):
         str(instance["maxConsec"]) +'mxC-' + \
         str(instance["maxHours"]) +'mxH-' + \
         str(instance["minHours"]) +'mnH-' + \
-        '{0:%Y%m%d_%H-%M-%S}'.format(datetime.now()) + '.dat' 
+        '{0:%Y%m%d_%H-%M-%S}'.format(datetime.now()) + \
+        str(randrange(1000)) + '.dat' 
     filename = PurePath(path, filename)
     filename = str(filename)
 
@@ -688,46 +689,59 @@ def metaGenerate4(path):
                                 for numCentroides in range (0,4):
                                     #generate 10 or 5 instances...
 
+        3s  and some 300s time limit
+        for hours in range (6,25,6):
+            for pct_extra in range(20,70,40):
+                for nNurses in [10,40,60,100,200,500,1000]:
+                    maxPresence = int(hours*2/3)
+                    maxConsec = int(maxPresence*2/3 - 2)
+                    maxHours = int(maxPresence*2/3)
+                    minHours = 2
+
     """
 
-    for hours in range (4,24,4):
-        for pct_extra in range (0,40,10):
-            for nNurses in range(1,30,5):
-                for maxPresence in range(3, hours,5):
-                    for maxConsec in range(maxPresence,int(maxPresence/2),-4):
-                        for maxHours in range(2, maxPresence,int(maxPresence/2)):
-                            for minHours in range(1,maxHours,int(maxHours/2)):
-                                for numCentroides in range (0,4):
-                                    instance = Generate4(
-                                        hours=hours, 
-                                        nNurses=nNurses, 
-                                        pct_extra=pct_extra, 
-                                        maxPresence=maxPresence, 
-                                        maxConsec=maxConsec, 
-                                        minHours=minHours, 
-                                        maxHours=maxHours, 
-                                        numCentroides=numCentroides)
-                                    write(instance,"ng",path)
-                                    instance = Generate4(
-                                        hours=hours, 
-                                        nNurses=nNurses, 
-                                        pct_extra=pct_extra, 
-                                        maxPresence=maxPresence, 
-                                        maxConsec=maxConsec, 
-                                        minHours=minHours, 
-                                        maxHours=maxHours, 
-                                        numCentroides=numCentroides)
-                                    write(instance,"ng",path)
-                                    instance = Generate4(
-                                        hours=hours, 
-                                        nNurses=nNurses, 
-                                        pct_extra=pct_extra, 
-                                        maxPresence=maxPresence, 
-                                        maxConsec=maxConsec, 
-                                        minHours=minHours, 
-                                        maxHours=maxHours, 
-                                        numCentroides=numCentroides)
-                                    write(instance,"ng",path)
+    for hours in range (12,25,6):
+        for pct_extra in range(20,70,40):
+            for nNurses in [40,100]:
+                maxPresence = int(hours*2/3)
+                maxConsec = int(maxPresence*2/3 - 2)
+                maxHours = int(maxPresence*2/3)
+                minHours = 2
+                #for maxPresence in range(3, hours,5):
+                #    for maxConsec in range(maxPresence,int(maxPresence/2),-4):
+                #        for maxHours in range(2, maxPresence,int(maxPresence/2)):
+                #            for minHours in range(1,maxHours,int(maxHours/2)):
+                for numCentroides in range (0,5):
+                    instance = Generate4(
+                        hours=hours, 
+                        nNurses=nNurses, 
+                        pct_extra=pct_extra, 
+                        maxPresence=maxPresence, 
+                        maxConsec=maxConsec, 
+                        minHours=minHours, 
+                        maxHours=maxHours, 
+                        numCentroides=numCentroides)
+                    write(instance,"ng",path)
+                    instance = Generate4(
+                        hours=hours, 
+                        nNurses=nNurses, 
+                        pct_extra=pct_extra, 
+                        maxPresence=maxPresence, 
+                        maxConsec=maxConsec, 
+                        minHours=minHours, 
+                        maxHours=maxHours, 
+                        numCentroides=numCentroides)
+                    write(instance,"ng",path)
+                    instance = Generate4(
+                        hours=hours, 
+                        nNurses=nNurses, 
+                        pct_extra=pct_extra, 
+                        maxPresence=maxPresence, 
+                        maxConsec=maxConsec, 
+                        minHours=minHours, 
+                        maxHours=maxHours, 
+                        numCentroides=numCentroides)
+                    write(instance,"ng",path)
 
 
 
