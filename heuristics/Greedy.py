@@ -25,13 +25,16 @@ def isValid(data, candidate):
     maxHours_check = True
     sumW = 0
     maxConsec_check = True
+    maxConsec_avoid = False
     consec = 0
     maxPresence_check = True
     start = -1
     end = -1
     rest_check = True
+    rest_avoid = False
     rest = 0
     minHours_check = True
+    minHours_avoid = False
     for w in range(len(candidate)):
 
         # maxHours
@@ -40,65 +43,57 @@ def isValid(data, candidate):
 
         # maxConsec
         #   -> just need to be checked on the last consec group of hours..
-        
-        maxConsec_check = False
-        if candidate[-1] == 0 :
-            maxConsec_check = True
-        else:
-            consec = 0
-            for w in range(len(candidate)):
-
-                
-                if candidate[len(candidate) - w - 1] == 0:
-                    maxConsec_check = True
-                    break
-                else:
-                    consec += 1
-                    if consec > d["maxConsec"]:
-                        maxConsec_check = False
-                        break
-                
+        if not maxConsec_avoid:
+            if candidate[len(candidate) - w - 1] == 0:
+                maxConsec_check = True
+                maxConsec_avoid = True
+            else:
+                consec += 1
+                if consec > d["maxConsec"]:
+                    maxConsec_check = False
+                    maxConsec_avoid = True
             
-            maxConsec_check = consec <= d["maxConsec"]
+                maxConsec_check = consec <= d["maxConsec"]
 
-            #print("maxconsec " + str(d["maxConsec"]) + " consec:" + str(consec))
+                #print("maxconsec " + str(d["maxConsec"]) + " consec:" + str(consec))
 
         # maxPresence
-        start = -1
-        for w in range(len(candidate)):
+        if start == -1:
             if candidate[w] == 1:
                 start = w + 1
-                break
-        end = -1
-        for w in range(len(candidate)):
+ 
+        if end == -1: 
             if candidate[len(candidate) - w - 1] == 1:
                 end = len(candidate) - w
-                break
-
-        if end == -1 or start == -1:
-            maxPresence_check = True  # should never happend!
-        else:
+        
+        if end != -1 and start != -1:
             maxPresence_check = d["maxPresence"] >= end - start + 1
+            # if not maxPresence_check:
+            #     print("maxPresence "+str(d["maxPresence"])+" start:"+str(start)+" end:"+str(end))
 
         #print("maxPresence "+str(d["maxPresence"])+" start:"+str(start)+" end:"+str(end))
 
         # rest
-        if candidate[-1] == 1:
-            rest_check = True
-        else:
-            if candidate[-2] == 1:
+        if not rest_avoid:
+            if candidate[-1] == 1:
                 rest_check = True
-            elif candidate[-2] == 0 and start < len(candidate) - 2 and end > len(candidate) - 2:
-                rest_check = False
+
             else:
-                rest_check = True
+                if candidate[-2] == 1:
+                    rest_check = True
+                elif candidate[-2] == 0 and start < len(candidate) - 2 and end > len(candidate) - 2:
+                    rest_check = False
+                else:
+                    rest_check = True
+            rest_avoid = True
 
         # minHours (only if hours - minHours + 1 <= len(candidate))
-        minHours_check = True
-        if sumW < d["minHours"]  and d["hours"] - d["minHours"] + 1 <= len(candidate):
-            #print("sumW: " + str(sumW) + " >= " + str(d["minHours"]) + "-" + str(d["hours"]) + "+" + str(len(candidate)) + " minHours_check: " + str(minHours_check))
+        if w == len(candidate) - 1  and not minHours_avoid:
+            if sumW < d["minHours"]  and d["hours"] - d["minHours"] + 1 <= len(candidate):
+                #print("sumW: " + str(sumW) + " >= " + str(d["minHours"]) + "-" + str(d["hours"]) + "+" + str(len(candidate)) + " minHours_check: " + str(minHours_check))
 
-            minHours_check = sumW >= d["minHours"] - (d["hours"] - len(candidate))
+                minHours_check = sumW >= d["minHours"] - (d["hours"] - len(candidate))
+            minHours_avoid = True
 
         validity = minHours_check and \
             maxHours_check and \
@@ -106,16 +101,19 @@ def isValid(data, candidate):
             maxPresence_check and \
             rest_check
         
-        # print("validity: ")
+        if not validity:
+            break
 
-        # print(candidate)
-        # print(minHours_check)
-        # print(maxHours_check)
-        # print(maxConsec_check)
-        # print(maxPresence_check)
-        # print(rest_check)
-        # print("=")
-        # print(validity)
+    print("validity: ")
+
+    print(candidate)
+    print(maxHours_check)
+    print(maxConsec_check)
+    print(maxPresence_check)
+    print(rest_check)
+    print(minHours_check)
+    print("=")
+    print(validity)
     return validity
 
 

@@ -51,7 +51,7 @@ def isTotallyValid(data, candidate):
                     print("maxconsec " + str(d["maxConsec"]) + " consec:" + str(consec) + " stop at "+str((len(candidate) - w)))
                   
             # maxPresence
-            if star == -1:
+            if start == -1:
                 if candidate[w] == 1:
                     start = w + 1
                 
@@ -71,11 +71,11 @@ def isTotallyValid(data, candidate):
                     
 
             # minHours (only if hours - minHours + 1 <= len(candidate))
-            
-            if sumW < d["minHours"] and d["hours"] - d["minHours"] + 1 <= len(candidate):
-                #print("sumW: " + str(sumW) + " >= " + str(d["minHours"]) + "-" + str(d["hours"]) + "+" + str(len(candidate)) + " minHours_check: " + str(minHours_check))
+            if w == len(candidate) - 1 :
+                if sumW < d["minHours"] and d["hours"] - d["minHours"] + 1 <= len(candidate):
+                    #print("sumW: " + str(sumW) + " >= " + str(d["minHours"]) + "-" + str(d["hours"]) + "+" + str(len(candidate)) + " minHours_check: " + str(minHours_check))
 
-                minHours_check = sumW >= d["minHours"] - (d["hours"] - len(candidate))
+                    minHours_check = sumW >= d["minHours"] - (d["hours"] - len(candidate))
 
 
         validity = minHours_check and \
@@ -84,20 +84,20 @@ def isTotallyValid(data, candidate):
             maxPresence_check and \
             rest_check
         
-        print("validity: ")
 
-        print(candidate)
-        print(minHours_check)
-        print(maxHours_check)
-        print(maxConsec_check)
-        print(maxPresence_check)
-        print(rest_check)
-        print("=")
-        print(validity)
 
         if not validity:
             print("not valid solution!")
-            return validity
+            print("validity: ")
+            print(candidate)
+            print(maxHours_check)
+            print(maxConsec_check)
+            print(maxPresence_check)
+            print(rest_check)
+            print(minHours_check)
+            print("=")
+            print(validity)
+            break
 
     return validity
 
