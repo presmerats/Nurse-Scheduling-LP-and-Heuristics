@@ -23,7 +23,7 @@ def isTotallyValid(data, candidate):
         
         if candidate_sol["z"][nurse] == 0:
             continue
-            
+
         candidate  = candidate_sol["w"][nurse]
 
         maxHours_check = True
@@ -38,6 +38,7 @@ def isTotallyValid(data, candidate):
         minHours_check = True
         for w in range(len(candidate)):
 
+            #print("----------hour: " +  str(w) + " w(n,h)=" + str(candidate[w]))
             # maxHours
             sumW += candidate[w]
             maxHours_check = sumW <= d["maxHours"]
@@ -57,7 +58,7 @@ def isTotallyValid(data, candidate):
             if start == -1:
                 if candidate[w] == 1:
                     start = w + 1
-                
+            
             if end == -1: 
                 if candidate[len(candidate) - w - 1] == 1:
                     end = len(candidate) - w
@@ -68,7 +69,7 @@ def isTotallyValid(data, candidate):
                 #     print("maxPresence "+str(d["maxPresence"])+" start:"+str(start)+" end:"+str(end))
                     
             # rest
-            if w > start and w <= end:
+            if end != -1 and start != -1 and w > start and w <= end:
                 if candidate[w - 1] == 0 and candidate[w] == 0:
                     rest_check = False
                     
@@ -145,16 +146,25 @@ def electiveCandidates(solution, n, h, data):
             candidate["z"][ni] = 1 # in case we use not working nurses also
             candidate["w"][n][h] = 0
             
-            candidate["z"][n] = 0 
+            candidate["z"][n] = 0
+            
             for haux in range(data["hours"]):
                 if candidate["w"][n][haux] == 1:
                     candidate["z"][n] = 1
-                    break
+                
+            this_cost = 0 
+            for z in candidate["z"]:
+                if z == 1:    
+                    this_cost += 1
+
+            candidate["cost"] = this_cost
+                    
 
 
-            pp.pprint(candidate)
+            #pp.pprint(candidate)
 
             # validate
+            #print(" isFeasible(candidate) " + str(isFeasible(candidate, data)))
             if isTotallyValid(data, candidate) and isFeasible(candidate, data):
                 candidates.append(candidate)
 
@@ -188,12 +198,14 @@ def createNeighborhood(solution, data):
                     # if no new candidates, return the current solution
                     candidates = electiveCandidates(solution,n,h, data)
 
+                    pp.pprint(candidates)
+
                     # add them to the set of new neighbors
                     new_ns.extend(candidates)
+                    
 
-            ns = new_ns
-
-        Ns.extend(ns)
+            Ns.extend(deepcopy(new_ns))
+            ns = []
 
         
     return Ns 
