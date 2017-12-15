@@ -104,16 +104,16 @@ def isValid(data, candidate):
         if not validity:
             break
 
-    print("validity: ")
+    # print("validity: ")
 
-    print(candidate)
-    print(maxHours_check)
-    print(maxConsec_check)
-    print(maxPresence_check)
-    print(rest_check)
-    print(minHours_check)
-    print("=")
-    print(validity)
+    # print(candidate)
+    # print(maxHours_check)
+    # print(maxConsec_check)
+    # print(maxPresence_check)
+    # print(rest_check)
+    # print(minHours_check)
+    # print("=")
+    # print(validity)
     return validity
 
 

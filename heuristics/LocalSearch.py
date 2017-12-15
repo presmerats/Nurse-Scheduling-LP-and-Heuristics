@@ -91,16 +91,16 @@ def isTotallyValid(data, candidate):
 
 
         if not validity:
-            print("not valid solution!")
-            print("validity: ")
-            print(candidate)
-            print(maxHours_check)
-            print(maxConsec_check)
-            print(maxPresence_check)
-            print(rest_check)
-            print(minHours_check)
-            print("=")
-            print(validity)
+            # print("not valid solution!")
+            # print("validity: ")
+            # print(candidate)
+            # print(maxHours_check)
+            # print(maxConsec_check)
+            # print(maxPresence_check)
+            # print(rest_check)
+            # print(minHours_check)
+            # print("=")
+            # print(validity)
             break
 
     return validity
@@ -138,7 +138,7 @@ def electiveCandidates(solution, n, h, data):
             continue
         else:
 
-            print(" switching from " + str(n) + "," + str(h) + " to " + str(ni) + "," + str(h))
+            print(" switching from W" + str(n) + "," + str(h) + " to W" + str(ni) + "," + str(h))
 
             # prepare the candidate (add the extra hour)
             candidate = copySol(solution, data)
@@ -177,7 +177,7 @@ def createNeighborhood(solution, data):
 
     Ns = []
     for n in range(data["nNurses"]):
-        print(" nurse " +  str(n))
+        #print(" nurse " +  str(n))
 
         if solution["z"][n] == 0:
             continue
@@ -198,7 +198,7 @@ def createNeighborhood(solution, data):
                     # if no new candidates, return the current solution
                     candidates = electiveCandidates(solution,n,h, data)
 
-                    pp.pprint(candidates)
+                    #pp.pprint(candidates)
 
                     # add them to the set of new neighbors
                     new_ns.extend(candidates)
@@ -215,7 +215,7 @@ def buildNewSol(neighbor):
 
     sumz = 0
     for z in neighbor["z"]:
-        print(" cost +=" + z)
+        #print(" cost +=" + str(z))
         sumz += z
 
     neighbor["cost"] = sumz 
@@ -231,15 +231,12 @@ def firstImprovementLocalSearch(solution, data):
 
         Ns = createNeighborhood(solution, data)
         pp.pprint(Ns)
-        exit()
-
-
-        
         
         for i in range(len(Ns)):
 
-            new_sol = buildNewSol( Ns[i])
-            
+            #new_sol = buildNewSol( Ns[i])
+            new_sol = Ns[i]
+
             if not isFeasible(new_sol, data):
                 continue
             else:

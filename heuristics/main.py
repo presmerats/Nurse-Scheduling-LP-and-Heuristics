@@ -10,14 +10,23 @@ def greedyPlusLocalSearch(data):
 
     solution = GreedyConstructive(data)
     print(" GREEDY SOLUTION: ")
+    pp.pprint(solution)
     pp.pprint(solution["cost"])
     print("")
     print("")
 
 
+    # testing local search
+    # solution = { 'cost': 3,
+    #     'last_added': 2,
+    #     'pending': [0, 0, 0, 0],
+    #     'w': [[1, 0, 0, 0], [0, 0, 0, 1], [0, 0, 1, 0]],
+    #     'z': [1, 1, 1]}
+    # pp.pprint(solution)
+
 
     failed_iterations = 0
-    while failed_iterations < 3:
+    while failed_iterations < 10:
 
         solution2 = firstImprovementLocalSearch(solution, data)
         # solution2 = bestImprovementLocalSearch(solution, data)
@@ -29,7 +38,7 @@ def greedyPlusLocalSearch(data):
             print(" --> improvement: " + str(solution2["cost"]))
             failed_iterations = 0
 
-        solution = solution2
+        solution = deepcopy(solution2)
 
     print(" LOCAL SEARCH SOLUTION: ")
     pp.pprint(solution)
