@@ -1,4 +1,7 @@
- 
+var ofile = new IloOplOutputFile(logname, true);
+ofile.writeln("{\"end\":\"end\"}]");
+ofile.close();
+
 def.end();
 cplex.end();
 src.end(); 

@@ -1,0 +1,8 @@
+centroides = 0;
+nNurses = 98;
+hours = 37;
+demand = [0 3 18 17 23 1 4 14 5 22 2 8 5 24 20 4 4 10 12 0 2 4 1 18 7 18 9 9 11 0 22 1 11 1 16 11 9];
+minHours = 2;
+maxHours = 18;
+maxConsec = 7;
+maxPresence = 32;

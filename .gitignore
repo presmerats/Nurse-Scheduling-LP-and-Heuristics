@@ -1,6 +1,11 @@
 # Prerequisites
 *.d
 
+# cplex project metadata
+*.metadata*
+*.metadata.*
+cplex/.metadata/
+
 # Compiled Object files
 *.slo
 *.lo
@@ -17,7 +22,7 @@
 *.dll
 
 # Fortran module files
-*.mod
+#*.mod
 *.smod
 
 # Compiled Static libraries
