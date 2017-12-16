@@ -1,0 +1,12 @@
+/*********************************************
+ * OPL 12.6.0.0 Data
+ * Author: Adrian Rodriguez Bazaga, Pau Rodriguez Esmerats
+ * Creation Date: 30/11/2017 at 19:59:18
+ *********************************************/
+
+nNurses=1125;
+maxConsec=2;
+maxPresence=7;
+maxHours=5;
+minHours=1;
+demand= [239 252 358 352 252 358 352 260 249 131 16 33 23 52 40 44 33 34 24 19 225 397 189 324  ];

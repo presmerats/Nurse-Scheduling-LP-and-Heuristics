@@ -1,0 +1,108 @@
+[
+{ "i-ng-60-64-40-24h-24mxP-8mxC-8mxH-1mnH-2Cnt-20171210_12-54-01528.dat" : {"expected_output" : "600",
+"computed_output" : "false",
+"desired_objfunc" : "SUCCESS",
+"Data" : "maxConsec = 8;\nmaxPresence = 24;\nmaxHours = 8;\nminHours = 1;\nhours = 24;\ndemand = [28 35 35 28 22 24 15 29 26 30 27 23 17 7 2 1 2 1 3 1 4 1 4 1];\nnNurses = 64;\ncentroides = 2;\n"
+}},{ "i-ng-60-64-40-24h-16mxP-10mxC-5mxH-4mnH-1Cnt-20171210_12-53-53350.dat" : {"expected_output" : "600",
+"computed_output" : "false",
+"desired_objfunc" : "SUCCESS",
+"Data" : "maxConsec = 10;\nmaxPresence = 16;\nmaxHours = 5;\nminHours = 4;\nhours = 24;\ndemand = [25 37 37 28 26 16 3 4 3 1 0 1 0 1 1 1 1 1 1 1 1 1 1 0];\nnNurses = 64;\ncentroides = 1;\n"
+}},{ "i-ng-60-64-40-24h-16mxP-5mxC-10mxH-1mnH-1Cnt-20171210_12-53-53795.dat" : {"expected_output" : "600",
+"computed_output" : "false",
+"desired_objfunc" : "SUCCESS",
+"Data" : "maxConsec = 5;\nmaxPresence = 16;\nmaxHours = 10;\nminHours = 1;\nhours = 24;\ndemand = [23 35 36 29 19 18 23 22 23 24 20 21 26 21 27 21 13 10 7 2 2 2 2 1];\nnNurses = 64;\ncentroides = 1;\n"
+}},{ "i-ng-60-64-40-24h-16mxP-10mxC-5mxH-4mnH-1Cnt-20171210_12-53-53435.dat" : {"expected_output" : "600",
+"computed_output" : "false",
+"desired_objfunc" : "SUCCESS",
+"Data" : "maxConsec = 10;\nmaxPresence = 16;\nmaxHours = 5;\nminHours = 4;\nhours = 24;\ndemand = [21 33 34 22 31 13 3 3 3 3 2 3 1 3 1 4 1 2 1 1 1 1 1 1];\nnNurses = 64;\ncentroides = 1;\n"
+}},{ "i-ng-60-64-40-24h-16mxP-5mxC-10mxH-1mnH-3Cnt-20171210_12-53-54360.dat" : {"expected_output" : "600",
+"computed_output" : "false",
+"desired_objfunc" : "SUCCESS",
+"Data" : "maxConsec = 5;\nmaxPresence = 16;\nmaxHours = 10;\nminHours = 1;\nhours = 24;\ndemand = [26 36 36 28 20 22 30 29 34 35 22 15 9 3 3 1 2 2 2 2 2 2 1 2];\nnNurses = 64;\ncentroides = 3;\n"
+}},{ "i-ng-60-64-40-24h-24mxP-16mxC-8mxH-6mnH-1Cnt-20171210_12-53-59698.dat" : {"expected_output" : "600",
+"computed_output" : "false",
+"desired_objfunc" : "SUCCESS",
+"Data" : "maxConsec = 16;\nmaxPresence = 24;\nmaxHours = 8;\nminHours = 6;\nhours = 24;\ndemand = [33 34 36 28 22 21 20 22 19 20 10 3 5 3 5 2 2 2 2 2 2 2 2 1];\nnNurses = 64;\ncentroides = 1;\n"
+}},{ "i-ng-60-64-40-24h-16mxP-5mxC-5mxH-4mnH-2Cnt-20171210_12-53-5562.dat" : {"expected_output" : "600",
+"computed_output" : "false",
+"desired_objfunc" : "SUCCESS",
+"Data" : "maxConsec = 5;\nmaxPresence = 16;\nmaxHours = 5;\nminHours = 4;\nhours = 24;\ndemand = [26 36 36 33 22 13 0 3 0 3 0 3 0 3 0 1 0 1 0 1 0 1 0 0];\nnNurses = 64;\ncentroides = 2;\n"
+}},{ "i-ng-60-64-40-24h-16mxP-5mxC-5mxH-1mnH-3Cnt-20171210_12-53-55719.dat" : {"expected_output" : "600",
+"computed_output" : "false",
+"desired_objfunc" : "SUCCESS",
+"Data" : "maxConsec = 5;\nmaxPresence = 16;\nmaxHours = 5;\nminHours = 1;\nhours = 24;\ndemand = [34 39 39 30 30 12 7 7 7 0 0 1 0 1 0 1 0 1 0 1 0 0 0 0];\nnNurses = 64;\ncentroides = 3;\n"
+}},{ "i-ng-60-64-40-24h-24mxP-8mxC-8mxH-1mnH-2Cnt-20171210_12-54-01978.dat" : {"expected_output" : "600",
+"computed_output" : "false",
+"desired_objfunc" : "SUCCESS",
+"Data" : "maxConsec = 8;\nmaxPresence = 24;\nmaxHours = 8;\nminHours = 1;\nhours = 24;\ndemand = [30 40 40 29 32 18 23 29 32 34 31 24 16 4 0 0 0 0 0 0 0 0 0 0];\nnNurses = 64;\ncentroides = 2;\n"
+}},{ "i-ng-60-64-40-24h-16mxP-5mxC-5mxH-4mnH-1Cnt-20171210_12-53-55308.dat" : {"expected_output" : "600",
+"computed_output" : "false",
+"desired_objfunc" : "SUCCESS",
+"Data" : "maxConsec = 5;\nmaxPresence = 16;\nmaxHours = 5;\nminHours = 4;\nhours = 24;\ndemand = [27 37 37 29 29 11 0 3 0 3 0 3 0 3 0 2 0 0 0 0 0 0 0 0];\nnNurses = 64;\ncentroides = 1;\n"
+}},{ "i-ng-60-64-40-24h-24mxP-16mxC-8mxH-1mnH-2Cnt-20171210_12-53-58107.dat" : {"expected_output" : "600",
+"computed_output" : "false",
+"desired_objfunc" : "SUCCESS",
+"Data" : "maxConsec = 16;\nmaxPresence = 24;\nmaxHours = 8;\nminHours = 1;\nhours = 24;\ndemand = [26 40 40 28 33 22 20 33 30 35 33 25 14 7 1 0 0 0 0 0 0 0 0 0];\nnNurses = 64;\ncentroides = 2;\n"
+}},{ "i-ng-60-64-40-24h-24mxP-16mxC-8mxH-1mnH-3Cnt-20171210_12-53-58296.dat" : {"expected_output" : "600",
+"computed_output" : "false",
+"desired_objfunc" : "SUCCESS",
+"Data" : "maxConsec = 16;\nmaxPresence = 24;\nmaxHours = 8;\nminHours = 1;\nhours = 24;\ndemand = [26 35 36 25 27 28 26 31 33 27 20 9 5 0 2 0 3 0 2 0 4 0 4 0];\nnNurses = 64;\ncentroides = 3;\n"
+}},{ "i-ng-60-64-40-24h-16mxP-5mxC-5mxH-4mnH-2Cnt-20171210_12-53-55760.dat" : {"expected_output" : "600",
+"computed_output" : "false",
+"desired_objfunc" : "SUCCESS",
+"Data" : "maxConsec = 5;\nmaxPresence = 16;\nmaxHours = 5;\nminHours = 4;\nhours = 24;\ndemand = [30 37 37 24 31 9 2 3 2 2 1 2 1 2 1 1 0 0 0 0 0 0 0 0];\nnNurses = 64;\ncentroides = 2;\n"
+}},{ "i-ng-60-64-40-24h-16mxP-10mxC-5mxH-1mnH-3Cnt-20171210_12-53-53643.dat" : {"expected_output" : "600",
+"computed_output" : "true",
+"desired_objfunc" : "SUCCESS",
+"time" : "1.01519",
+"int_vars" : "128",
+"Gap" : "0.40625",
+"ObjectiveFunction" : "64",
+"isMIP?" : "true",
+"Data" : "maxConsec = 10;\nmaxPresence = 16;\nmaxHours = 5;\nminHours = 1;\nhours = 24;\ndemand = [33 37 38 29 26 9 4 4 4 1 0 1 0 1 0 0 0 0 0 1 0 1 0 1];\nnNurses = 64;\ncentroides = 3;\n",
+"Solution" : "// solution (time limit exceeded) with objective 64\n// Quality Incumbent solution:\n// MILP objective                                 6,4000000000e+01\n// MILP solution norm |x| (Total, Max)            1,55700e+03  2,40000e+01\n// MILP solution error (Ax=b) (Total, Max)        0,00000e+00  0,00000e+00\n// MILP x bound error (Total, Max)                0,00000e+00  0,00000e+00\n// MILP x integrality error (Total, Max)          0,00000e+00  0,00000e+00\n// MILP slack bound error (Total, Max)            0,00000e+00  0,00000e+00\n// \n\nz = [1\n         1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n         1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1];\nw = [[0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [1 1 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [0 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [0 0 0 0 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [1 0 1 0 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [0 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [1 1 1 0 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [1 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [0 0 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [0 1 0 1 0 1 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [1 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [0 0 1 1 0 1 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [1 1 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [1 1 1 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0]\n             [0 1 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [1 0 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [0 1 0 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [1 1 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [0 0 0 0 0 0 0 0 1 0 1 0 1 1 0 0 0 0 0 0 0 0 0 0]\n             [0 1 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [1 1 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [1 1 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [0 0 0 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [0 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [0 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [1 1 0 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [1 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 0 1]\n             [1 1 0 1 0 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [1 1 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [1 1 0 1 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [0 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [1 0 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [1 1 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]];\ne = [18 16 17 16 16 17 20 24 20 24 16 19 17 16 16 16 18 19 17 16 16 18 16 16\n         18 20 16 16 16 16 24 17 16 16 16 19 17 16 24 17 19 16 16 16 18 16\n         16 19 17 16 20 17 16 16 24 16 16 16 17 17 16 16 16 23];\ns = [3 1 2 1 1 2 5 10 5 9 1 4 2 1 1 1 3 4 2 1 1 3 1 1 3 5 1 1 1 1 12 2 1 1 1\n         4 2 1 9 2 4 1 1 1 3 1 1 4 2 1 5 2 1 1 20 1 1 1 2 2 1 1 1 8];\n"
+}},{ "i-ng-60-64-40-24h-16mxP-5mxC-5mxH-1mnH-3Cnt-20171210_12-53-55159.dat" : {"expected_output" : "600",
+"computed_output" : "false",
+"desired_objfunc" : "SUCCESS",
+"Data" : "maxConsec = 5;\nmaxPresence = 16;\nmaxHours = 5;\nminHours = 1;\nhours = 24;\ndemand = [34 37 37 28 27 8 5 5 5 1 1 1 2 1 1 0 1 0 1 0 1 0 0 0];\nnNurses = 64;\ncentroides = 3;\n"
+}},{ "i-ng-60-64-40-24h-24mxP-16mxC-8mxH-1mnH-2Cnt-20171210_12-53-58838.dat" : {"expected_output" : "600",
+"computed_output" : "false",
+"desired_objfunc" : "SUCCESS",
+"Data" : "maxConsec = 16;\nmaxPresence = 24;\nmaxHours = 8;\nminHours = 1;\nhours = 24;\ndemand = [22 33 33 26 26 19 15 25 23 29 23 19 15 3 4 0 4 2 4 2 5 2 5 2];\nnNurses = 64;\ncentroides = 2;\n"
+}},{ "i-ng-60-64-40-24h-24mxP-8mxC-8mxH-6mnH-1Cnt-20171210_12-54-01846.dat" : {"expected_output" : "600",
+"computed_output" : "false",
+"desired_objfunc" : "SUCCESS",
+"Data" : "maxConsec = 8;\nmaxPresence = 24;\nmaxHours = 8;\nminHours = 6;\nhours = 24;\ndemand = [29 37 39 28 29 19 24 21 24 21 14 4 7 3 6 0 3 0 1 0 0 0 0 0];\nnNurses = 64;\ncentroides = 1;\n"
+}},{ "i-ng-60-64-40-24h-16mxP-10mxC-5mxH-1mnH-1Cnt-20171210_12-53-52178.dat" : {"expected_output" : "600",
+"computed_output" : "false",
+"desired_objfunc" : "SUCCESS",
+"Data" : "maxConsec = 10;\nmaxPresence = 16;\nmaxHours = 5;\nminHours = 1;\nhours = 24;\ndemand = [26 36 36 28 26 10 1 1 1 1 1 1 1 1 0 2 0 1 0 2 0 2 0 2];\nnNurses = 64;\ncentroides = 1;\n"
+}},{ "i-ng-60-64-40-24h-16mxP-5mxC-5mxH-4mnH-1Cnt-20171210_12-53-55513.dat" : {"expected_output" : "600",
+"computed_output" : "false",
+"desired_objfunc" : "SUCCESS",
+"Data" : "maxConsec = 5;\nmaxPresence = 16;\nmaxHours = 5;\nminHours = 4;\nhours = 24;\ndemand = [30 38 37 28 27 10 1 4 1 3 0 2 0 1 0 1 0 0 0 0 0 0 0 0];\nnNurses = 64;\ncentroides = 1;\n"
+}},{ "i-ng-60-64-40-24h-24mxP-8mxC-8mxH-6mnH-1Cnt-20171210_12-54-01787.dat" : {"expected_output" : "600",
+"computed_output" : "false",
+"desired_objfunc" : "SUCCESS",
+"Data" : "maxConsec = 8;\nmaxPresence = 24;\nmaxHours = 8;\nminHours = 6;\nhours = 24;\ndemand = [29 37 37 30 31 16 23 20 24 20 10 9 3 4 2 3 0 2 0 2 0 2 0 1];\nnNurses = 64;\ncentroides = 1;\n"
+}},{ "i-ng-60-64-40-24h-8mxP-2mxC-5mxH-4mnH-3Cnt-20171210_12-53-50774.dat" : {"expected_output" : "600",
+"computed_output" : "false",
+"desired_objfunc" : "SUCCESS",
+"Data" : "maxConsec = 2;\nmaxPresence = 8;\nmaxHours = 5;\nminHours = 4;\nhours = 24;\ndemand = [26 34 20 17 20 25 20 2 2 3 1 2 1 2 0 1 0 0 0 0 0 0 0 0];\nnNurses = 64;\ncentroides = 3;\n"
+}},{ "i-ng-60-64-40-24h-16mxP-5mxC-5mxH-4mnH-3Cnt-20171210_12-53-56802.dat" : {"expected_output" : "600",
+"computed_output" : "false",
+"desired_objfunc" : "SUCCESS",
+"Data" : "maxConsec = 5;\nmaxPresence = 16;\nmaxHours = 5;\nminHours = 4;\nhours = 24;\ndemand = [30 36 36 31 22 9 2 3 2 2 2 2 2 0 1 0 1 0 1 0 0 0 0 0];\nnNurses = 64;\ncentroides = 3;\n"
+}},{ "i-ng-60-64-40-24h-16mxP-5mxC-5mxH-1mnH-1Cnt-20171210_12-53-55990.dat" : {"expected_output" : "600",
+"computed_output" : "false",
+"desired_objfunc" : "SUCCESS",
+"Data" : "maxConsec = 5;\nmaxPresence = 16;\nmaxHours = 5;\nminHours = 1;\nhours = 24;\ndemand = [29 38 38 29 31 10 3 1 3 0 2 0 2 0 0 0 0 0 0 0 0 0 0 0];\nnNurses = 64;\ncentroides = 1;\n"
+}},{ "i-ng-60-64-40-24h-16mxP-5mxC-5mxH-1mnH-2Cnt-20171210_12-53-55168.dat" : {"expected_output" : "600",
+"computed_output" : "false",
+"desired_objfunc" : "SUCCESS",
+"Data" : "maxConsec = 5;\nmaxPresence = 16;\nmaxHours = 5;\nminHours = 1;\nhours = 24;\ndemand = [28 37 37 28 32 9 0 0 1 1 1 1 1 1 1 1 1 1 0 0 0 1 0 1];\nnNurses = 64;\ncentroides = 2;\n"
+}},{ "i-ng-60-64-40-24h-24mxP-16mxC-8mxH-1mnH-1Cnt-20171210_12-53-58585.dat" : {"expected_output" : "600",
+"computed_output" : "false",
+"desired_objfunc" : "SUCCESS",
+"Data" : "maxConsec = 16;\nmaxPresence = 24;\nmaxHours = 8;\nminHours = 1;\nhours = 24;\ndemand = [29 35 35 24 31 10 26 12 26 12 14 12 11 12 10 2 1 2 2 2 2 3 2 2];\nnNurses = 64;\ncentroides = 1;\n"
+}},{"end":"end"}]

@@ -1,0 +1,6 @@
+[
+{ "i-ng-60-64-40-24h-16mxP-5mxC-10mxH-4mnH-1Cnt-20171210_23-33-58987.dat" : {"expected_output" : "SUCCESS",
+"computed_output" : "false",
+"desired_objfunc" : "1",
+"Data" : "maxConsec = 5;\nmaxPresence = 16;\nmaxHours = 10;\nminHours = 4;\nhours = 24;\ndemand = [26 38 38 29 21 19 22 20 23 20 23 26 29 30 34 23 16 8 5 0 2 0 1 0];\nnNurses = 64;\ncentroides = 1;\n"
+}},{"end":"end"}]
