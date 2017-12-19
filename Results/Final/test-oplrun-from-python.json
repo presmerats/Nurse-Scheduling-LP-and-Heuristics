@@ -1,10 +1,9 @@
 [
-{ "./test-oplrun-from-python.dat" : {[
 { "./test-oplrun-from-python.dat" : {"expected_output" : "SUCCESS",
 "computed_output" : "true",
 "desired_objfunc" : "1",
 "solver" : "ILP",
-"time" : "1.56072",
+"time" : "1.26631",
 "int_vars" : "128",
 "Gap" : "0",
 "ObjectiveFunction" : "40",

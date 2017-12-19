@@ -69,7 +69,7 @@ def process_log_file(log):
                 trailing_zeroes = "0" * (4 - l)
                 
 
-            filename2 = trailing_zeroes + time_str + "-" + filename
+            filename2 = trailing_zeroes + time_str + "-" + os.path.basename(filename)
             if time_limit:
                 filename2 = "timelimit-"+filename2
             new_path =  os.path.join(done_instances_folder, filename2)
@@ -100,14 +100,15 @@ def clean_json_file(logfile):
 
     if processed:
         shutil.move(logfile + '.temp', logfile)
+        os.remove(logfile + '.temp')        
 
 
 
 os.chdir(results_folder)
 print(os.getcwd())
 for root, dirs, files in os.walk("."):
-    all_ok = True
     for logfile in files:
+        all_ok = True
         try:   
             logfilepath = os.path.join(root,logfile)
             if os.path.exists(logfilepath):
@@ -126,6 +127,6 @@ for root, dirs, files in os.walk("."):
     
         # once finished move log file
         if all_ok:
-            shutil.move(os.path.join(root,logfile), os.path.join(done_results_folder, logfile))            
+            shutil.move(os.path.join(root,logfile), os.path.join(done_results_folder, logfile))      
 
 
