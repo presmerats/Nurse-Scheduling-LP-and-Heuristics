@@ -3,6 +3,7 @@ from LocalSearch import *
 #from Grasp import *
 #from BRKGA_main import *
 from instance import *
+import time
 
 import sys
 
@@ -32,7 +33,7 @@ def greedyPlusLocalSearch(data):
         solution = solution2
 
     print(" LOCAL SEARCH SOLUTION: ")
-    pp.pprint(solution)
+    pp.pprint(solution["cost"])
 
 
 def grasp(data):
@@ -40,6 +41,37 @@ def grasp(data):
 
 def brkga(data):
     pass
+
+
+def readInstance(ipath):
+
+    data = {}
+    with open(ipath,'r') as f:
+        for line in f.readlines():
+            i1 = line.find("=")
+            i2 = line.find(";")
+            if line.startswith("maxConsec="):
+                data["maxConsec"] = int(line[i1+1:i2])
+            if line.startswith("maxPresence="):
+                data["maxPresence"] = int(line[i1+1:i2])
+            if line.startswith("maxHours="):
+                data["maxHours"] = int(line[i1+1:i2])
+
+            if line.startswith("minHours="):
+                data["minHours"] = int(line[i1+1:i2])
+            if line.startswith("hours="):
+                data["hours"] = int(line[i1+1:i2])
+            if line.startswith("nNurses="):
+                data["nNurses"] = int(line[i1+1:i2])
+            if line.startswith("demand"):
+                j1 = line.find("[")
+                j2 = line.find("]")
+                liststr = line[j1+1:j2]
+                demand = liststr.split(" ")
+                data["demand"] = [ int(d) for d in demand if len(d)>0]
+
+    return data 
+
 
 if __name__ == '__main__':
 
@@ -52,6 +84,17 @@ if __name__ == '__main__':
         'nNurses': nNurses,
         'demand': demand
     }
+
+    instancepath = '../../Instances/Final/0001-i-ng-60-64-40-24h-8mxP-2mxC-2mxH-1mnH-3Cnt-20171210_12-53-50.dat'
+
+    instancepath = '../../Instances/Final/0074-i-ng-60-64-40-24h-16mxP-5mxC-10mxH-2mnH-3Cnt-20171218_23-50-01921.dat'
+
+    data = readInstance(instancepath)
+    # pp.pprint(data)
+    # exit()
+
+    t1 = time.time()
+
 
     if len(sys.argv) > 1:
 
@@ -66,3 +109,8 @@ if __name__ == '__main__':
 
     else:
         greedyPlusLocalSearch(data)
+
+    t2 = time.time()
+    solveTime = t2 - t1
+
+    writewriteLog(solveTime,data)

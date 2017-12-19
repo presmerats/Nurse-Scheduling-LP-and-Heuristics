@@ -48,10 +48,10 @@ def isTotallyValid(data, candidate):
                 consec += 1
                 if consec > d["maxConsec"]:
                     maxConsec_check = False
-                    print("maxconsec " + str(d["maxConsec"]) + " consec:" + str(consec) + " stop at "+str((len(candidate) - w)))
+                    #print("maxconsec " + str(d["maxConsec"]) + " consec:" + str(consec) + " stop at "+str((len(candidate) - w)))
                   
             # maxPresence
-            if star == -1:
+            if start == -1:
                 if candidate[w] == 1:
                     start = w + 1
                 
@@ -84,19 +84,19 @@ def isTotallyValid(data, candidate):
             maxPresence_check and \
             rest_check
         
-        print("validity: ")
+        # print("validity: ")
 
-        print(candidate)
-        print(minHours_check)
-        print(maxHours_check)
-        print(maxConsec_check)
-        print(maxPresence_check)
-        print(rest_check)
-        print("=")
-        print(validity)
+        # print(candidate)
+        # print(minHours_check)
+        # print(maxHours_check)
+        # print(maxConsec_check)
+        # print(maxPresence_check)
+        # print(rest_check)
+        # print("=")
+        # print(validity)
 
         if not validity:
-            print("not valid solution!")
+            #print("not valid solution!")
             return validity
 
     return validity
@@ -174,7 +174,10 @@ def createNeighborhood(solution, data):
                     candidates = electiveCandidates(solution,n,h, data)
 
                     # add them to the set of new neighbors
-                    new_ns.extend(candidates)
+                    #new_ns.extend(candidates)
+                    if len(candidates)>0:
+                        new_ns.extend(candidates[0])
+
 
             ns = new_ns
 
@@ -202,7 +205,7 @@ def firstImprovementLocalSearch(solution, data):
         update = False
 
         Ns = createNeighborhood(solution, data)
-        pp.pprint(Ns)
+        #pp.pprint(Ns)
 
 
         
@@ -214,8 +217,8 @@ def firstImprovementLocalSearch(solution, data):
             if not isFeasible(new_sol, data):
                 continue
             else:
-                print("new solution: ")
-                pp.pprint(new_sol)
+                #print("new solution: ")
+                #pp.pprint(new_sol)
 
                 if new_sol["cost"] < solution["cost"]:
                     print("-->IMPROVEMENT")
