@@ -10,8 +10,6 @@ pp = pprint.PrettyPrinter(indent=2)
 
 
 
-
-
 def isTotallyValid(data, candidate):
     d = data
 
@@ -103,6 +101,9 @@ def isTotallyValid(data, candidate):
 
 
 
+
+
+
 def copySol(solution, data):
 
     copied_sol = {
@@ -176,7 +177,7 @@ def createNeighborhood(solution, data):
                     # add them to the set of new neighbors
                     #new_ns.extend(candidates)
                     if len(candidates)>0:
-                        new_ns.extend(candidates[0])
+                        new_ns.extend(candidates)
 
 
             ns = new_ns

@@ -7,6 +7,12 @@ import re
 from subprocess import call,check_call,Popen, PIPE
 from pathlib import Path, PurePath
 
+parentPath = os.path.abspath("../../Metaheuristics/GRASP_python")
+if parentPath not in sys.path:
+    sys.path.insert(0, parentPath)
+
+import main as grasp
+
 
 """
     this script 
@@ -82,37 +88,77 @@ def prepareModFile(instancepath, tilim=1800.0,  path=Path()):
     return str(filename)
 
 
-def solveInstanceWithILP(modfile):
+def solveInstanceWithILP(instancepath):
+
+    modfile = prepareModFile(instancepath)
+
     print("solving instance " + modfile)
     output, error = shellexec("oplrun -v " + modfile)
     print("output = ")
     print(output)
 
 
+def acceptInstance(instance):
 
-instances_folder = "../../Instances/Pending/"
+    i1 = instance.find('-')
+    time_it_takes_to_solve = -1
+    try:
+        time_it_takes_to_solve = int(instance[:i1])
+    except:
+        time_it_takes_to_solve = sys.maxsize
 
-if not os.path.exists(instances_folder):
-    print("check folder paths!")
-    exit()
+    return time_it_takes_to_solve < 3
 
-os.chdir(instances_folder)
-for root, dirs, files in os.walk("."):
-    all_ok = True
-    for instance in files:
-        try:
-            instancepath = os.path.join(root, instance)
-            print("processing instance " + instance)
 
-            mod_path = prepareModFile(instancepath)
 
-            solveInstanceWithILP(mod_path)            
+if __name__ == '__main__':
 
-        except Exception:
-            all_ok = False
-            print("Exception in user code:")
-            print("-"*60)
-            traceback.print_exc(file=sys.stdout)
-            print("-"*60)
-    
-            
+    instances_folder = "../../Instances/Pending/"
+
+    if len(sys.argv) > 1:
+
+        solverType = sys.argv[1]
+
+        if solverType not in ["ILP", "greedy", "grasp", "brkga"]:
+            print("Usage: python main.py <metaheuristic_algorithm>")
+            exit()
+    else:
+        solverType = "ILP"
+
+    instanceType = 'all'
+    if len(sys.argv) > 2:
+        instanceType = sys.argv[2]
+
+    if len(sys.argv) > 3:
+        instances_folder = sys.argv[3]
+
+    if not os.path.exists(instances_folder):
+        print("check folder paths!")
+        exit()
+
+    os.chdir(instances_folder)
+    for root, dirs, files in os.walk("."):
+        all_ok = True
+        for instance in files:
+            try:
+
+                if instanceType != 'all':
+                    if not acceptInstance(instance):
+                        continue
+
+                instancepath = os.path.join(root, instance)
+                print("processing instance " + instance)
+
+                if solverType == "ILP":
+                    solveInstanceWithILP(instancepath)
+                elif solverType in ["greedy", "grasp", "brkga"]:
+                    grasp.run(instancepath, solverType)
+
+            except Exception:
+                all_ok = False
+                print("Exception in user code:")
+                print("-"*60)
+                traceback.print_exc(file=sys.stdout)
+                print("-"*60)
+        
+                
