@@ -7,6 +7,8 @@ import logging
 
 pp = pprint.PrettyPrinter(indent=2)
 
+printlog = False
+
 
 def create_logger(name):
     """
@@ -589,7 +591,7 @@ def update(solution, elements, data):
     """
     w = solution["w"]
     
-    print(solution["pending"])
+    #print(solution["pending"])
     for h in range(len(solution["pending"])):
         sum_col=0
         for n in range(data["nNurses"]):
@@ -609,10 +611,11 @@ def computeGreedyCost(solution, elements,  data):
 
 
     """
-    print("----------------------------computing greedy cost:")
-    pp.pprint(data["demand"])
-    pp.pprint(solution["pending"])
-    pp.pprint(solution["w"])
+    if printlog:
+        print("----------------------------computing greedy cost:")
+        pp.pprint(data["demand"])
+        pp.pprint(solution["pending"])
+        pp.pprint(solution["w"])
 
 
     for e in range(len(elements)):
@@ -633,7 +636,7 @@ def computeGreedyCost(solution, elements,  data):
         #     element.gc = float("inf")
             
         # print("")
-        element.myprint()
+        #element.myprint()
 
 
 
@@ -706,11 +709,24 @@ def computeCost(solution, data):
     """
         
     """
-    cost = 0
-    for h in range(len(solution["z"])):
-        cost += solution["z"][h]
 
-    return cost
+    # pp.pprint(data)
+    # pp.pprint(solution)
+
+    cost = 0
+    totalw = 0
+    for n in range(len(solution["z"])):
+        cost += solution["z"][n]
+
+        #print("nurse: " + str(n))
+        for h in range(data["hours"]):
+
+            # if printlog:
+            #     print(" hours " + str(h))
+            totalw += solution["w"][n][h]
+
+
+    return cost, totalw
 
 def GreedyConstructive(data):
 
@@ -762,7 +778,8 @@ def GreedyConstructive(data):
     print()
     print("after greedy loop finished: elements left=" + str(len(elements)) + " and isFeasible(soluion)" +  str(isFeasible(solution, data)) )
 
-    solution["cost"] = computeCost(solution, data)
+    solution["cost"], solution["totalw"] = computeCost(solution, data)
+    print("solution cost"+ str(solution["cost"]) )
     return solution
 
 

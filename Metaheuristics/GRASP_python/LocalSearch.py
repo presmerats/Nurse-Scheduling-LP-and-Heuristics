@@ -8,8 +8,10 @@ from Greedy import *
 
 pp = pprint.PrettyPrinter(indent=2)
 
-printlog = True
-
+printlog = False
+printlog_mainloop = False
+printlog_createNeighborhood = False
+printlog_electiveCandidates = False
 
 def isTotallyValid(data, candidate):
     d = data
@@ -101,18 +103,18 @@ def isTotallyValid(data, candidate):
 
         if not validity:
 
-            if printlog:
-                print("validity: ")
+            # if printlog:
+            #     print("validity: ")
 
-                print(candidate)
-                print(data)
-                print("minHours: " + str(minHours_check))
-                print("maxHours: " + str(maxHours_check))
-                print("consec:   " + str(maxConsec_check))
-                print("Presence: " + str(maxPresence_check))
-                print("rest:     " + str(rest_check))
-                print("=")
-                print(validity)
+            #     print(candidate)
+            #     print(data)
+            #     print("minHours: " + str(minHours_check))
+            #     print("maxHours: " + str(maxHours_check))
+            #     print("consec:   " + str(maxConsec_check))
+            #     print("Presence: " + str(maxPresence_check))
+            #     print("rest:     " + str(rest_check))
+            #     print("=")
+            #     print(validity)
             return validity
 
     return validity
@@ -130,10 +132,19 @@ def copySol(solution, data):
         "z": list(solution["z"]),
         "last_added": 0,
         "pending": list(solution["pending"]),
+        "totalw" : solution["totalw"]
     }
 
     
     return copied_sol
+
+def nursesAtHourH( solution, h):
+
+    sumN = 0
+    for w in solution["w"]:
+        sumN += w[h]
+    return sumN
+
 
 
 
@@ -144,6 +155,22 @@ def electiveCandidates(solution, n, h, data):
     # get all other schedules
     candidates = []
 
+    if data["demand"][h] < nursesAtHourH(solution,h):
+        candidate = copySol(solution, data)
+        candidate["w"][n][h] = 0
+        #candidate["z"][n] = 0
+
+        # validate
+        if isTotallyValid(data, candidate):
+            if printlog or printlog_electiveCandidates:
+                print("-->valid elimination!")
+                pp.pprint(candidate)
+                print()
+                
+            
+            candidates.append(candidate)
+
+            #return candidates
 
     for ni in (range(data["nNurses"])):
         if ni == n:
@@ -154,7 +181,8 @@ def electiveCandidates(solution, n, h, data):
             continue
         else:
 
-            #print("exchange " + str(n) + ", " + str(h) + " with " + str(ni) + ", " + str(h))
+            if printlog or printlog_electiveCandidates:
+                print("exchange " + str(n) + ", " + str(h) + " with " + str(ni) + ", " + str(h))
             # prepare the candidate (add the extra hour)
             
             candidate = copySol(solution, data)
@@ -162,20 +190,20 @@ def electiveCandidates(solution, n, h, data):
             # pp.pprint(solution)
             # pp.pprint(candidate)
 
-            #pp.pprint(candidate)
+            # pp.pprint(candidate)
 
             candidate["w"][ni][h] = 1
             candidate["z"][ni] = 1 # in case we use not working nurses also
             candidate["w"][n][h] = 0
-            candidate["z"][n] = 0 # wait until the end to do this (or compute all vector to assure it can be set to 0) -> go that way
+            #candidate["z"][n] = 0 # wait until the end to do this (or compute all vector to assure it can be set to 0) -> go that way
 
-            if printlog:
-                pp.pprint(candidate)
+            # if printlog  or printlog_electiveCandidates:
+            #     pp.pprint(candidate)
 
             # validate
             if isTotallyValid(data, candidate):
-                if printlog:
-                    print("-->valid!")
+                if printlog or printlog_electiveCandidates:
+                    print("-->valid exchange!")
                     #pp.pprint(candidate)
                     print()
                     
@@ -184,6 +212,63 @@ def electiveCandidates(solution, n, h, data):
     return candidates
 
 
+
+def findCandidates(solution, data, n):
+    """ 
+         this function returns solutions that include:
+            - 0 hours assigned to nurse n
+            - all the hours that where assigned to nurse n are assigned to other nurses 
+            - the solution is feasible (valid constraints) and cover all demand
+
+        strategies:
+            1) find all possible combinations to satisfy this
+            2) find the first combination to satisfy this
+
+        not working...
+            let a reduction of hours be a positive sign and return it
+    """
+    ns = [solution]
+    # pp.pprint(ns)
+
+    improved = False
+    for h in range(data["hours"]):
+
+        if printlog:
+            print(" h = " + str(h))
+            pp.pprint(solution["w"][n])
+
+        partial_ns = []
+        improved = False
+        for s in ns:
+
+            if solution["w"][n][h] == 1:
+
+                # look for z, maxHours, maxPresence, maxConsec, (rest?)
+                # not necessarily only z=1 candidates ...
+                # (some diversity can be great)
+                #   -> it depends on how many rounds the local search
+                # runs, it should run one whole round
+                # update each candidate
+                # if no new candidates, return the current solution
+                candidates = electiveCandidates(s, n, h, data)
+
+                # add them to the set of new neighbors
+                # new_ns.extend(candidates)
+                if len(candidates) > 0:
+                    partial_ns.extend(candidates)
+
+        if len(partial_ns) > 0:
+            improved = True
+            # previous solution is no more considered
+            ns = partial_ns
+
+    # should return only those that have no working hours for nurse n
+    if improved:
+        return ns
+    else:
+        # return []
+        # return ns as well
+        return ns
 
 
 def createNeighborhood(solution, data):
@@ -196,47 +281,23 @@ def createNeighborhood(solution, data):
         print()
 
 
-    for n in range(0, data["nNurses"] -1,1):
+    for n in range(0, data["nNurses"],1):
         if solution["z"][n] == 0:
             continue
 
-        if printlog:
+        if printlog  or printlog_createNeighborhood:
             print("")
             print("Nurse " + str(n))
 
-        ns = [solution]
-        #pp.pprint(ns)
-        for h in range(data["hours"]):
+        ns = findCandidates(solution, data, n )
+        
+        if printlog or printlog_createNeighborhood:
+            print(" after findCandidates "+ "--"*10)
+            pp.pprint(ns)
+            print("")
 
-
-            if printlog:
-                print(" h = " + str(h) )
-                pp.pprint(solution["w"][n])
-            
-            new_ns = []
-            for s in ns:
-
-
-
-                if solution["w"][n][h] == 1:
-
-                    # look for z, maxHours, maxPresence, maxConsec, (rest?)
-                    # not necessarily only z=1 candidates ... (some diversity can be great)
-                    #   -> it depends on how many rounds the local search runs, it should run one whole round 
-                    # update each candidate
-                    # if no new candidates, return the current solution
-                    candidates = electiveCandidates(s,n,h, data)
-
-                    # add them to the set of new neighbors
-                    #new_ns.extend(candidates)
-                    if len(candidates)>0:
-                        new_ns.extend(candidates)
-
-            ns.extend(new_ns)
-
-
-        if len(ns) > 1:
-            Ns.extend(ns[1:])
+        if len(ns) > 0:
+            Ns.extend(ns)
 
         
     return Ns 
@@ -244,11 +305,26 @@ def createNeighborhood(solution, data):
 
 def buildNewSol(neighbor):
 
+    totalw = 0
     sumz = 0
-    for z in neighbor["z"]:
-        sumz += z
 
-    neighbor["cost"] = sumz 
+    for n in range(len(neighbor["w"])):
+            
+        sumZn = 0
+        for h in range(len(neighbor["w"][n])):
+            totalw += neighbor["w"][n][h]
+            sumZn += neighbor["w"][n][h]
+
+        if sumZn > 0:
+            neighbor["z"][n] = 1
+            sumz += 1
+        else:
+            neighbor["z"][n] = 0
+
+            
+
+    neighbor["cost"] = sumz
+    neighbor["totalw"] = totalw
 
     return neighbor
 
@@ -262,24 +338,21 @@ def firstImprovementLocalSearch(solution, data):
         update = False
 
         Ns = createNeighborhood(solution, data)
-        if printlog:
+        if printlog or printlog_mainloop:
             print()
             print("new neighborhood")
             pp.pprint(Ns)
-
-
-        
         
         for i in range(len(Ns)):
 
             new_sol = buildNewSol( Ns[i])
-            
+
             # print("new_sol")
             # pp.pprint(new_sol)
             # print()
             
             if not isFeasible(new_sol, data):
-                if printlog:
+                if printlog or printlog_mainloop:
                     print("unfeasible")
                 continue
             else:
@@ -289,21 +362,31 @@ def firstImprovementLocalSearch(solution, data):
 
                 if new_sol["cost"] < solution["cost"]:
 
-                    if printlog:
+                    if printlog or printlog_mainloop:
                         print("-->IMPROVEMENT")
-                        print(str(new_sol["cost"]))
+                        print("   " + str(new_sol["cost"]) + " total_w:" + str(solution["totalw"]))
+
+                    solution = new_sol
+                    update = False
+                    break
+                elif (new_sol["cost"] == solution["cost"] and
+                    new_sol["totalw"] < solution["totalw"]):
+
+                    if printlog or printlog_mainloop:
+                        print("-->IMPROVEMENT")
+                        print("   " + str(new_sol["cost"]) + " total_w:" + str(solution["totalw"]))
 
                     solution = new_sol
                     update = True
                     break
                 elif new_sol["cost"] == solution["cost"]:
                     
-                    if printlog:
+                    if printlog or printlog_mainloop:
                         print("same cost" + str(new_sol["cost"]))
 
 
-            if update:
-                break
+            # if update:
+            #     break
                 
 
     return solution

@@ -22,13 +22,13 @@ def greedyPlusLocalSearch(data):
 
 
     failed_iterations = 0
-    while failed_iterations < 3:
+    while failed_iterations < 5:
 
         solution2 = firstImprovementLocalSearch(solution, data)
         # solution2 = bestImprovementLocalSearch(solution, data)
 
         if solution2["cost"] >= solution["cost"]:
-            print("     searching: " + str(solution2["cost"]))
+            print("     searching, cost" + str(solution2["cost"]) + " total_w:" + str(solution2["totalw"]))
             failed_iterations += 1
         else:
             print(" --> improvement: " + str(solution2["cost"]))
@@ -37,6 +37,8 @@ def greedyPlusLocalSearch(data):
         solution = solution2
 
     print(" LOCAL SEARCH SOLUTION: ")
+    pp.pprint(solution["w"])
+    print(solution["z"])
     pp.pprint(solution["cost"])
 
     return solution
@@ -120,7 +122,6 @@ def run(instancepath, solverType):
         solution = brkga(data)
     else:
         solverType = "greedy"
-        #cProfile.run('greedyPlusLocalSearch(data)')
         solution = greedyPlusLocalSearch(data)
 
     t2 = time.time()
@@ -142,21 +143,34 @@ if __name__ == '__main__':
         'demand': demand
     }
 
-    instancepath = '../../Instances/Final/0001-i-ng-60-64-40-24h-8mxP-2mxC-2mxH-1mnH-3Cnt-20171210_12-53-50687.dat'
 
-    instancepath = '../../Instances/Final/0003-x_17_7.dat'
+    instancepath = '../../Instances/Final/test_gc01.dat'
+
+    instancepath = '../../Instances/Final/test_gc02.dat'
+
+    #instancepath = '../../Instances/Final/0003-x_17_7.dat'
     # 12 s
+    # 20171221 - of=6 - time = 95s
 
-    instancepath = '../../Instances/Final/0004-x_15_8.dat'
+    #instancepath = '../../Instances/Final/0004-x_15_8.dat'
     # 7.1 s
 
-    instancepath = '../../Instances/Final/0004-x_21_8.dat'
+    #instancepath = '../../Instances/Final/0004-x_21_8.dat'
     # 154 s
 
+    #instancepath = '../../Instances/Final/0000-x_8_1.dat'
+    # 12 s
+
+    #instancepath = '../../Instances/Final/0001-i-ng-60-64-40-24h-8mxP-2mxC-2mxH-1mnH-3Cnt-20171210_12-53-50687.dat'
+
+
+    #instancepath = '../../Instances/Final/0001-i-ng-60-64-40-24h-8mxP-2mxC-2mxH-1mnH-3Cnt-20171210_12-53-51891.dat'
 
     #instancepath = '../../Instances/Final/0005-i-ng-60-64-40-24h-10mxP-5mxC-10mxH-1mnH-3Cnt-20171218_23-50-01970.dat'
 
     #instancepath = '../../Instances/Final/0074-i-ng-60-64-40-24h-16mxP-5mxC-10mxH-2mnH-3Cnt-20171218_23-50-01921.dat'
+
+    #instancepath = '../../Instances/Final/1661-i-ng-60-128-80-24h-16mxP-5mxC-10mxH-1mnH-3Cnt-20171218_23-49-58683.dat'
 
 
     if len(sys.argv) > 1:
@@ -168,5 +182,6 @@ if __name__ == '__main__':
     else:
         solverType = "greedy"
 
-    run(instancepath, solverType)
+    cProfile.run('run(instancepath, solverType)')   
+    #run(instancepath, solverType)
 
