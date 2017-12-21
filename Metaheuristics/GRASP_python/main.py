@@ -24,8 +24,8 @@ def greedyPlusLocalSearch(data):
     failed_iterations = 0
     while failed_iterations < 5:
 
-        solution2 = firstImprovementLocalSearch(solution, data)
-        # solution2 = bestImprovementLocalSearch(solution, data)
+        #solution2 = firstImprovementLocalSearch(solution, data)
+        solution2 = bestImprovementLocalSearch(solution, data)
 
         if solution2["cost"] >= solution["cost"]:
             print("     searching, cost" + str(solution2["cost"]) + " total_w:" + str(solution2["totalw"]))
@@ -148,20 +148,27 @@ if __name__ == '__main__':
 
     instancepath = '../../Instances/Final/test_gc02.dat'
 
-    #instancepath = '../../Instances/Final/0003-x_17_7.dat'
+    instancepath = '../../Instances/Final/test_gc03.dat'
+    # 20171221  -firstImprovement obj=   - time= 
+
+
+    instancepath = '../../Instances/Final/0000-x_8_1.dat'
     # 12 s
-    # 20171221 - of=6 - time = 95s
+    # 20171221  -firstImprovement obj=7(greedy)   - time=759
+    # 20171221  -bestsImprovement obj=7(greedy)   - time=675
 
     #instancepath = '../../Instances/Final/0004-x_15_8.dat'
     # 7.1 s
 
+    #instancepath = '../../Instances/Final/0003-x_17_7.dat'
+    # 12 s
+    # 20171221 - of=16(greedy) - time = 173s
+    #    
+
     #instancepath = '../../Instances/Final/0004-x_21_8.dat'
     # 154 s
 
-    #instancepath = '../../Instances/Final/0000-x_8_1.dat'
-    # 12 s
-
-    #instancepath = '../../Instances/Final/0001-i-ng-60-64-40-24h-8mxP-2mxC-2mxH-1mnH-3Cnt-20171210_12-53-50687.dat'
+    instancepath = '../../Instances/Final/0001-i-ng-60-64-40-24h-8mxP-2mxC-2mxH-1mnH-3Cnt-20171210_12-53-50687.dat'
 
 
     #instancepath = '../../Instances/Final/0001-i-ng-60-64-40-24h-8mxP-2mxC-2mxH-1mnH-3Cnt-20171210_12-53-51891.dat'

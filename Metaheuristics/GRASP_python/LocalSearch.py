@@ -332,64 +332,106 @@ def buildNewSol(neighbor):
 
 def firstImprovementLocalSearch(solution, data):
 
-    update = True
+    Ns = createNeighborhood(solution, data)
+    if printlog or printlog_mainloop:
+        print()
+        print("new neighborhood")
+        pp.pprint(Ns)
+    
+    for i in range(len(Ns)):
 
-    while update:
-        update = False
+        new_sol = buildNewSol( Ns[i])
 
-        Ns = createNeighborhood(solution, data)
-        if printlog or printlog_mainloop:
-            print()
-            print("new neighborhood")
-            pp.pprint(Ns)
+        # print("new_sol")
+        # pp.pprint(new_sol)
+        # print()
         
-        for i in range(len(Ns)):
+        if not isFeasible(new_sol, data):
+            if printlog or printlog_mainloop:
+                print("unfeasible")
+            continue
+        else:
+            #print("new solution: ")
+            #pp.pprint(new_sol)
+            #print(str(new_sol["cost"]))
 
-            new_sol = buildNewSol( Ns[i])
+            if new_sol["cost"] < solution["cost"]:
 
-            # print("new_sol")
-            # pp.pprint(new_sol)
-            # print()
-            
-            if not isFeasible(new_sol, data):
                 if printlog or printlog_mainloop:
-                    print("unfeasible")
-                continue
-            else:
-                #print("new solution: ")
-                #pp.pprint(new_sol)
-                #print(str(new_sol["cost"]))
+                    print("-->IMPROVEMENT")
+                    print("   " + str(new_sol["cost"]) + " total_w:" + str(solution["totalw"]))
 
-                if new_sol["cost"] < solution["cost"]:
+                solution = new_sol
+            elif (new_sol["cost"] == solution["cost"] and
+                new_sol["totalw"] < solution["totalw"]):
 
-                    if printlog or printlog_mainloop:
-                        print("-->IMPROVEMENT")
-                        print("   " + str(new_sol["cost"]) + " total_w:" + str(solution["totalw"]))
+                if printlog or printlog_mainloop:
+                    print("-->IMPROVEMENT")
+                    print("   " + str(new_sol["cost"]) + " total_w:" + str(solution["totalw"]))
 
-                    solution = new_sol
-                    update = False
-                    break
-                elif (new_sol["cost"] == solution["cost"] and
-                    new_sol["totalw"] < solution["totalw"]):
+                solution = new_sol
 
-                    if printlog or printlog_mainloop:
-                        print("-->IMPROVEMENT")
-                        print("   " + str(new_sol["cost"]) + " total_w:" + str(solution["totalw"]))
-
-                    solution = new_sol
-                    update = True
-                    break
-                elif new_sol["cost"] == solution["cost"]:
-                    
-                    if printlog or printlog_mainloop:
-                        print("same cost" + str(new_sol["cost"]))
-
-
-            # if update:
-            #     break
+            elif new_sol["cost"] == solution["cost"]:
                 
+                if printlog or printlog_mainloop:
+                    print("same cost" + str(new_sol["cost"]))
 
     return solution
 
 
+
+def bestImprovementLocalSearch(solution, data):
+
+    bestSolution = solution
+
+    Ns = createNeighborhood(solution, data)
+    if printlog or printlog_mainloop:
+        print()
+        print("new neighborhood")
+        pp.pprint(Ns)
+
+    for i in range(len(Ns)):
+
+        new_sol = buildNewSol( Ns[i])
+
+        # print("new_sol")
+        # pp.pprint(new_sol)
+        # print()
+        
+        if not isFeasible(new_sol, data):
+            if printlog or printlog_mainloop:
+                print("unfeasible")
+            continue
+        else:
+            #print("new solution: ")
+            #pp.pprint(new_sol)
+            #print(str(new_sol["cost"]))
+
+            if new_sol["cost"] < bestSolution["cost"]:
+
+                if printlog or printlog_mainloop:
+                    print("-->IMPROVEMENT")
+                    print("   " + str(new_sol["cost"]) + " total_w:" + str(solution["totalw"]))
+
+                bestSolution = new_sol
+
+                
+            elif (new_sol["cost"] == bestSolution["cost"] and
+                new_sol["totalw"] < bestSolution["totalw"]):
+
+                if printlog or printlog_mainloop:
+                    print("-->IMPROVEMENT")
+                    print("   " + str(new_sol["cost"]) + " total_w:" + str(solution["totalw"]))
+
+                bestSolution = new_sol
+
+                
+            elif new_sol["cost"] >= bestSolution["cost"]:
+                
+                if printlog or printlog_mainloop:
+                    print("same or worse cost" + str(new_sol["cost"]) + " vs " + str(bestSolution["cost"]))
+
+                
+
+    return bestSolution
 
