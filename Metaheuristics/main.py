@@ -87,7 +87,7 @@ def run(instancepath, solverType):
     elif solverType == "grasp":
         solution = grasp(data)
     elif solverType == "brkga":
-        solution = brkga(data)
+        solution = brkga_run(data)
     else:
         solverType = "greedy"
         solution = greedyPlusLocalSearch(data)
