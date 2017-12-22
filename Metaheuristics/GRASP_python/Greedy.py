@@ -4,6 +4,8 @@ import numpy as np
 import pprint
 from copy import copy, deepcopy
 import logging
+import time
+
 
 pp = pprint.PrettyPrinter(indent=2)
 
@@ -781,6 +783,7 @@ def GreedyConstructive(data):
     solution["cost"], solution["totalw"] = computeCost(solution, data)
     print("solution cost"+ str(solution["cost"]) )
     return solution
+
 
 
 

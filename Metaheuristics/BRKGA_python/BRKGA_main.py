@@ -8,6 +8,11 @@ from DATA_DUMMY import data
 from CONFIGURATION import config
 
 
+def brkga(data):
+    print("BRKGA!")
+
+
+
 if __name__ == '__main__':
 
     # initializations

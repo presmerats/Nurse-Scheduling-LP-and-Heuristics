@@ -17,6 +17,10 @@ parentPath = os.path.abspath("../../Metaheuristics")
 if parentPath not in sys.path:
     sys.path.insert(0, parentPath)
 
+from Greedy import *
+from LocalSearch2 import *
+from BRKGA_main import *
+from Grasp2 import *
 import main as metaheuristics
 
 """
@@ -129,7 +133,7 @@ if __name__ == '__main__':
             exit()
     else:
         solverType = "ILP"
-        solverType = "brkga"
+        solverType = "grasp"
 
     instanceType = 'all'
     if len(sys.argv) > 2:
@@ -158,6 +162,7 @@ if __name__ == '__main__':
                 if solverType == "ILP":
                     solveInstanceWithILP(instancepath)
                 elif solverType in ["greedy", "grasp", "brkga"]:
+                    print(solverType)
                     metaheuristics.run(instancepath, solverType)
 
             except Exception:

@@ -39,3 +39,7 @@ cplex/.metadata/
 # IntelliJ
 .idea
 *.iml
+
+
+# Python compiled
+*.pyc

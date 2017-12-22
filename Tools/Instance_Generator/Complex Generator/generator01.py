@@ -68,7 +68,9 @@ def write(instance, instance_type="", path='.'):
 
 def writeTestModel(path=Path()):
 
-    filename = 'Test-'  + '{0:%Y%m%d_%H-%M-%S}'.format(datetime.now()) + '.mod' 
+    filename = 'Test-' \
+        + '{0:%Y%m%d_%H-%M-%S}'.format(datetime.now()) + '.mod'
+        
     filename = PurePath(path,filename)
     with open(filename,'w') as f:
 

@@ -18,79 +18,6 @@ from BRKGA_main import *
 from instance import *
 
 
-def greedyPlusLocalSearch(data):
-
-    solution = GreedyConstructive(data)
-    print(" GREEDY SOLUTION: ")
-    pp.pprint(solution["cost"])
-    print(time.time())
-    print("")
-    print("")
-
-
-
-    failed_iterations = 0
-    while failed_iterations < 5:
-
-        solution2 = firstImprovementLocalSearch(solution, data)
-        #solution2 = bestImprovementLocalSearch(solution, data)
-
-        if solution2["cost"] >= solution["cost"]:
-            print("     searching, cost" + str(solution2["cost"]) + " total_w:" + str(solution2["totalw"]))
-            failed_iterations += 1
-        else:
-            print(" --> improvement: " + str(solution2["cost"]))
-            failed_iterations = 0
-
-        solution = solution2
-
-    print(" LOCAL SEARCH SOLUTION: ")
-    pp.pprint(solution["w"])
-    print(solution["z"])
-    pp.pprint(solution["cost"])
-
-    return solution
-
-
-def grasp(data):
-
-    solution = GraspConstructive(data)
-    print(" GRASP CONSTRUCTIVE SOLUTION: ")
-    pp.pprint(solution["cost"])
-    print(time.time())
-    print("")
-    print("")
-
-    failed_iterations = 0
-    while failed_iterations < 5:
-
-        solution2 = firstImprovementLocalSearch(solution, data)
-        solution2 = bestImprovementLocalSearch(solution, data)
-
-        if solution2["cost"] >= solution["cost"]:
-            print("     searching, cost" +
-                  str(solution2["cost"]) +
-                  " total_w:" +
-                  str(solution2["totalw"]))
-            failed_iterations += 1
-        else:
-            print(" --> improvement: " + str(solution2["cost"]))
-            failed_iterations = 0
-
-        solution = solution2
-
-    print(" LOCAL SEARCH SOLUTION: ")
-    pp.pprint(solution["w"])
-    print(solution["z"])
-    pp.pprint(solution["cost"])
-
-    return solution
-
-
-
-def brkga(data):
-    pass
-
 
 def readInstance(ipath):
 
@@ -220,7 +147,7 @@ if __name__ == '__main__':
     instancepath = '../Instances/Final/0001-i-ng-60-64-40-24h-8mxP-2mxC-2mxH-1mnH-3Cnt-20171210_12-53-51891.dat'
     # 20171222 obj=40(g) t=7.4s
 
-    instancepath = '../Instances/Final/0005-i-ng-60-64-40-24h-10mxP-5mxC-10mxH-1mnH-3Cnt-20171218_23-50-01970.dat'
+    #instancepath = '../Instances/Final/0005-i-ng-60-64-40-24h-10mxP-5mxC-10mxH-1mnH-3Cnt-20171218_23-50-01970.dat'
     # 20171222 obj=47(ls) t=46s -> LS WORKS WELL!! greedy(59) vs ls(47)
     # 20171222 obj=47(ls) t=31s -> alph=0.2 ok, 0.5ok, 0.6 fails
 

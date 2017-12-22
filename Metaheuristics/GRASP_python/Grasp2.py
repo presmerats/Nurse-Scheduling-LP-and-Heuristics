@@ -3,9 +3,11 @@ import matplotlib.pyplot as pyplot
 import numpy as np
 import pprint
 from copy import copy, deepcopy
-from Greedy import *
 from random import randrange
+import time
 
+from Greedy import *
+from LocalSearch2 import *
 
 def GraspConstructive(data):
 
@@ -64,3 +66,70 @@ def GraspConstructive(data):
 
 
 
+def grasp(data):
+
+    solution = GraspConstructive(data)
+    print(" GRASP CONSTRUCTIVE SOLUTION: ")
+    pp.pprint(solution["cost"])
+    print(time.time())
+    print("")
+    print("")
+
+    failed_iterations = 0
+    while failed_iterations < 5:
+
+        solution2 = firstImprovementLocalSearch(solution, data)
+        solution2 = bestImprovementLocalSearch(solution, data)
+
+        if solution2["cost"] >= solution["cost"]:
+            print("     searching, cost" +
+                  str(solution2["cost"]) +
+                  " total_w:" +
+                  str(solution2["totalw"]))
+            failed_iterations += 1
+        else:
+            print(" --> improvement: " + str(solution2["cost"]))
+            failed_iterations = 0
+
+        solution = solution2
+
+    print(" LOCAL SEARCH SOLUTION: ")
+    pp.pprint(solution["w"])
+    print(solution["z"])
+    pp.pprint(solution["cost"])
+
+    return solution
+
+
+
+
+def greedyPlusLocalSearch(data):
+
+    solution = GreedyConstructive(data)
+    print(" GREEDY SOLUTION: ")
+    pp.pprint(solution["cost"])
+    print(time.time())
+    print("")
+    print("")
+
+    failed_iterations = 0
+    while failed_iterations < 5:
+
+        solution2 = firstImprovementLocalSearch(solution, data)
+        #solution2 = bestImprovementLocalSearch(solution, data)
+
+        if solution2["cost"] >= solution["cost"]:
+            print("     searching, cost" + str(solution2["cost"]) + " total_w:" + str(solution2["totalw"]))
+            failed_iterations += 1
+        else:
+            print(" --> improvement: " + str(solution2["cost"]))
+            failed_iterations = 0
+
+        solution = solution2
+
+    print(" LOCAL SEARCH SOLUTION: ")
+    pp.pprint(solution["w"])
+    print(solution["z"])
+    pp.pprint(solution["cost"])
+
+    return solution

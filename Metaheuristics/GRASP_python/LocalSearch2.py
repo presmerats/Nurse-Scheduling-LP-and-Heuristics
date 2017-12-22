@@ -3,10 +3,28 @@ import matplotlib.pyplot as pyplot
 import numpy as np
 import pprint
 from copy import copy, deepcopy
+import os, sys
 
-from Greedy import *
+# parentPath = os.path.abspath("../../Metaheuristics/GRASP_python")
+# if parentPath not in sys.path:
+#     sys.path.insert(0, parentPath)
+# parentPath = os.path.abspath("../GRASP_python")
+# if parentPath not in sys.path:
+#     sys.path.insert(0, parentPath)
+# parentPath = os.path.abspath(".")
+# if parentPath not in sys.path:
+#     sys.path.insert(0, parentPath)
+
+parentPath = os.path.abspath(".")
+if parentPath not in sys.path:
+    sys.path.insert(0, parentPath)
 
 pp = pprint.PrettyPrinter(indent=2)
+
+#from Greedy import Greedy.isFeasible
+from Greedy import *
+
+
 
 printlog = False
 printlog_mainloop = False
