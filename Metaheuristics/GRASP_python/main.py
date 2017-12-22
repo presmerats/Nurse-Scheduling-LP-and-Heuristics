@@ -1,9 +1,10 @@
 from Greedy import *
-from LocalSearch import *
+from LocalSearch2 import *
 #from Grasp import *
 #from BRKGA_main import *
 from instance import *
 import time
+from Grasp2 import *
 
 import sys
 import os
@@ -24,8 +25,8 @@ def greedyPlusLocalSearch(data):
     failed_iterations = 0
     while failed_iterations < 5:
 
-        #solution2 = firstImprovementLocalSearch(solution, data)
-        solution2 = bestImprovementLocalSearch(solution, data)
+        solution2 = firstImprovementLocalSearch(solution, data)
+        #solution2 = bestImprovementLocalSearch(solution, data)
 
         if solution2["cost"] >= solution["cost"]:
             print("     searching, cost" + str(solution2["cost"]) + " total_w:" + str(solution2["totalw"]))
@@ -45,7 +46,37 @@ def greedyPlusLocalSearch(data):
 
 
 def grasp(data):
-    pass
+
+    solution = GraspConstructive(data)
+    print(" GRASP CONSTRUCTIVE SOLUTION: ")
+    pp.pprint(solution["cost"])
+    print(time.time())
+    print("")
+    print("")
+
+    failed_iterations = 0
+    while failed_iterations < 5:
+
+        solution2 = firstImprovementLocalSearch(solution, data)
+        solution2 = bestImprovementLocalSearch(solution, data)
+
+        if solution2["cost"] >= solution["cost"]:
+            print("     searching, cost" + str(solution2["cost"]) + " total_w:" + str(solution2["totalw"]))
+            failed_iterations += 1
+        else:
+            print(" --> improvement: " + str(solution2["cost"]))
+            failed_iterations = 0
+
+        solution = solution2
+
+    print(" LOCAL SEARCH SOLUTION: ")
+    pp.pprint(solution["w"])
+    print(solution["z"])
+    pp.pprint(solution["cost"])
+
+    return solution  
+
+
 
 def brkga(data):
     pass
@@ -144,11 +175,13 @@ if __name__ == '__main__':
     }
 
 
-    instancepath = '../../Instances/Final/test_gc01.dat'
+    #instancepath = '../../Instances/Final/test_gc01.dat'
 
     instancepath = '../../Instances/Final/test_gc02.dat'
+    # gc+ls =  obj 2 t 0.02s
+    # grasp :  obj 2 t 0.014s
 
-    instancepath = '../../Instances/Final/test_gc03.dat'
+    #instancepath = '../../Instances/Final/test_gc03.dat'
     # 20171221  -firstImprovement obj=   - time= 
 
 
@@ -156,28 +189,38 @@ if __name__ == '__main__':
     # 12 s
     # 20171221  -firstImprovement obj=7(greedy)   - time=759
     # 20171221  -bestsImprovement obj=7(greedy)   - time=675
+    # 20171222  -firstImproement obj=7(greedy)   - time=0.6
 
     #instancepath = '../../Instances/Final/0004-x_15_8.dat'
     # 7.1 s
 
-    #instancepath = '../../Instances/Final/0003-x_17_7.dat'
+    instancepath = '../../Instances/Final/0003-x_17_7.dat'
     # 12 s
     # 20171221 - of=16(greedy) - time = 173s
-    #    
+    # 20171221 - of=16(greedy) - time = 14s
 
-    #instancepath = '../../Instances/Final/0004-x_21_8.dat'
+    instancepath = '../../Instances/Final/0004-x_21_8.dat'
     # 154 s
+    # 20172222 - of=26(greedy) - t=57s
 
     instancepath = '../../Instances/Final/0001-i-ng-60-64-40-24h-8mxP-2mxC-2mxH-1mnH-3Cnt-20171210_12-53-50687.dat'
+    # 20171221 OBJ=40(g) time=665
+    # 20171222 obj=40(g) t=6.5s
+
+    instancepath = '../../Instances/Final/0001-i-ng-60-64-40-24h-8mxP-2mxC-2mxH-1mnH-3Cnt-20171210_12-53-51891.dat'
+    # 20171222 obj=40(g) t=7.4s
+
+    instancepath = '../../Instances/Final/0005-i-ng-60-64-40-24h-10mxP-5mxC-10mxH-1mnH-3Cnt-20171218_23-50-01970.dat'
+    # 20171222 obj=47(ls) t=46s -> LS WORKS WELL!! greedy(59) vs ls(47)
+    # 20171222 obj=47(ls) t=31s -> alph=0.2 ok, 0.5ok, 0.6 fails
 
 
-    #instancepath = '../../Instances/Final/0001-i-ng-60-64-40-24h-8mxP-2mxC-2mxH-1mnH-3Cnt-20171210_12-53-51891.dat'
-
-    #instancepath = '../../Instances/Final/0005-i-ng-60-64-40-24h-10mxP-5mxC-10mxH-1mnH-3Cnt-20171218_23-50-01970.dat'
-
-    #instancepath = '../../Instances/Final/0074-i-ng-60-64-40-24h-16mxP-5mxC-10mxH-2mnH-3Cnt-20171218_23-50-01921.dat'
+    instancepath = '../../Instances/Final/0074-i-ng-60-64-40-24h-16mxP-5mxC-10mxH-2mnH-3Cnt-20171218_23-50-01921.dat'
+    # 20171222 obj=57(greedy) t=317s
+    # 20171222 obj=57(constr) t=421
 
     #instancepath = '../../Instances/Final/1661-i-ng-60-128-80-24h-16mxP-5mxC-10mxH-1mnH-3Cnt-20171218_23-49-58683.dat'
+
 
 
     if len(sys.argv) > 1:
@@ -188,6 +231,7 @@ if __name__ == '__main__':
             print("Usage: python main.py <metaheuristic_algorithm>")
     else:
         solverType = "greedy"
+        solverType = "grasp"
 
     cProfile.run('run(instancepath, solverType)')   
     #run(instancepath, solverType)
