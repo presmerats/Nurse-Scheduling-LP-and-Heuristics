@@ -1,15 +1,22 @@
-from Greedy import *
-from LocalSearch2 import *
-#from Grasp import *
-#from BRKGA_main import *
-from instance import *
 import time
-from Grasp2 import *
-
 import sys
 import os
 import json
 import cProfile
+
+
+parentPath = os.path.abspath("./GRASP_python")
+if parentPath not in sys.path:
+    sys.path.insert(0, parentPath)
+parentPath = os.path.abspath("./BRKGA_python")
+if parentPath not in sys.path:
+    sys.path.insert(0, parentPath)
+from Greedy import *
+from LocalSearch2 import *
+from Grasp2 import *
+from BRKGA_main import *
+from instance import *
+
 
 def greedyPlusLocalSearch(data):
 
@@ -61,7 +68,10 @@ def grasp(data):
         solution2 = bestImprovementLocalSearch(solution, data)
 
         if solution2["cost"] >= solution["cost"]:
-            print("     searching, cost" + str(solution2["cost"]) + " total_w:" + str(solution2["totalw"]))
+            print("     searching, cost" +
+                  str(solution2["cost"]) +
+                  " total_w:" +
+                  str(solution2["totalw"]))
             failed_iterations += 1
         else:
             print(" --> improvement: " + str(solution2["cost"]))
@@ -74,7 +84,7 @@ def grasp(data):
     print(solution["z"])
     pp.pprint(solution["cost"])
 
-    return solution  
+    return solution
 
 
 
@@ -130,7 +140,7 @@ def writeLog(instancepath, solver, solveTime , solution, data):
     instance_name = os.path.basename(instancepath)
     instance_name = os.path.splitext(instance_name)[0] + '_' + solver + '.json'
     
-    logpath = os.path.join('../../Results/Final/', instance_name)
+    logpath = os.path.join('../Results/Final/', instance_name)
 
     with open(logpath,'w+') as logfile:
         json.dump(results_list, logfile)
@@ -175,51 +185,51 @@ if __name__ == '__main__':
     }
 
 
-    #instancepath = '../../Instances/Final/test_gc01.dat'
+    #instancepath = '../Instances/Final/test_gc01.dat'
 
-    instancepath = '../../Instances/Final/test_gc02.dat'
+    instancepath = '../Instances/Final/test_gc02.dat'
     # gc+ls =  obj 2 t 0.02s
     # grasp :  obj 2 t 0.014s
 
-    #instancepath = '../../Instances/Final/test_gc03.dat'
+    #instancepath = '../Instances/Final/test_gc03.dat'
     # 20171221  -firstImprovement obj=   - time= 
 
 
-    instancepath = '../../Instances/Final/0000-x_8_1.dat'
+    instancepath = '../Instances/Final/0000-x_8_1.dat'
     # 12 s
     # 20171221  -firstImprovement obj=7(greedy)   - time=759
     # 20171221  -bestsImprovement obj=7(greedy)   - time=675
     # 20171222  -firstImproement obj=7(greedy)   - time=0.6
 
-    #instancepath = '../../Instances/Final/0004-x_15_8.dat'
+    #instancepath = '../Instances/Final/0004-x_15_8.dat'
     # 7.1 s
 
-    instancepath = '../../Instances/Final/0003-x_17_7.dat'
+    instancepath = '../Instances/Final/0003-x_17_7.dat'
     # 12 s
     # 20171221 - of=16(greedy) - time = 173s
     # 20171221 - of=16(greedy) - time = 14s
 
-    instancepath = '../../Instances/Final/0004-x_21_8.dat'
+    instancepath = '../Instances/Final/0004-x_21_8.dat'
     # 154 s
     # 20172222 - of=26(greedy) - t=57s
 
-    instancepath = '../../Instances/Final/0001-i-ng-60-64-40-24h-8mxP-2mxC-2mxH-1mnH-3Cnt-20171210_12-53-50687.dat'
+    instancepath = '../Instances/Final/0001-i-ng-60-64-40-24h-8mxP-2mxC-2mxH-1mnH-3Cnt-20171210_12-53-50687.dat'
     # 20171221 OBJ=40(g) time=665
     # 20171222 obj=40(g) t=6.5s
 
-    instancepath = '../../Instances/Final/0001-i-ng-60-64-40-24h-8mxP-2mxC-2mxH-1mnH-3Cnt-20171210_12-53-51891.dat'
+    instancepath = '../Instances/Final/0001-i-ng-60-64-40-24h-8mxP-2mxC-2mxH-1mnH-3Cnt-20171210_12-53-51891.dat'
     # 20171222 obj=40(g) t=7.4s
 
-    instancepath = '../../Instances/Final/0005-i-ng-60-64-40-24h-10mxP-5mxC-10mxH-1mnH-3Cnt-20171218_23-50-01970.dat'
+    instancepath = '../Instances/Final/0005-i-ng-60-64-40-24h-10mxP-5mxC-10mxH-1mnH-3Cnt-20171218_23-50-01970.dat'
     # 20171222 obj=47(ls) t=46s -> LS WORKS WELL!! greedy(59) vs ls(47)
     # 20171222 obj=47(ls) t=31s -> alph=0.2 ok, 0.5ok, 0.6 fails
 
 
-    instancepath = '../../Instances/Final/0074-i-ng-60-64-40-24h-16mxP-5mxC-10mxH-2mnH-3Cnt-20171218_23-50-01921.dat'
+    #instancepath = '../Instances/Final/0074-i-ng-60-64-40-24h-16mxP-5mxC-10mxH-2mnH-3Cnt-20171218_23-50-01921.dat'
     # 20171222 obj=57(greedy) t=317s
     # 20171222 obj=57(constr) t=421
 
-    #instancepath = '../../Instances/Final/1661-i-ng-60-128-80-24h-16mxP-5mxC-10mxH-1mnH-3Cnt-20171218_23-49-58683.dat'
+    #instancepath = '../Instances/Final/1661-i-ng-60-128-80-24h-16mxP-5mxC-10mxH-1mnH-3Cnt-20171218_23-49-58683.dat'
 
 
 
@@ -232,6 +242,7 @@ if __name__ == '__main__':
     else:
         solverType = "greedy"
         solverType = "grasp"
+        #solverType = "brkga"
 
     cProfile.run('run(instancepath, solverType)')   
     #run(instancepath, solverType)

@@ -4,15 +4,20 @@ import os
 import traceback
 import shutil
 import re
-from subprocess import call,check_call,Popen, PIPE
+from subprocess import call,check_call, Popen, PIPE
 from pathlib import Path, PurePath
 
 parentPath = os.path.abspath("../../Metaheuristics/GRASP_python")
 if parentPath not in sys.path:
     sys.path.insert(0, parentPath)
+parentPath = os.path.abspath("../../Metaheuristics/BRKGA_python")
+if parentPath not in sys.path:
+    sys.path.insert(0, parentPath)
+parentPath = os.path.abspath("../../Metaheuristics")
+if parentPath not in sys.path:
+    sys.path.insert(0, parentPath)
 
-import main as grasp
-
+import main as metaheuristics
 
 """
     this script 
@@ -124,6 +129,7 @@ if __name__ == '__main__':
             exit()
     else:
         solverType = "ILP"
+        solverType = "brkga"
 
     instanceType = 'all'
     if len(sys.argv) > 2:
@@ -152,7 +158,7 @@ if __name__ == '__main__':
                 if solverType == "ILP":
                     solveInstanceWithILP(instancepath)
                 elif solverType in ["greedy", "grasp", "brkga"]:
-                    grasp.run(instancepath, solverType)
+                    metaheuristics.run(instancepath, solverType)
 
             except Exception:
                 all_ok = False
