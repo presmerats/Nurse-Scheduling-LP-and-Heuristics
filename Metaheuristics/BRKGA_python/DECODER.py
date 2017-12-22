@@ -8,6 +8,7 @@ parentPath = os.path.abspath("../GRASP_python")
 if parentPath not in sys.path:
     sys.path.insert(0, parentPath)
 from LocalSearch2 import validCandidate
+from Greedy import isFeasible
 
 
 def checkIfCanWork(solution, h, n, data, sumW):
@@ -125,18 +126,18 @@ def assignNurses(solution, hini, data):
         #  those who can be assigned to work
         mustWork, canWork = computeAssignments(solution, h, data, sumW, hini)
 
-        print("h=" + str(h))
-        print("mustWork")
-        print(mustWork)
-        print("canWork")
-        print(canWork)
-        print("hini:")
-        print(hini)
-        print("demand")
-        print(data["demand"])
-        print("pending")
-        print(solution["pending"])
-        print("")
+        # print("h=" + str(h))
+        # print("mustWork")
+        # print(mustWork)
+        # print("canWork")
+        # print(canWork)
+        # print("hini:")
+        # print(hini)
+        # print("demand")
+        # print(data["demand"])
+        # print("pending")
+        # print(solution["pending"])
+        # print("")
 
         # for each nurse    
         #   try to assign if pending[h] > 0 and h >= hini[n]
@@ -160,6 +161,76 @@ def assignNurses(solution, hini, data):
     
     # compute cost: already updated!
 
+    # compute feasibility: if unfeasible -> fitness should be inf
+    if not isFeasible(solution, data):
+        # assign the max cost
+        solution["cost"] = 2 * data["nNurses"]
+
+
+def decode_hini(ind, data):
+
+    start = data["hours"] + 1
+    end = -1
+    for i in range(len(data["demand"])):
+        if data["demand"][i]  > 0:
+            if i < start:
+                start = i
+            if i > end:
+                end = i
+
+    demandh_min = start
+    demandh_max = end
+    therange = demandh_max - demandh_min
+
+    # print("demand start")
+    # print(demandh_min)
+
+    # print("demand end")
+    # print(demandh_max)
+
+    hini = []
+    themin = demandh_max + 1
+    themin_i = data["hours"] + 1
+    themax = demandh_min -1 
+    themax_i = -1
+    for i in range(len(ind['chr'])):
+        hi = int(therange * ind['chr'][i])
+        # print(hi)
+        # print(themin)
+        # print(themax)
+        if hi < themin:
+            themin = hi
+            themin_i = i
+        if hi > themax:
+            themax = hi
+            themax_i = i
+        hini.append(hi)
+
+    # print(" hini min")
+    # print(themin_i)
+    # print(hini[themin_i])
+    # print(" hini max")
+    # print(themax_i)
+    # print(hini[themax_i])
+
+    #adjust min and max to real demand
+    hini[themin_i] = demandh_min
+    hini[themax_i] = demandh_max
+    # print(" hini min")
+    # print(themin_i)
+    # print(hini[themin_i])
+    if hini[themin_i] > start:
+        print("-->Error in min hini!")
+    # print(" hini max")
+    # print(themax_i)
+    # print(hini[themax_i])
+    if hini[themax_i] < end:
+        print("Error in max hini!")
+    # print("")
+
+
+    return hini
+
 
 def decode(population, data):
     """
@@ -182,9 +253,7 @@ def decode(population, data):
         # improvement1, use the first hour with demand, instead of 1...
         # improvement2, how to reduce infeasibility?
 
-        hini = [int(hours * ci) for ci in ind['chr']]
-
-
+        hini = decode_hini(ind, data)
 
         # 2) assign work hours to nurses
         solution = {
@@ -199,12 +268,12 @@ def decode(population, data):
 
         assignNurses(solution, hini, data)
 
-        ind['solution']=solution
+        ind['solution'] = solution
 
-        ind['fitness']=solution["cost"]
+        ind['fitness'] = solution["cost"]
 
-        pp.pprint(data["demand"])
-        pp.pprint(solution)
+        # pp.pprint(data["demand"])
+        # pp.pprint(solution)
         time.sleep(5)
 
     return(population)
