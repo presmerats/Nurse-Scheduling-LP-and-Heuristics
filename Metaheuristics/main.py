@@ -67,7 +67,7 @@ def writeLog(instancepath, solver, solveTime , solution, data):
     instance_name = os.path.basename(instancepath)
     instance_name = os.path.splitext(instance_name)[0] + '_' + solver + '.json'
     
-    logpath = os.path.join('../Results/Final/', instance_name)
+    logpath = os.path.join('../../Results/Final/', instance_name)
 
     with open(logpath,'w+') as logfile:
         json.dump(results_list, logfile)
@@ -147,7 +147,7 @@ if __name__ == '__main__':
     instancepath = '../Instances/Final/0001-i-ng-60-64-40-24h-8mxP-2mxC-2mxH-1mnH-3Cnt-20171210_12-53-51891.dat'
     # 20171222 obj=40(g) t=7.4s
 
-    #instancepath = '../Instances/Final/0005-i-ng-60-64-40-24h-10mxP-5mxC-10mxH-1mnH-3Cnt-20171218_23-50-01970.dat'
+    instancepath = '../Instances/Final/0005-i-ng-60-64-40-24h-10mxP-5mxC-10mxH-1mnH-3Cnt-20171218_23-50-01970.dat'
     # 20171222 obj=47(ls) t=46s -> LS WORKS WELL!! greedy(59) vs ls(47)
     # 20171222 obj=47(ls) t=31s -> alph=0.2 ok, 0.5ok, 0.6 fails
 
@@ -157,6 +157,11 @@ if __name__ == '__main__':
     # 20171222 obj=57(constr) t=421
 
     #instancepath = '../Instances/Final/1661-i-ng-60-128-80-24h-16mxP-5mxC-10mxH-1mnH-3Cnt-20171218_23-49-58683.dat'
+
+
+    instancepath = '../Instances/Final/test_gc02.dat'
+    # gc+ls =  obj 2 t 0.02s
+    # grasp :  obj 2 t 0.014s
 
 
 
@@ -169,7 +174,7 @@ if __name__ == '__main__':
     else:
         solverType = "greedy"
         solverType = "grasp"
-        #solverType = "brkga"
+        solverType = "brkga"
 
     cProfile.run('run(instancepath, solverType)')   
     #run(instancepath, solverType)

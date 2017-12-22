@@ -45,7 +45,7 @@ def brkga_run(data):
     population = decoder.decode(population, data)
     bestIndividual = brkga.getBestFitness(population)
 
-
+    return bestIndividual
 
 if __name__ == '__main__':
 
