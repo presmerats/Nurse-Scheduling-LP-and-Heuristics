@@ -1,5 +1,8 @@
 import numpy as np
 import sys, os
+import pprint
+import time
+pp = pprint.PrettyPrinter(indent=2)
 
 parentPath = os.path.abspath("../GRASP_python")
 if parentPath not in sys.path:
@@ -23,11 +26,11 @@ def checkIfCanWork(solution, h, n, data, sumW):
     # verify max rest constraint if not working
     rest_check, maxPresence_check, maxConsec_check, maxHours_check, minHours_check = validCandidate(solution, data, n, verify_minHours=verify_minHours, whattoreturn='All')
 
-    if rest_check2 and \
-        maxPresence_check2 and \
-        maxConsec_check2 and  \
-        maxHours_check2 and \
-        minHours_check2:
+    if rest_check and \
+        maxPresence_check and \
+        maxConsec_check and  \
+        maxHours_check and \
+        minHours_check:
 
         return True
 
@@ -61,13 +64,13 @@ def checkIfCanRest(solution, h, n, data, sumW, canWork_check):
         # should always be true at the same time!
         if not canWork_check:
             print(" INCOHERENCE DETECTED cannot rest but cannot work!")
-            
+
         return canWork_check
 
     return False
 
 
-def computeAssignments(solution, h, data, sumW):
+def computeAssignments(solution, h, data, sumW, hini):
     """
         for each nurse,
             compute which nurses must work at time h to be valid
@@ -83,6 +86,9 @@ def computeAssignments(solution, h, data, sumW):
 
     # for each nurse
     for n in range(data["nNurses"]):
+
+        if h < hini[n]:
+            continue
 
         # canWork Check-------------------------------
         canWork_check = checkIfCanWork(solution, h, n, data, sumW)
@@ -117,7 +123,20 @@ def assignNurses(solution, hini, data):
         # compute valid candidates
         #  those who must be assigned (rest constraint)
         #  those who can be assigned to work
-        mustWork, canWork = computeAssignments(solution, h, data, sumW)
+        mustWork, canWork = computeAssignments(solution, h, data, sumW, hini)
+
+        print("h=" + str(h))
+        print("mustWork")
+        print(mustWork)
+        print("canWork")
+        print(canWork)
+        print("hini:")
+        print(hini)
+        print("demand")
+        print(data["demand"])
+        print("pending")
+        print(solution["pending"])
+        print("")
 
         # for each nurse    
         #   try to assign if pending[h] > 0 and h >= hini[n]
@@ -170,18 +189,22 @@ def decode(population, data):
         # 2) assign work hours to nurses
         solution = {
             "cost": 0,
-            "w": [],
+            "w": [[0] * data["hours"] for n in range(data["nNurses"])],
             "z": [0] * data["nNurses"],
             "last_added": 0,
-            "pending": [0] * data["hours"],
+            "pending": list(data["demand"]),
             "totalw": 0,
             "exceeding": [0] * data["hours"]
         }
 
-        assignNurses(assignment, hini, data)
+        assignNurses(solution, hini, data)
 
         ind['solution']=solution
 
         ind['fitness']=solution["cost"]
+
+        pp.pprint(data["demand"])
+        pp.pprint(solution)
+        time.sleep(5)
 
     return(population)
