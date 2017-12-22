@@ -13,6 +13,7 @@ printlog_mainloop = False
 printlog_createNeighborhood = False
 printlog_electiveCandidates = False
 printlog_findCandidates = False
+printlog_validity = False
 
 def isTotallyValid(data, candidate):
     d = data
@@ -22,8 +23,8 @@ def isTotallyValid(data, candidate):
     validity = True
 
     for nurse in range(len(candidate_sol["w"])):
-        
-        candidate  = candidate_sol["w"][nurse]
+
+        candidate = candidate_sol["w"][nurse]
 
         maxHours_check = True
         sumW = 0
@@ -33,56 +34,39 @@ def isTotallyValid(data, candidate):
         start = -1
         end = -1
         rest_check = True
-        rest = 0
         minHours_check = True
         for w in range(len(candidate)):
 
             # maxHours
             sumW += candidate[w]
             maxHours_check = sumW <= d["maxHours"]
-            # if not maxHours_check:
-            #     print("maxHours is not respected")
-                
-            # maxConsec 
+
+            # maxConsec
             if candidate[len(candidate) - w - 1] == 0:
                 consec = 0
             else:
                 consec += 1
                 if consec > d["maxConsec"]:
                     maxConsec_check = False
-                    #print("maxconsec " + str(d["maxConsec"]) + " consec:" + str(consec) + " stop at "+str((len(candidate) - w)))
-                  
+
             # maxPresence
             if start == -1:
                 if candidate[w] == 1:
                     start = w + 1
-                
-            if end == -1: 
+            if end == -1:
                 if candidate[len(candidate) - w - 1] == 1:
                     end = len(candidate) - w
-            
             if end != -1 and start != -1:
                 maxPresence_check = d["maxPresence"] >= end - start + 1
-                # if not maxPresence_check:
-                #     print("maxPresence "+str(d["maxPresence"])+" start:"+str(start)+" end:"+str(end))
-                    
+
             # rest
             if end != -1 and start != -1 and w > start and w <= end:
                 if candidate[w - 1] == 0 and candidate[w] == 0:
                     rest_check = False
-                    
 
             # minHours (only if hours - minHours + 1 <= len(candidate))
-            
-            # if sumW > 0 and sumW < d["minHours"] and d["hours"] - d["minHours"] + 1 <= len(candidate):
-            #     #print("sumW: " + str(sumW) + " >= " + str(d["minHours"]) + "-" + str(d["hours"]) + "+" + str(len(candidate)) + " minHours_check: " + str(minHours_check))
-
-            #     minHours_check = sumW >= d["minHours"] - (d["hours"] - len(candidate))
-
             if sumW > 0:
                 minHours_check = sumW >= d["minHours"]
-
-
 
         validity = minHours_check and \
             maxHours_check and \
@@ -104,25 +88,21 @@ def isTotallyValid(data, candidate):
 
         if not validity:
 
-            # if printlog:
-            #     print("validity: ")
+            if printlog or printlog_validity:
+                print("validity: ")
 
-            #     print(candidate)
-            #     print(data)
-            #     print("minHours: " + str(minHours_check))
-            #     print("maxHours: " + str(maxHours_check))
-            #     print("consec:   " + str(maxConsec_check))
-            #     print("Presence: " + str(maxPresence_check))
-            #     print("rest:     " + str(rest_check))
-            #     print("=")
-            #     print(validity)
+                print(candidate)
+                print(data)
+                print("minHours: " + str(minHours_check))
+                print("maxHours: " + str(maxHours_check))
+                print("consec:   " + str(maxConsec_check))
+                print("Presence: " + str(maxPresence_check))
+                print("rest:     " + str(rest_check))
+                print("=")
+                print(validity)
             return validity
 
     return validity
-
-
-
-
 
 
 def copySol(solution, data):
@@ -137,11 +117,16 @@ def copySol(solution, data):
         "exceeding": list(solution["exceeding"])
     }
 
-    
     return copied_sol
 
 
-def exceedingCapacityRemoval(candidate,n,data):
+def exceedingCapacityRemoval(candidate, n, data):
+    """
+        Given a solution(candidate) and a nurse
+        this function removes any assignment w[n][h] whenever
+        capacity is exceeded at some hour h and
+        the resulting schedule is valid
+    """
 
     for h in range(data["hours"]):
         if candidate["w"][n][h] == 1 and candidate["exceeding"][h] > 0:
@@ -155,20 +140,27 @@ def exceedingCapacityRemoval(candidate,n,data):
                     print()
 
                 candidate["exceeding"][h] -= 1
-            
             else:
                 candidate["w"][n][h] = 1
 
 
 def buildNewSol(neighbor, data):
+    """
+        given a recently build solution (neighbor)
+        this function computes:
+            the cost,
+            the exceeding capacity,
+            the pending assignments
+            the total assigned hours
+    """
 
     totalw = 0
     sumz = 0
-    columnarSum = [-1*d for d in data["demand"]]
+    columnarSum = [-1 * d for d in data["demand"]]
     columnarPending = list(data["demand"])
 
     for n in range(len(neighbor["w"])):
-            
+
         sumZn = 0
         for h in range(len(neighbor["w"][n])):
             totalw += neighbor["w"][n][h]
@@ -176,8 +168,7 @@ def buildNewSol(neighbor, data):
             # pending and exceeding
             columnarSum[h] += neighbor["w"][n][h]
             columnarPending[h] -= neighbor["w"][n][h]
-            columnarPending[h] = max(columnarPending[h],0)
-
+            columnarPending[h] = max(columnarPending[h], 0)
 
         if sumZn > 0:
             neighbor["z"][n] = 1
@@ -185,7 +176,6 @@ def buildNewSol(neighbor, data):
         else:
             neighbor["z"][n] = 0
 
-            
     neighbor["pending"] = columnarPending
     neighbor["exceeding"] = columnarSum
     neighbor["cost"] = sumz
@@ -194,93 +184,37 @@ def buildNewSol(neighbor, data):
     return neighbor
 
 
-def electiveCandidates(solution, n, h, data):
-
-    schedule = solution["w"][n]
-
-    # get all other schedules
-    candidates = []
-
-    if solution["exceeding"] > 0:
-        candidate["w"][n][h] = 0
-        #candidate["z"][n] = 0
-
-        # validate
-        if isTotallyValid(data, candidate):
-            if printlog or printlog_electiveCandidates:
-                print("-->valid elimination!")
-                pp.pprint(candidate)
-                print()
-                
-            
-            candidates.append(candidate)
-
-            #return candidates
-
-    for ni in (range(data["nNurses"])):
-        if ni == n:
-            continue
-        # elif solution["z"][ni] == 0:
-        #     continue
-        elif solution["w"][ni][h] ==1:
-            continue
-        else:
-
-            if printlog or printlog_electiveCandidates:
-                print("exchange " + str(n) + ", " + str(h) + " with " + str(ni) + ", " + str(h))
-            # prepare the candidate (add the extra hour)
-            
-            candidate = copySol(solution, data)
-            # print("copysol:"+"-"*24)
-            # pp.pprint(solution)
-            # pp.pprint(candidate)
-
-            # pp.pprint(candidate)
-
-            candidate["w"][ni][h] = 1
-            candidate["z"][ni] = 1 # in case we use not working nurses also
-            candidate["w"][n][h] = 0
-            #candidate["z"][n] = 0 # wait until the end to do this (or compute all vector to assure it can be set to 0) -> go that way
-
-            # if printlog  or printlog_electiveCandidates:
-            #     pp.pprint(candidate)
-
-            # validate
-            if isTotallyValid(data, candidate):
-                if printlog or printlog_electiveCandidates:
-                    print("-->valid exchange!")
-                    #pp.pprint(candidate)
-                    print()
-      
-                candidates.append(candidate)
-
-    return candidates
-
-
 def electiveCandidate(candidate, n, h, data):
 
-
+    # first try to remove candidate assign if exceeding capcity
     if candidate["exceeding"][h] > 0:
         candidate["w"][n][h] = 0
 
         # validate
         if isTotallyValid(data, candidate):
-            if printlog or printlog_electiveCandidates or printlog_findCandidates:
+            if printlog or \
+               printlog_electiveCandidates or \
+               printlog_findCandidates:
                 print("-->valid elimination!  n" + str(n) + " h:" + str(h))
                 pp.pprint(candidate)
                 print()
 
             # update pending and exceeding
             candidate["exceeding"][h] -= 1
-            
+
             return candidate
         else:
+            # if this removing is not valid, restore state
             candidate["w"][n][h] = 1
 
+    # then try to find a candidate replacement among other nurses
     for ni in (range(data["nNurses"])):
 
+        # save state for nurse ni
         aux_list = list(candidate["w"][ni])
         aux_list2 = list(candidate["exceeding"])
+
+        # remove all exceeding capacity assignmnts for nurse ni
         exceedingCapacityRemoval(candidate, ni, data)
 
         if ni == n:
@@ -311,6 +245,7 @@ def electiveCandidate(candidate, n, h, data):
                 return candidate
 
             else:
+                # if exchange is not valid, restore state
                 candidate["w"][ni] = aux_list
                 candidate["w"][n][h] = 1
                 candidate["exceeding"] = aux_list2
@@ -322,12 +257,13 @@ def findCandidates(solution, data, n):
     """ 
          this function returns solutions that include:
             - 0 hours assigned to nurse n
-            - all the hours that where assigned to nurse n are assigned to other nurses 
-            - the solution is feasible (valid constraints) and cover all demand
+            - all the hours that where assigned to nurse n
+              are assigned to other nurses
+            - the solution is valid (constraints)
     """
 
-    s = copySol(solution, data) 
-       
+    # make changes to a copy s
+    s = copySol(solution, data)
     for h in range(data["hours"]):
 
         if printlog or printlog_findCandidates:
@@ -336,22 +272,29 @@ def findCandidates(solution, data, n):
 
         if s["w"][n][h] == 1:
             electiveCandidate(s, n, h, data)
-        
+
     s = buildNewSol(s, data)
 
-    #pp.pprint(s)
+    # pp.pprint(s)
 
     if s["z"][n]==0:
+        # the nurse has been freed from work
+        # the cost has decreased
         return [s]
     elif s["totalw"] < solution["totalw"]:
-        #print("improved w! " + str(s["totalw"]))
+        # the cost has not decreased
+        # but # assignments is reduced,
+        # useful for further improvements
         return[s]
     else:
         return []
 
 
-def nursesAtHourH( solution, h):
-
+def nursesAtHourH(solution, h):
+    """
+        this function computes the total nurse assignments
+        at hour h
+    """
     sumN = 0
     for w in solution["w"]:
         sumN += w[h]
@@ -359,10 +302,16 @@ def nursesAtHourH( solution, h):
 
 
 def exceedingNurseHours(solution, data):
+    """
+    this function computes and stores the
+    exceeding capacity for each hour
 
-    solution["exceeding"] = [0]*len(solution["w"][0])
+    """
+
+    solution["exceeding"] = [0] * len(solution["w"][0])
     for h in range(data["hours"]):
-        solution["exceeding"][h]=nursesAtHourH(solution,h) - data["demand"][h]
+        solution["exceeding"][h] = nursesAtHourH(solution, h) - \
+            data["demand"][h]
 
     if printlog or printlog_electiveCandidates:
         print("exceeding capacity")
@@ -370,43 +319,44 @@ def exceedingNurseHours(solution, data):
         print("")
 
 
-
 def createNeighborhood(solution, data):
+    """
+    creates a set of solutions that are
+    neighbors to the current solution
+
+    feasibility is not verified at this point
+    (it should be feasible if input solution is feasible)
+    """
 
     Ns = []
 
     if printlog:
-        print("Initial solutioni: " + "-"*24)
+        print("Initial solutioni: " + "-" * 24)
         pp.pprint(solution)
         print()
 
-
+    # computes and stores the exceeding capacity
     exceedingNurseHours(solution, data)
 
-    for n in range(0, data["nNurses"],1):
+    for n in range(0, data["nNurses"], 1):
         if solution["z"][n] == 0:
             continue
 
-        if printlog  or printlog_createNeighborhood:
+        if printlog or printlog_createNeighborhood:
             print("")
             print("Nurse " + str(n))
 
-        ns = findCandidates(solution, data, n )
-        
+        ns = findCandidates(solution, data, n)
+
         if printlog or printlog_createNeighborhood:
-            print(" after findCandidates "+ "--"*10)
+            print(" after findCandidates " + "--" * 10)
             pp.pprint(ns)
             print("")
 
-        if len(ns)>0:
+        if len(ns) > 0:
             Ns.extend(ns)
 
-        
     return Ns
-
-
-
-
 
 
 def firstImprovementLocalSearch(solution, data):
@@ -415,7 +365,7 @@ def firstImprovementLocalSearch(solution, data):
     if printlog or printlog_mainloop:
         print()
         print("new neighborhood")
-        #pp.pprint(Ns)
+        # pp.pprint(Ns)
     
     for i in range(len(Ns)):
 
@@ -423,45 +373,43 @@ def firstImprovementLocalSearch(solution, data):
 
         if printlog or printlog_mainloop:
             print("new_sol")
-            #pp.pprint(new_sol["z"])
+            # pp.pprint(new_sol["z"])
             pp.pprint(new_sol["cost"])
             pp.pprint(new_sol["totalw"])
             print()
-        
+
         if not isFeasible(new_sol, data):
             if printlog or printlog_mainloop:
                 print("unfeasible")
             continue
         else:
-            #print("new solution: ")
-            #pp.pprint(new_sol)
-            #print(str(new_sol["cost"]))
 
             if new_sol["cost"] < solution["cost"]:
 
                 if printlog or printlog_mainloop:
                     print("-->IMPROVEMENT")
-                    print("   " + str(new_sol["cost"]) + " total_w:" + str(solution["totalw"]))
+                    print("   " + str(new_sol["cost"]) +
+                          " total_w:" + str(solution["totalw"]))
 
                 solution = new_sol
                 return solution
 
             elif (new_sol["cost"] == solution["cost"] and
-                new_sol["totalw"] < solution["totalw"]):
+                  new_sol["totalw"] < solution["totalw"]):
 
                 if printlog or printlog_mainloop:
                     print("-->IMPROVEMENT")
-                    print("   " + str(new_sol["cost"]) + " total_w:" + str(solution["totalw"]))
+                    print("   " + str(new_sol["cost"]) +
+                          " total_w:" + str(solution["totalw"]))
 
                 solution = new_sol
 
             elif new_sol["cost"] == solution["cost"]:
-                
+
                 if printlog or printlog_mainloop:
                     print("same cost" + str(new_sol["cost"]))
 
     return solution
-
 
 
 def bestImprovementLocalSearch(solution, data):
@@ -471,43 +419,38 @@ def bestImprovementLocalSearch(solution, data):
         print()
         print("new neighborhood")
         pp.pprint(Ns)
-    
+
     for i in range(len(Ns)):
 
         new_sol = Ns[i]
 
-        # print("new_sol")
-        # pp.pprint(new_sol)
-        # print()
-        
         if not isFeasible(new_sol, data):
             if printlog or printlog_mainloop:
                 print("unfeasible")
             continue
         else:
-            #print("new solution: ")
-            #pp.pprint(new_sol)
-            #print(str(new_sol["cost"]))
 
             if new_sol["cost"] < solution["cost"]:
 
                 if printlog or printlog_mainloop:
                     print("-->IMPROVEMENT")
-                    print("   " + str(new_sol["cost"]) + " total_w:" + str(solution["totalw"]))
+                    print("   " + str(new_sol["cost"]) +
+                          " total_w:" + str(solution["totalw"]))
 
                 solution = new_sol
-                
+
             elif (new_sol["cost"] == solution["cost"] and
-                new_sol["totalw"] < solution["totalw"]):
+                  new_sol["totalw"] < solution["totalw"]):
 
                 if printlog or printlog_mainloop:
                     print("-->IMPROVEMENT")
-                    print("   " + str(new_sol["cost"]) + " total_w:" + str(solution["totalw"]))
+                    print("   " + str(new_sol["cost"]) +
+                          " total_w:" + str(solution["totalw"]))
 
                 solution = new_sol
 
             elif new_sol["cost"] == solution["cost"]:
-                
+
                 if printlog or printlog_mainloop:
                     print("same cost" + str(new_sol["cost"]))
 
