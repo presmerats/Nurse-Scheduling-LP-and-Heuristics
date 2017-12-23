@@ -190,7 +190,7 @@ def decode_hini(ind, data):
 
     hini = []
     themin = demandh_max + 1
-    themin_i = data["hours"] + 1
+    themin_i = data["nNurses"] + 1
     themax = demandh_min -1 
     themax_i = -1
     for i in range(len(ind['chr'])):
@@ -201,7 +201,10 @@ def decode_hini(ind, data):
         if hi < themin:
             themin = hi
             themin_i = i
-        if hi > themax:
+        if hi >= themax:
+            # when all 3 are the same,
+            # use >= in the max to avoid
+            # pointing to the same index
             themax = hi
             themax_i = i
         hini.append(hi)
@@ -209,25 +212,50 @@ def decode_hini(ind, data):
     # print(" hini min")
     # print(themin_i)
     # print(hini[themin_i])
+    # print(demandh_min)
     # print(" hini max")
     # print(themax_i)
     # print(hini[themax_i])
-
+    # print(demandh_max)
     #adjust min and max to real demand
     hini[themin_i] = demandh_min
     hini[themax_i] = demandh_max
     # print(" hini min")
     # print(themin_i)
     # print(hini[themin_i])
+
+    # print(" hini min")
+    # print(themin_i)
+    # print(hini[themin_i])
+    # print(demandh_min)
+    # print(" hini max")
+    # print(themax_i)
+    # print(hini[themax_i])
+    # print(demandh_max)
+
     if hini[themin_i] > start:
+        # this happens if max and min are the same and in the same index!
+        print(ind['chr'])
+        print(hini)
         print("-->Error in min hini!")
+        print("Min hini")
+        print(hini[themin_i])
+        print("start")
+        print(start)
     # print(" hini max")
     # print(themax_i)
     # print(hini[themax_i])
     if hini[themax_i] < end:
+        print(ind['chr'])
+        print(hini)
         print("Error in max hini!")
+        print("Max hini")
+        print(hini[themax_i])
+        print("en")
+        print(end)
     # print("")
-
+    # print("")
+    # print("")
 
     return hini
 
@@ -274,6 +302,6 @@ def decode(population, data):
 
         # pp.pprint(data["demand"])
         # pp.pprint(solution)
-        time.sleep(5)
+        #time.sleep(5)
 
     return(population)

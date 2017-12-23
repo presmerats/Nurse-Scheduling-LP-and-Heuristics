@@ -1,6 +1,9 @@
 # imports
 import math
 import matplotlib.pyplot as plt
+import pprint
+import time
+pp = pprint.PrettyPrinter(indent=2)
 
 import BRKGA as brkga
 import DECODER as decoder
@@ -45,6 +48,9 @@ def brkga_run(data):
     population = decoder.decode(population, data)
     bestIndividual = brkga.getBestFitness(population)
 
+
+    pp.pprint(data)
+    pp.pprint(bestIndividual)
     return bestIndividual
 
 if __name__ == '__main__':
