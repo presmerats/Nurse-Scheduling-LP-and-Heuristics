@@ -110,7 +110,7 @@ def computeAssignments(solution, h, data, sumW, hini):
 def assignNurses(solution, hini, data):
 
     demand = data["demand"]
-    pending = list(demand)
+    pending = solution["pending"]
     hours = data["hours"]
     sumW = [0] * data["nNurses"]
 
@@ -148,6 +148,7 @@ def assignNurses(solution, hini, data):
             if z[n] == 0:
                 z[n] = 1
                 solution["cost"] += 1
+
 
         if pending[h] > 0:
             for n in canWork:
