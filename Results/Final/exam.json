@@ -1,0 +1,13 @@
+[
+{ "./exam.dat" : {"expected_output" : "SUCCESS",
+"computed_output" : "true",
+"desired_objfunc" : "1",
+"solver" : "ILP",
+"time" : "2.9629",
+"int_vars" : "40",
+"Gap" : "0",
+"ObjectiveFunction" : "11",
+"isMIP?" : "true",
+"Data" : "centroides = 3;\nnNurses = 20;\nhours = 24;\ndemand = [2 2 1 1 1 2 2 3 4 6 6 7 5 8 8 7 6 6 4 3 4 3 3 3];\nminHours = 5;\nmaxHours = 9;\nmaxConsec = 3;\nmaxPresence = 14;\n",
+"Solution" : "// solution (optimal) with objective 11\n// Quality Incumbent solution:\n// MILP objective                                 1,1000000000e+01\n// MILP solution norm |x| (Total, Max)            4,25000e+02  2,40000e+01\n// MILP solution error (Ax=b) (Total, Max)        0,00000e+00  0,00000e+00\n// MILP x bound error (Total, Max)                0,00000e+00  0,00000e+00\n// MILP x integrality error (Total, Max)          0,00000e+00  0,00000e+00\n// MILP slack bound error (Total, Max)            0,00000e+00  0,00000e+00\n// \n\nz = [1\n         1 1 1 1 1 1 1 1 0 0 0 1 0 0 0 0 0 0 1];\nw = [[0 0 0 0 0 1 1 0 1 1 1 0 1 0 1 1 1 0 0 0 0 0 0 0]\n             [0 0 0 0 0 0 0 0 1 1 0 1 0 1 1 1 0 1 1 0 1 0 0 0]\n             [1 1 1 0 1 0 1 1 0 1 0 1 0 1 0 0 0 0 0 0 0 0 0 0]\n             [0 0 0 0 0 0 0 0 0 0 0 1 0 1 1 0 1 1 1 0 1 0 1 1]\n             [0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 0 1 1 1 0 1 0 1 1]\n             [0 0 0 0 0 0 0 0 0 1 1 1 0 1 1 1 0 1 1 0 1 0 0 0]\n             [0 0 0 0 0 0 0 1 1 0 1 1 1 0 1 1 1 0 0 0 0 0 0 0]\n             [1 1 0 1 0 1 0 1 1 1 0 1 0 1 0 0 0 0 0 0 0 0 0 0]\n             [0 0 0 0 0 0 0 0 0 0 1 0 1 1 0 1 1 1 0 1 0 1 0 1]\n             [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [0 0 0 0 0 0 0 0 0 0 1 0 1 0 1 1 1 0 1 1 0 1 1 0]\n             [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n             [0 0 0 0 0 0 0 0 0 1 1 1 0 1 1 1 0 1 0 1 0 1 0 0]];\ne = [17 22 14 24 24 21 17 14 24 0 0 0 24 0 0 0 0 0 0 23];\ns = [6 9 1 12 13 10 8 1 11 0 0 0 11 0 0 0 0 0 0 10];\n"
+}},{"end":"end"}]

@@ -32,8 +32,7 @@ printlog_electiveCandidates = False
 printlog_findCandidates = False
 printlog_validity = False
 
-
-def validCandidate(candidate_sol, d, nurse, verify_minHours = True, whattoreturn = 'summary'):
+def incrementalValidCandidate(candidate_sol, d, nurse, verify_minHours = True, whattoreturn = 'summary', force_rest_check = False, set_end=-1):
 
     candidate = candidate_sol["w"][nurse]
 
@@ -46,7 +45,134 @@ def validCandidate(candidate_sol, d, nurse, verify_minHours = True, whattoreturn
     end = -1
     rest_check = True
     minHours_check = True
-    for w in range(len(candidate)):
+
+    stop = len(candidate)
+    if set_end > -1:
+        stop = set_end + 1
+
+    for w in range(stop):
+
+        # maxHours
+        sumW += candidate[w]
+        maxHours_check = sumW <= d["maxHours"]
+
+        # maxConsec
+        if candidate[stop - w - 1] == 0:
+            consec = 0
+        else:
+            consec += 1
+            if consec > d["maxConsec"]:
+                maxConsec_check = False
+
+        # maxPresence
+        if start == -1:
+            if candidate[w] == 1:
+                start = w + 1
+        #if end == -1:
+        if candidate[w] == 1:
+            end = w + 1
+        # if candidate[stop - w - 1] == 1:
+        #     end = stop - w
+
+        if end != -1 and start != -1:
+            maxPresence_check = d["maxPresence"] >= end - start + 1
+
+        # print("           end "+str(end))
+        # print("           start "+str(start))
+        # print("           w[n]["+str(w)+"]="+str(candidate[w]))
+        if end != -1 and start != -1 and w > start:
+            if candidate[w - 1] == 0 and candidate[w] == 0:
+                rest_check = False
+        elif force_rest_check:
+
+            # rest
+            # print(start)
+            # print(end)
+            # print(w)
+            # try:
+            #     print(candidate[w - 1])
+            #     print(candidate[w])
+            #     print(candidate[w - 1] == 1 or candidate[w - 1] == 0 and not candidate[w] == 0)
+            # except:
+            #     pass
+            if w - 1 >= 0 and candidate[w - 1] == 0 and candidate[w] == 0:
+                rest_check = False
+
+        # minHours (only if hours - minHours + 1 <= len(candidate))
+        if sumW > 0 and verify_minHours:
+            minHours_check = sumW >= d["minHours"]
+
+    validity = minHours_check and \
+        maxHours_check and \
+        maxConsec_check and \
+        maxPresence_check and \
+        rest_check
+    
+    # print("validity: ")
+
+    # print(candidate)
+    # print(data)
+    # print(minHours_check)
+    # print(maxHours_check)
+    # print(maxConsec_check)
+    # print(maxPresence_check)
+    # print(rest_check)
+    # print("=")
+    # print(validity)
+
+    if not validity:
+
+        if printlog or printlog_validity:
+            print("validity: ")
+
+            print(candidate)
+            print(data)
+            print("minHours: " + str(minHours_check))
+            print("maxHours: " + str(maxHours_check))
+            print("consec:   " + str(maxConsec_check))
+            print("Presence: " + str(maxPresence_check))
+            print("rest:     " + str(rest_check))
+            print("=")
+            print(validity)
+
+    if whattoreturn == 'All':
+        return (rest_check, maxPresence_check, maxConsec_check, maxHours_check, minHours_check )
+    elif whattoreturn == 'rest':
+        return rest_check
+    elif whattoreturn == 'presence':
+        return maxPresence_check
+    elif whattoreturn == 'consec':
+        return maxConsec_check
+    elif whattoreturn == 'maxhours':
+        return maxHours_check
+    elif whattoreturn == 'minhours':
+        return minHours_check
+
+    return validity
+
+
+
+
+
+def validCandidate(candidate_sol, d, nurse, verify_minHours = True, whattoreturn = 'summary', force_rest_check = False, set_end=-1):
+
+    candidate = candidate_sol["w"][nurse]
+
+    maxHours_check = True
+    sumW = 0
+    maxConsec_check = True
+    consec = 0
+    maxPresence_check = True
+    start = -1
+    end = -1
+    rest_check = True
+    minHours_check = True
+
+    stop = len(candidate)
+    if set_end > -1:
+        stop = set_end + 1
+
+    for w in range(stop):
 
         # maxHours
         sumW += candidate[w]
@@ -70,9 +196,23 @@ def validCandidate(candidate_sol, d, nurse, verify_minHours = True, whattoreturn
         if end != -1 and start != -1:
             maxPresence_check = d["maxPresence"] >= end - start + 1
 
-        # rest
+
         if end != -1 and start != -1 and w > start and w <= end:
             if candidate[w - 1] == 0 and candidate[w] == 0:
+                rest_check = False
+        elif force_rest_check:
+
+            # rest
+            # print(start)
+            # print(end)
+            # print(w)
+            # try:
+            #     print(candidate[w - 1])
+            #     print(candidate[w])
+            #     print(candidate[w - 1] == 1 or candidate[w - 1] == 0 and not candidate[w] == 0)
+            # except:
+            #     pass
+            if w - 1 >= 0 and candidate[w - 1] == 0 and candidate[w] == 0:
                 rest_check = False
 
         # minHours (only if hours - minHours + 1 <= len(candidate))

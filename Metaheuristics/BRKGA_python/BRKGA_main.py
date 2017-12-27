@@ -33,6 +33,7 @@ def brkga_run(data):
     while (i<maxNumGen):
         population = decoder.decode(population,data)
         evol.append(brkga.getBestFitness(population)['fitness'])
+        print(evol[-1])
         if numElite>0:
             elite, nonelite = brkga.classifyIndividuals(population,numElite)
         else: 

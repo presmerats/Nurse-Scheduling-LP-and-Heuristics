@@ -58,7 +58,7 @@ def shellexec(command, cwd="."):
     return (out, err)
 
 
-def prepareModFile(instancepath, tilim=4000.0,  path=Path()):
+def prepareModFile(instancepath, tilim=8000.0,  path=Path()):
     print("preparing mod file for :" + instancepath)
 
     filename = '../../Tools/Launcher/temp.mod'

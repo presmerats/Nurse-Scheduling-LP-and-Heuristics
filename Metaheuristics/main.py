@@ -96,7 +96,11 @@ def run(instancepath, solverType):
     solveTime = t2 - t1
 
     if solution is not None:
-        writeLog(instancepath, solverType, solveTime, solution, data)
+        try:
+            
+            writeLog(instancepath, solverType, solveTime, solution, data)
+        except: 
+            pass
 
 
 if __name__ == '__main__':
@@ -117,16 +121,20 @@ if __name__ == '__main__':
     instancepath = '../Instances/Final/test_gc02.dat'
     # gc+ls =  obj 2 t 0.02s
     # grasp :  obj 2 t 0.014s
+    # brkga:  obj 2 t 35s(a=10,gen=2000) 7.4s(a=5,gen=1000)
+
 
     #instancepath = '../Instances/Final/test_gc03.dat'
     # 20171221  -firstImprovement obj=   - time= 
 
 
-    instancepath = '../Instances/Final/0000-x_8_1.dat'
+    #instancepath = '../Instances/Final/0000-x_8_1.dat'
     # 12 s
     # 20171221  -firstImprovement obj=7(greedy)   - time=759
     # 20171221  -bestsImprovement obj=7(greedy)   - time=675
     # 20171222  -firstImproement obj=7(greedy)   - time=0.6
+    # 20171224  -brkga           obj=8           - time=271s
+
 
     #instancepath = '../Instances/Final/0004-x_15_8.dat'
     # 7.1 s
@@ -135,19 +143,20 @@ if __name__ == '__main__':
     # 12 s
     # 20171221 - of=16(greedy) - time = 173s
     # 20171221 - of=16(greedy) - time = 14s
+    # 20171224 - of=14 (brkga) - tiem = 3182.9s
 
-    instancepath = '../Instances/Final/0004-x_21_8.dat'
+    #instancepath = '../Instances/Final/0004-x_21_8.dat'
     # 154 s
     # 20172222 - of=26(greedy) - t=57s
 
-    instancepath = '../Instances/Final/0001-i-ng-60-64-40-24h-8mxP-2mxC-2mxH-1mnH-3Cnt-20171210_12-53-50687.dat'
+    #instancepath = '../Instances/Final/0001-i-ng-60-64-40-24h-8mxP-2mxC-2mxH-1mnH-3Cnt-20171210_12-53-50687.dat'
     # 20171221 OBJ=40(g) time=665
     # 20171222 obj=40(g) t=6.5s
 
-    instancepath = '../Instances/Final/0001-i-ng-60-64-40-24h-8mxP-2mxC-2mxH-1mnH-3Cnt-20171210_12-53-51891.dat'
+    #instancepath = '../Instances/Final/0001-i-ng-60-64-40-24h-8mxP-2mxC-2mxH-1mnH-3Cnt-20171210_12-53-51891.dat'
     # 20171222 obj=40(g) t=7.4s
 
-    instancepath = '../Instances/Final/0005-i-ng-60-64-40-24h-10mxP-5mxC-10mxH-1mnH-3Cnt-20171218_23-50-01970.dat'
+    #instancepath = '../Instances/Final/0005-i-ng-60-64-40-24h-10mxP-5mxC-10mxH-1mnH-3Cnt-20171218_23-50-01970.dat'
     # 20171222 obj=47(ls) t=46s -> LS WORKS WELL!! greedy(59) vs ls(47)
     # 20171222 obj=47(ls) t=31s -> alph=0.2 ok, 0.5ok, 0.6 fails
 
@@ -159,9 +168,6 @@ if __name__ == '__main__':
     #instancepath = '../Instances/Final/1661-i-ng-60-128-80-24h-16mxP-5mxC-10mxH-1mnH-3Cnt-20171218_23-49-58683.dat'
 
 
-    instancepath = '../Instances/Final/test_gc02.dat'
-    # gc+ls =  obj 2 t 0.02s
-    # grasp :  obj 2 t 0.014s
 
 
 

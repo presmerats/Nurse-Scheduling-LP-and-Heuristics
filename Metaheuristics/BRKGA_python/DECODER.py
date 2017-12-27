@@ -8,6 +8,7 @@ parentPath = os.path.abspath("../GRASP_python")
 if parentPath not in sys.path:
     sys.path.insert(0, parentPath)
 from LocalSearch2 import validCandidate
+from LocalSearch2 import incrementalValidCandidate
 from Greedy import isFeasible
 
 
@@ -17,6 +18,7 @@ def checkIfCanWork(solution, h, n, data, sumW):
     z = solution["z"]
     w = solution["w"]
 
+    aux = w[n][h]
     w[n][h] = 1
 
     # minHours validity
@@ -27,11 +29,15 @@ def checkIfCanWork(solution, h, n, data, sumW):
     # verify max rest constraint if not working
     rest_check, maxPresence_check, maxConsec_check, maxHours_check, minHours_check = validCandidate(solution, data, n, verify_minHours=verify_minHours, whattoreturn='All')
 
+    # undo changes, just a verification
+    w[n][h] = aux
+
     if rest_check and \
         maxPresence_check and \
         maxConsec_check and  \
         maxHours_check and \
         minHours_check:
+
 
         return True
 
@@ -43,16 +49,28 @@ def checkIfCanRest(solution, h, n, data, sumW, canWork_check):
     hours = data["hours"]
     z = solution["z"]
     w = solution["w"]
+    aux = w[n][h]
 
     w[n][h] = 0
 
     # minHours validity
     verify_minHours = False
     if z[n] == 1 and hours - h + 1 < minHours - sumW[n]:
-        verify_minHours=True
+        verify_minHours = True
 
     # verify max rest constraint if not working
-    rest_check, maxPresence_check, maxConsec_check, maxHours_check, minHours_check = validCandidate(solution, data, n, verify_minHours=verify_minHours, whattoreturn='All')
+    rest_check, maxPresence_check, maxConsec_check, maxHours_check, minHours_check = incrementalValidCandidate(solution, data, n, verify_minHours=verify_minHours, whattoreturn='All', force_rest_check=False, set_end=h)
+
+    # undo changes, just a verification
+    w[n][h] = aux
+
+    # print("CanRest w[" + str(n) + "][" + str(h) + "] = " + str(w[n][h]) + " ?:")
+    # # print(rest_check)
+    # print("rest_checkt " + str(rest_check))
+    # print("minHours_checkt " + str(minHours_check))
+    # print("maxHours_checkt " + str(maxHours_check))
+    # print("maxConsec_checkt " + str(maxConsec_check))
+    # print("maxPresence_checkt " + str(maxPresence_check))
 
     if ((not rest_check and minHours_check) or \
         (not rest_check and not minHours_check) or \
@@ -85,8 +103,14 @@ def computeAssignments(solution, h, data, sumW, hini):
     mustWork = []
     canWork = []
 
+    # sort nurses, first by those who work
+    sorted_nurses = sorted(range(data["nNurses"]), key=lambda n: solution["z"][n], reverse=True)
+    # print(solution["z"])
+    # print(sorted_nurses)
+    # print("")
+
     # for each nurse
-    for n in range(data["nNurses"]):
+    for n in sorted_nurses:
 
         if h < hini[n]:
             continue
@@ -102,7 +126,8 @@ def computeAssignments(solution, h, data, sumW, hini):
                 mustWork.append(n)
             else:
                 canWork.append(n)
-    
+
+
     return mustWork, canWork
 
 
@@ -138,20 +163,26 @@ def assignNurses(solution, hini, data):
         # print("pending")
         # print(solution["pending"])
         # print("")
-
-        # for each nurse    
+  
         #   try to assign if pending[h] > 0 and h >= hini[n]
         for n in mustWork:
+            # print("nurse :" + str(n) + "  h: " + str(h) + " pending: ")
+            # print(pending)
             w[n][h] = 1
             sumW[n] += 1
             pending[h] -= 1
             if z[n] == 0:
                 z[n] = 1
                 solution["cost"] += 1
+            # print("w[" + str(n) + "]")
+            # pp.pprint(solution["w"])
 
 
-        if pending[h] > 0:
-            for n in canWork:
+
+        for n in canWork:
+            # print("nurse :" + str(n) + "  h: " + str(h) + " pending: ")
+            # print(pending)
+            if pending[h] > 0:
                 if h >= hini[n]:
                     w[n][h] = 1
                     sumW[n] += 1
@@ -159,7 +190,14 @@ def assignNurses(solution, hini, data):
                     if z[n] == 0:
                         z[n] = 1
                         solution["cost"] += 1
-    
+            # print("w[" + str(n) + "]")
+            # pp.pprint(solution["w"])
+
+
+    # pp.pprint(data)
+    # pp.pprint(solution)
+    # exit()
+
     # compute cost: already updated!
 
     # compute feasibility: if unfeasible -> fitness should be inf
@@ -305,4 +343,5 @@ def decode(population, data):
         # pp.pprint(solution)
         #time.sleep(5)
 
+    print("breed: " + str(len(population)) + " individuals")
     return(population)
