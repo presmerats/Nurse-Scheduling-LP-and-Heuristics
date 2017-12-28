@@ -5,10 +5,10 @@ import json
 import cProfile
 
 
-parentPath = os.path.abspath("./GRASP_python")
+parentPath = os.path.abspath("./GRASP")
 if parentPath not in sys.path:
     sys.path.insert(0, parentPath)
-parentPath = os.path.abspath("./BRKGA_python")
+parentPath = os.path.abspath("./BRKGA")
 if parentPath not in sys.path:
     sys.path.insert(0, parentPath)
 from Greedy import *
