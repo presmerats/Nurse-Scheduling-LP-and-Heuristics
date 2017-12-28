@@ -1,9 +1,0 @@
-[
-{ "x_15_0.dat" : {"expected_output" : "SUCCESS",
-"computed_output" : "true",
-"desired_objfunc" : "1",
-"time" : "3.71982",
-"int_vars" : "80",
-"Gap" : "0.137931",
-"ObjectiveFunction" : "29",
-"isMIP?" : "true",
