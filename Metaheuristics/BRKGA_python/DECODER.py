@@ -164,7 +164,7 @@ def assignNurses(solution, hini, data):
         print(data["demand"])
         print("pending")
         print(solution["pending"])
-        print("")
+
   
         #   try to assign if pending[h] > 0 and h >= hini[n]
         for n in mustWork:
@@ -176,7 +176,7 @@ def assignNurses(solution, hini, data):
             if z[n] == 0:
                 z[n] = 1
                 solution["cost"] += 1
-            # print("w[" + str(n) + "]")
+            print("w[" + str(n) + "," + str(h) + "] = 1")
             # pp.pprint(solution["w"])
 
 
@@ -184,20 +184,22 @@ def assignNurses(solution, hini, data):
         for n in canWork:
             # print("nurse :" + str(n) + "  h: " + str(h) + " pending: ")
             # print(pending)
-            if pending[h] > 0:
-                if h >= hini[n]:
-                    w[n][h] = 1
-                    sumW[n] += 1
-                    pending[h] -= 1
-                    if z[n] == 0:
-                        z[n] = 1
-                        solution["cost"] += 1
+            if pending[h] > 0:    
+                w[n][h] = 1
+                sumW[n] += 1
+                pending[h] -= 1
+                if z[n] == 0:
+                    z[n] = 1
+                    solution["cost"] += 1
+                print("w[" + str(n) + "," + str(h) + "] = 1")
             # print("w[" + str(n) + "]")
             # pp.pprint(solution["w"])
 
-
         # if pending[h] > 0:
         #     print(" h:" + str(h) + " pending[h]=" + str(pending[h]))
+        print(solution["pending"])
+        print("")
+        
 
     pp.pprint(data)
     pp.pprint(solution["cost"])
