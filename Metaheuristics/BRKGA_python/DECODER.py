@@ -44,7 +44,7 @@ def checkIfCanWork(solution, h, n, data, sumW):
     return False
 
 
-def checkIfCanRest(solution, h, n, data, sumW, canWork_check):
+def checkIfMustWork(solution, h, n, data, sumW, canWork_check, hini):
     minHours = data["minHours"]
     hours = data["hours"]
     z = solution["z"]
@@ -52,6 +52,10 @@ def checkIfCanRest(solution, h, n, data, sumW, canWork_check):
     aux = w[n][h]
 
     w[n][h] = 0
+
+    #hini (chr)
+    if h >= hini[n] and z[n]==0:
+        return True
 
     # minHours validity
     verify_minHours = False
@@ -112,8 +116,6 @@ def computeAssignments(solution, h, data, sumW, hini):
     # for each nurse
     for n in sorted_nurses:
 
-        if h < hini[n]:
-            continue
 
         # canWork Check-------------------------------
         canWork_check = checkIfCanWork(solution, h, n, data, sumW)
@@ -121,7 +123,7 @@ def computeAssignments(solution, h, data, sumW, hini):
            
             # mustWork Check-------------------------------
             # avoid repeating canWork_check
-            mustWork_check = checkIfCanRest(solution, h, n, data, sumW, canWork_check)
+            mustWork_check = checkIfMustWork(solution, h, n, data, sumW, canWork_check, hini)
             if mustWork_check:
                 mustWork.append(n)
             else:
@@ -151,18 +153,18 @@ def assignNurses(solution, hini, data):
         #  those who can be assigned to work
         mustWork, canWork = computeAssignments(solution, h, data, sumW, hini)
 
-        # print("h=" + str(h))
-        # print("mustWork")
-        # print(mustWork)
-        # print("canWork")
-        # print(canWork)
-        # print("hini:")
-        # print(hini)
-        # print("demand")
-        # print(data["demand"])
-        # print("pending")
-        # print(solution["pending"])
-        # print("")
+        print("h=" + str(h))
+        print("mustWork")
+        print(mustWork)
+        print("canWork")
+        print(canWork)
+        print("hini:")
+        print(hini)
+        print("demand")
+        print(data["demand"])
+        print("pending")
+        print(solution["pending"])
+        print("")
   
         #   try to assign if pending[h] > 0 and h >= hini[n]
         for n in mustWork:
@@ -194,16 +196,19 @@ def assignNurses(solution, hini, data):
             # pp.pprint(solution["w"])
 
 
-    # pp.pprint(data)
-    # pp.pprint(solution)
-    # exit()
+        # if pending[h] > 0:
+        #     print(" h:" + str(h) + " pending[h]=" + str(pending[h]))
+
+    pp.pprint(data)
+    pp.pprint(solution["cost"])
+    exit()
 
     # compute cost: already updated!
 
     # compute feasibility: if unfeasible -> fitness should be inf
     if not isFeasible(solution, data):
         # assign the max cost
-        solution["cost"] = 2 * data["nNurses"]
+        solution["cost"] = 200000 * data["nNurses"]
 
 
 def decode_hini(ind, data):
@@ -322,6 +327,12 @@ def decode(population, data):
 
         hini = decode_hini(ind, data)
 
+        print("demand:")
+        print(data["demand"])
+        print("hini:")
+        print(hini)
+
+
         # 2) assign work hours to nurses
         solution = {
             "cost": 0,
@@ -343,5 +354,5 @@ def decode(population, data):
         # pp.pprint(solution)
         #time.sleep(5)
 
-    #print("breed: " + str(len(population)) + " individuals")
+    print("breed: " + str(len(population)) + " individuals")
     return(population)
