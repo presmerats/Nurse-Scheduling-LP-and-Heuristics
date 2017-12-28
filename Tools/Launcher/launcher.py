@@ -6,6 +6,7 @@ import shutil
 import re
 from subprocess import call,check_call, Popen, PIPE
 from pathlib import Path, PurePath
+import argparse
 
 parentPath = os.path.abspath("../../Metaheuristics/GRASP_python")
 if parentPath not in sys.path:
@@ -58,7 +59,7 @@ def shellexec(command, cwd="."):
     return (out, err)
 
 
-def prepareModFile(instancepath, tilim=8000.0,  path=Path()):
+def prepareModFile(instancepath, tilim=4200.0, path=Path()):
     print("preparing mod file for :" + instancepath)
 
     filename = '../../Tools/Launcher/temp.mod'
@@ -122,25 +123,44 @@ def acceptInstance(instance):
 
 if __name__ == '__main__':
 
-    instances_folder = "../../Instances/Pending/"
+    # set instances folder
+    # set results folder
+    # set model params (alpha_grasp, num-iterations, inheritance, num pop, num generations, num mutatns)
 
-    if len(sys.argv) > 1:
 
-        solverType = sys.argv[1]
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--solver",help="solver model/algorithm to use [ILP, grasp, brkga]")
+    parser.add_argument("--instances",help="instances folder where to read instances files from")
+    parser.add_argument("--results",help="results folder where to save result files to")
+    parser.add_argument("--type",help="instance type, selects instances by timelimit")
 
-        if solverType not in ["ILP", "greedy", "grasp", "brkga"]:
-            print("Usage: python main.py <metaheuristic_algorithm>")
-            exit()
-    else:
-        solverType = "ILP"
-        solverType = "grasp"
+    parser.add_argument("--alpha",help="grasp alpha param", type=float)
+    parser.add_argument("--iterations",help="grasp num iterations param", type=int)
+    parser.add_argument("--ls",help="values first or best (improvement)")
+
+    parser.add_argument("--generations",help="brkga num generations", type=int)
+    parser.add_argument("--eliteprop",help="brkga elite proportion", type=float)
+    parser.add_argument("--mutantprop",help="brkga mutant proportion", type=float)
+    parser.add_argument("--population",help="brkga population size", type=int)
+    parser.add_argument("--inheritance",help="brkga inheritance probability", type=float)
+
+    args = parser.parse_args()
+
+    solverType = "ILP"
+    if args.solver:
+        solverType = args.solver
 
     instanceType = 'all'
-    if len(sys.argv) > 2:
-        instanceType = sys.argv[2]
+    if args.type:
+        instanceType = args.type
 
-    if len(sys.argv) > 3:
-        instances_folder = sys.argv[3]
+    instances_folder = "../../Instances/Pending/"
+    if args.instances:
+        instances_folder = args.instances
+
+    results_folder = "../../Results/Pending/"
+    if args.results:
+        results_folder = args.results
 
     if not os.path.exists(instances_folder):
         print("check folder paths!")
@@ -161,9 +181,28 @@ if __name__ == '__main__':
 
                 if solverType == "ILP":
                     solveInstanceWithILP(instancepath)
-                elif solverType in ["greedy", "grasp", "brkga"]:
+                elif solverType == "grasp":
                     print(solverType)
-                    metaheuristics.run(instancepath, solverType)
+
+                    metaheuristics.run(instancepath=instancepath,
+                        solverType=solverType,
+                        results_path=results_folder,
+                        grasp_alpha=args.alpha,
+                        grasp_iterations=args.iterations,
+                        grasp_lstype=args.ls
+                        )
+                elif solverType == "brkga":
+                    print(solverType)
+
+                    metaheuristics.run(instancepath=instancepath,
+                        solverType=solverType,
+                        results_path=results_folder,
+                        brkga_generations=args.generations,
+                        brkga_eliteprop=args.eliteprop,
+                        brkga_mutantprop=args.mutantprop,
+                        brkga_population=args.population,
+                        brkga_inheritance=args.inheritance
+                        )
 
             except Exception:
                 all_ok = False

@@ -9,7 +9,11 @@ import time
 from Greedy import *
 from LocalSearch2 import *
 
-def GraspConstructive(data):
+def GraspConstructive(data, alpha_param=None):
+
+    alpha = 0.2
+    if alpha_param:
+        alpha = alpha_param
 
     # initialize solution and cost
     solution = {
@@ -32,7 +36,7 @@ def GraspConstructive(data):
         gcmin = elements[0].gc
         gcmax = elements[-1].gc
 
-        alpha = 0.1
+        
         threshold = gcmin + alpha*(float(gcmax - gcmin))
 
         i = 0
@@ -66,9 +70,23 @@ def GraspConstructive(data):
 
 
 
-def grasp(data):
+def grasp(data, alpha=None, iterations=None, lstype=None):
 
-    solution = GraspConstructive(data)
+    # params
+    #  - first improve or best improvement
+    #  - num iteartions
+    #  - alpha 
+
+
+    numiterations = 5
+    if iterations:
+        numiterations = iterations
+
+    ls = "first"
+    if lstype:
+        ls = lstype
+
+    solution = GraspConstructive(data, alpha)
     print(" GRASP CONSTRUCTIVE SOLUTION: ")
     pp.pprint(solution["cost"])
     print(time.time())
@@ -76,10 +94,13 @@ def grasp(data):
     print("")
 
     failed_iterations = 0
-    while failed_iterations < 5:
+    while failed_iterations < numiterations:
 
-        solution2 = firstImprovementLocalSearch(solution, data)
-        solution2 = bestImprovementLocalSearch(solution, data)
+        solution2 = []
+        if ls == "first":
+            solution2 = firstImprovementLocalSearch(solution, data)
+        else:
+            solution2 = bestImprovementLocalSearch(solution, data)
 
         if solution2["cost"] >= solution["cost"]:
             print("     searching, cost" +
@@ -94,8 +115,8 @@ def grasp(data):
         solution = solution2
 
     print(" LOCAL SEARCH SOLUTION: ")
-    pp.pprint(solution["w"])
-    print(solution["z"])
+    #pp.pprint(solution["w"])
+    #print(solution["z"])
     pp.pprint(solution["cost"])
 
     return solution

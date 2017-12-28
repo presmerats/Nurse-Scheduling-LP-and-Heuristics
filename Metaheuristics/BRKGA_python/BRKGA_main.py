@@ -11,25 +11,53 @@ from DATA_DUMMY import data
 from CONFIGURATION import config
 
 
-def brkga_run(data):
+def brkga_run(data,
+              generations=None,
+              eliteprop=None,
+              mutantprop=None,
+              population=None,
+              inheritance=None):
+
+    # params
+    #   - num generations
+    #   - population size
+    #   - inheritance probability
+    #   - proportino of elite
+    #   - proportion of mutants
 
     # initializations
 
     # must be derived from instance
     chrLength = int(data["nNurses"])
+
     numIndividuals = int(config['a']) * int(data["nNurses"])
+    if population:
+        numIndividuals = population * int(data["nNurses"])
 
     numElite = int(math.ceil(numIndividuals * config['eliteProp']))
+    if eliteprop:
+        numElite = int(math.ceil(numIndividuals * eliteprop))
+
     numMutants = int(math.ceil(numIndividuals * config['mutantProp']))
-    numCrossover = max(numIndividuals - numElite - numMutants, 0)
+    if mutantprop:
+        numMutants = int(math.ceil(numIndividuals * mutantprop))
+
     maxNumGen = int(config['maxNumGen'])
+    if generations:
+        maxNumGen = generations
+
     ro = float(config['inheritanceProb'])
+    if inheritance:
+        ro = inheritance
+
+    numCrossover = max(numIndividuals - numElite - numMutants, 0)
+
     evol = []
 
     # Main body
     population = brkga.initializePopulation(numIndividuals, chrLength)
 
-    i=0
+    i = 0
     while (i<maxNumGen):
         population = decoder.decode(population,data)
         evol.append(brkga.getBestFitness(population)['fitness'])
@@ -50,8 +78,8 @@ def brkga_run(data):
     bestIndividual = brkga.getBestFitness(population)
 
 
-    pp.pprint(data)
-    pp.pprint(bestIndividual)
+    #pp.pprint(data)
+    pp.pprint(bestIndividual['fitness'])
     return bestIndividual
 
 if __name__ == '__main__':

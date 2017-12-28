@@ -343,5 +343,5 @@ def decode(population, data):
         # pp.pprint(solution)
         #time.sleep(5)
 
-    print("breed: " + str(len(population)) + " individuals")
+    #print("breed: " + str(len(population)) + " individuals")
     return(population)
