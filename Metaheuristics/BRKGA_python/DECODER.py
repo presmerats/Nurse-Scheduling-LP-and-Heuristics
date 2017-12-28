@@ -153,17 +153,17 @@ def assignNurses(solution, hini, data):
         #  those who can be assigned to work
         mustWork, canWork = computeAssignments(solution, h, data, sumW, hini)
 
-        print("h=" + str(h))
-        print("mustWork")
-        print(mustWork)
-        print("canWork")
-        print(canWork)
-        print("hini:")
-        print(hini)
-        print("demand")
-        print(data["demand"])
-        print("pending")
-        print(solution["pending"])
+        # print("h=" + str(h))
+        # print("mustWork")
+        # print(mustWork)
+        # print("canWork")
+        # print(canWork)
+        # print("hini:")
+        # print(hini)
+        # print("demand")
+        # print(data["demand"])
+        # print("pending")
+        # print(solution["pending"])
 
   
         #   try to assign if pending[h] > 0 and h >= hini[n]
@@ -176,7 +176,7 @@ def assignNurses(solution, hini, data):
             if z[n] == 0:
                 z[n] = 1
                 solution["cost"] += 1
-            print("w[" + str(n) + "," + str(h) + "] = 1")
+            #print("w[" + str(n) + "," + str(h) + "] = 1")
             # pp.pprint(solution["w"])
 
 
@@ -191,19 +191,19 @@ def assignNurses(solution, hini, data):
                 if z[n] == 0:
                     z[n] = 1
                     solution["cost"] += 1
-                print("w[" + str(n) + "," + str(h) + "] = 1")
+                #print("w[" + str(n) + "," + str(h) + "] = 1")
             # print("w[" + str(n) + "]")
             # pp.pprint(solution["w"])
 
         # if pending[h] > 0:
         #     print(" h:" + str(h) + " pending[h]=" + str(pending[h]))
-        print(solution["pending"])
-        print("")
+        # print(solution["pending"])
+        # print("")
         
 
-    pp.pprint(data)
-    pp.pprint(solution["cost"])
-    exit()
+    # pp.pprint(data)
+    # pp.pprint(solution["cost"])
+    # exit()
 
     # compute cost: already updated!
 
@@ -329,10 +329,10 @@ def decode(population, data):
 
         hini = decode_hini(ind, data)
 
-        print("demand:")
-        print(data["demand"])
-        print("hini:")
-        print(hini)
+        # print("demand:")
+        # print(data["demand"])
+        # print("hini:")
+        # print(hini)
 
 
         # 2) assign work hours to nurses

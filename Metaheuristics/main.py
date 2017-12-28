@@ -49,7 +49,7 @@ def readInstance(ipath):
     return data 
 
 
-def writeLog(instancepath, solver, solveTime , solution, data):
+def writeLog(instancepath, solver, solveTime , solution, data, results_path='../../Results/Final/'):
 
     results_list = []
     current_result = {}
@@ -65,15 +65,29 @@ def writeLog(instancepath, solver, solveTime , solution, data):
     results_list.append(current_result)
 
     instance_name = os.path.basename(instancepath)
-    instance_name = os.path.splitext(instance_name)[0] + '_' + solver + '.json'
+    instance_name = os.path.splitext(instance_name)[0] + '-' + solver + '.json'
     
-    logpath = os.path.join('../../Results/Final/', instance_name)
+    logpath = os.path.join(results_path, instance_name)
 
     with open(logpath,'w+') as logfile:
         json.dump(results_list, logfile)
+        print("written result to: " + logpath )
 
 
-def run(instancepath, solverType):
+def run(instancepath, solverType,
+        results_path=None,
+        grasp_alpha=None,
+        grasp_iterations=None,
+        grasp_lstype=None,
+        brkga_generations=None,
+        brkga_eliteprop=None,
+        brkga_mutantprop=None,
+        brkga_population=None,
+        brkga_inheritance=None
+        ):
+
+    # pass a set of params **kargvs
+    # pass the results folder path
 
     data = readInstance(instancepath)
     # pp.pprint(data)
@@ -85,9 +99,18 @@ def run(instancepath, solverType):
     if solverType == "greedy":
         solution = greedyPlusLocalSearch(data)
     elif solverType == "grasp":
-        solution = grasp(data)
+        solution = grasp(data,
+                         alpha=grasp_alpha,
+                         iterations=grasp_iterations,
+                         lstype=grasp_lstype)
     elif solverType == "brkga":
-        solution = brkga_run(data)
+        solution = brkga_run(data,
+                             generations=brkga_generations,
+                             eliteprop=brkga_eliteprop,
+                             mutantprop=brkga_mutantprop,
+                             population=brkga_population,
+                             inheritance=brkga_inheritance)
+    
     else:
         solverType = "greedy"
         solution = greedyPlusLocalSearch(data)
@@ -95,12 +118,20 @@ def run(instancepath, solverType):
     t2 = time.time()
     solveTime = t2 - t1
 
+
     if solution is not None:
         try:
-            
-            writeLog(instancepath, solverType, solveTime, solution, data)
-        except: 
-            pass
+            if results_path:
+                writeLog(instancepath, solverType, solveTime, solution, data, results_path)
+            else:
+                writeLog(instancepath, solverType, solveTime, solution, data)    
+        except Exception:
+            print("Exception in user code:")
+            print("-"*60)
+            traceback.print_exc(file=sys.stdout)
+            print("-"*60)
+    else:
+        print("solution is None!")
 
 
 if __name__ == '__main__':

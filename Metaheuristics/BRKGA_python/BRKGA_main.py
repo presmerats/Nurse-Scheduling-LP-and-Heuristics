@@ -80,7 +80,9 @@ def brkga_run(data,
 
     #pp.pprint(data)
     pp.pprint(bestIndividual['fitness'])
-    return bestIndividual
+    # pp.pprint(bestIndividual.keys())
+    # pp.pprint(bestIndividual['solution'].keys())
+    return bestIndividual["solution"]
 
 if __name__ == '__main__':
 
