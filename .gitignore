@@ -1,6 +1,12 @@
 # Prerequisites
 *.d
 
+#latex
+*.tex.aux
+
+# logs
+*.log
+
 # cplex project metadata
 *.metadata*
 *.metadata.*
