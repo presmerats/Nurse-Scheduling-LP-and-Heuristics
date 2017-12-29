@@ -79,6 +79,7 @@ def grasp(data, alpha=None, iterations=None, lstype=None):
 
 
     numiterations = 5
+    maxFailed = 5
     if iterations:
         numiterations = iterations
 
@@ -86,15 +87,32 @@ def grasp(data, alpha=None, iterations=None, lstype=None):
     if lstype:
         ls = lstype
 
-    solution = GraspConstructive(data, alpha)
-    print(" GRASP CONSTRUCTIVE SOLUTION: ")
-    pp.pprint(solution["cost"])
-    print(time.time())
-    print("")
-    print("")
+    solution = []
+    
+    while numiterations > 0:
+        solution = GraspConstructive(data, alpha)
+        print(time.time())
+        print("")
+        print("")
+        
+        solution2 = []
+        if ls == "first":
+            solution2 = firstImprovementLocalSearch(solution, data)
+        else:
+            solution2 = bestImprovementLocalSearch(solution, data)
 
+        if solution2["cost"] < solution["cost"]:
+            solution = solution2
+
+        numiterations -= 1
+
+    print('First LS solution')
+    print(solution["cost"])
+    
+    # Final intensive LS
+    print('Intensive LS')
     failed_iterations = 0
-    while failed_iterations < numiterations:
+    while failed_iterations < maxFailed:
 
         solution2 = []
         if ls == "first":
@@ -111,14 +129,12 @@ def grasp(data, alpha=None, iterations=None, lstype=None):
         else:
             print(" --> improvement: " + str(solution2["cost"]))
             failed_iterations = 0
-
+        
         solution = solution2
+    #
 
-    print(" LOCAL SEARCH SOLUTION: ")
-    #pp.pprint(solution["w"])
-    #print(solution["z"])
-    pp.pprint(solution["cost"])
-
+    print('Final solution')
+    print(solution["cost"])
     return solution
 
 def greedyPlusLocalSearch(data):
