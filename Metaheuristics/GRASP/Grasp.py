@@ -121,9 +121,6 @@ def grasp(data, alpha=None, iterations=None, lstype=None):
 
     return solution
 
-
-
-
 def greedyPlusLocalSearch(data):
 
     solution = GreedyConstructive(data)
