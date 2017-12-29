@@ -12,11 +12,19 @@ from LocalSearch import incrementalValidCandidate
 from Greedy import isFeasible
 
 
-def checkIfCanWork(solution, h, n, data, sumW):
+def checkIfCanWork(solution, h, n, data, sumW, hini):
     minHours = data["minHours"]
     hours = data["hours"]
     z = solution["z"]
     w = solution["w"]
+
+    #print(z[n])
+    #if z[n]==0:
+    #    print("nurse " + str(n) + " check can work at " + str(h) + " cause hini =" + str(hini[n]) + " z[n]" + str(z[n]) + " can work?:"+ str(hini[n] < h and z[n]==0))
+        
+    if hini[n] < h and z[n]==0:
+        #print("nurse " + str(n) + "cannot work at " + str(h) + " cause hini =" + str(hini[n]))
+        return False
 
     aux = w[n][h]
     w[n][h] = 1
@@ -54,8 +62,8 @@ def checkIfMustWork(solution, h, n, data, sumW, canWork_check, hini):
     w[n][h] = 0
 
     #hini (chr)
-    if h >= hini[n] and z[n]==0:
-        return True
+    # if h >= hini[n] and z[n]==0:
+    #     return True
 
     # minHours validity
     verify_minHours = False
@@ -96,8 +104,10 @@ def checkIfMustWork(solution, h, n, data, sumW, canWork_check, hini):
 def computeAssignments(solution, h, data, sumW, hini):
     """
         for each nurse,
+            if h>hini[n] and z[n]==0 -> that nurse cannot work
             compute which nurses must work at time h to be valid
             compute which nurses can work at time h and still be valid
+
     """
     minHours = data["minHours"]
     hours = data["hours"]
@@ -118,7 +128,7 @@ def computeAssignments(solution, h, data, sumW, hini):
 
 
         # canWork Check-------------------------------
-        canWork_check = checkIfCanWork(solution, h, n, data, sumW)
+        canWork_check = checkIfCanWork(solution, h, n, data, sumW, hini)
         if canWork_check:
            
             # mustWork Check-------------------------------
@@ -136,6 +146,13 @@ def computeAssignments(solution, h, data, sumW, hini):
 
 def assignNurses(solution, hini, data):
 
+    """
+        hini is used as the highest hour at which a nuser can start working.
+        If at hini a nuses has not started working, that nuser won't work.
+
+        A nurse can work before hini,(if there is enough demand)
+    """
+
     demand = data["demand"]
     pending = solution["pending"]
     hours = data["hours"]
@@ -151,6 +168,7 @@ def assignNurses(solution, hini, data):
         # compute valid candidates
         #  those who must be assigned (rest constraint)
         #  those who can be assigned to work
+        #  if h>hini and z[n]== 0 , that nurse cannot work
         mustWork, canWork = computeAssignments(solution, h, data, sumW, hini)
 
         # print("h=" + str(h))
@@ -355,8 +373,8 @@ def decode(population, data):
 		# print
         #pp.pprint(data["demand"])
         #pp.pprint(solution)
-        pp.pprint(ind['fitness'])
-        time.sleep(5)
+        #pp.pprint(ind['fitness'])
+        ##time.sleep(5)
 
     print("breed: " + str(len(population)) + " individuals")
     return(population)
