@@ -5,7 +5,10 @@ import pprint
 from copy import copy, deepcopy
 import logging
 import time
+import os
+import sys
 
+from Common.Nurse import *
 
 pp = pprint.PrettyPrinter(indent=2)
 
@@ -32,77 +35,6 @@ def create_logger(name):
     return logger
 
 logger = create_logger("greedy")
-
-
-class Element:
-
-
-    def __init__(self, schedule, element=None):
-
-        if element is None:
-            self.schedule = schedule
-            self.sumW = 0
-            self.consec = 0
-            self.start = -1
-            self.end = -1
-            self.rest = -1
-            self.rest_1 = -1
-            self.rest_2 = -1
-            self.gc = float("inf")
-        else:
-
-            self.schedule = schedule
-            self.sumW = element.sumW
-            self.consec = element.consec
-            self.start = element.start
-            self.end = -1
-            self.rest = -1
-            self.rest_1 = element.rest
-            self.rest_2 = -1
-            if len(schedule) > 2:
-                self.rest_2 = element.rest_1
-
-            self.gc = float("inf")       
-
-            # update information
-            if schedule[-1] == 1:
-                self.sumW = element.sumW + 1
-                self.consec = element.consec + 1
-                if element.start == -1:
-                    self.start = len(schedule)
-                self.end = len(schedule)
-                self.rest = 0
-            else:
-                self.sumW = element.sumW 
-                self.consec = 0
-                self.end = element.end
-                self.rest = 1  
-
-            #element.myprint()
-        
-        #self.myprint()
-
-
-    def myprint_long(self):
-        pp.pprint(self.schedule)
-        pp.pprint(self.gc)
-        pp.pprint(self.start)
-        pp.pprint(self.end)
-        pp.pprint(self.sumW)
-        pp.pprint(self.rest)
-        pp.pprint(self.rest_1)
-        pp.pprint(self.consec)
-        print("")
-
-    def myprint(self):
-        pp.pprint(self.schedule)
-        pp.pprint(self.gc)
-        print("")
-
-    def myprint_short(self):
-        pp.pprint(self.schedule)
-
-
 
 def isValid_ng(data, candidate):
     d = data
@@ -284,7 +216,7 @@ def buildCandidates02_add(data, cand, value):
 
     newlist = cand.schedule
     newlist.append(value)
-    newcand = Element(newlist, cand)
+    newcand = Nurse(newlist, cand)
 
     if isValid_ng(data, newcand):
         return newcand
@@ -300,7 +232,7 @@ def buildCandidates02(data, l):
 
         #print("-"*10 + "hini=" + str(hini))
 
-        c1 = Element([0]*hini)
+        c1 = Nurse([0]*hini)
         c1.rest=1
         c1.sumW=0
         c1.start=-1
@@ -309,7 +241,7 @@ def buildCandidates02(data, l):
         c1.rest_1=-1
         c1.rest_2=-1
 
-        c2 = Element([0]*hini)
+        c2 = Nurse([0]*hini)
         c2.rest=1
         c2.sumW=0
         c2.start=-1

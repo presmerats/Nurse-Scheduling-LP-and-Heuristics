@@ -11,7 +11,7 @@ from LocalSearch import *
 
 def GraspConstructive(data, alpha_param=None):
 
-    alpha = 0.2
+    alpha = 0.5
     if alpha_param:
         alpha = alpha_param
 
