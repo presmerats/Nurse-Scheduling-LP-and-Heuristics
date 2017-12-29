@@ -12,7 +12,7 @@ from LocalSearch import incrementalValidCandidate
 from Greedy import isFeasible
 
 
-def checkIfCanWork(solution, h, n, data, sumW, hini):
+def checkIfCanWork(solution, h, n, data, sumW, hini=None):
     minHours = data["minHours"]
     hours = data["hours"]
     z = solution["z"]
@@ -22,9 +22,10 @@ def checkIfCanWork(solution, h, n, data, sumW, hini):
     #if z[n]==0:
     #    print("nurse " + str(n) + " check can work at " + str(h) + " cause hini =" + str(hini[n]) + " z[n]" + str(z[n]) + " can work?:"+ str(hini[n] < h and z[n]==0))
         
-    if hini[n] < h and z[n]==0:
-        #print("nurse " + str(n) + "cannot work at " + str(h) + " cause hini =" + str(hini[n]))
-        return False
+    if hini:
+        if hini[n] < h and z[n]==0:
+            #print("nurse " + str(n) + "cannot work at " + str(h) + " cause hini =" + str(hini[n]))
+            return False
 
     aux = w[n][h]
     w[n][h] = 1
@@ -52,7 +53,7 @@ def checkIfCanWork(solution, h, n, data, sumW, hini):
     return False
 
 
-def checkIfMustWork(solution, h, n, data, sumW, canWork_check, hini):
+def checkIfMustWork(solution, h, n, data, sumW, canWork_check, hini=None):
     minHours = data["minHours"]
     hours = data["hours"]
     z = solution["z"]
@@ -60,10 +61,6 @@ def checkIfMustWork(solution, h, n, data, sumW, canWork_check, hini):
     aux = w[n][h]
 
     w[n][h] = 0
-
-    #hini (chr)
-    # if h >= hini[n] and z[n]==0:
-    #     return True
 
     # minHours validity
     verify_minHours = False
@@ -101,10 +98,10 @@ def checkIfMustWork(solution, h, n, data, sumW, canWork_check, hini):
     return False
 
 
-def computeAssignments(solution, h, data, sumW, hini):
+def computeAssignments(solution, h, data, sumW, hini=None):
     """
         for each nurse,
-            if h>hini[n] and z[n]==0 -> that nurse cannot work
+            if hini != None and h>hini[n] and z[n]==0 -> that nurse cannot work
             compute which nurses must work at time h to be valid
             compute which nurses can work at time h and still be valid
 
@@ -141,7 +138,6 @@ def computeAssignments(solution, h, data, sumW, hini):
 
 
     return mustWork, canWork
-
 
 
 def assignNurses(solution, hini, data):
@@ -229,6 +225,119 @@ def assignNurses(solution, hini, data):
     if not isFeasible(solution, data):
         # assign the max cost
         solution["cost"] = 200000 * data["nNurses"]
+
+
+def decode_hini_simple(ind, data):
+
+    hini = []
+    therange = data["hours"]
+    for i in range(len(ind['chr'])):
+        hi = int(therange * ind['chr'][i])
+        hini.append(hi)
+
+    return hini
+
+
+
+
+
+def assignNurses2(solution, hini, data):
+
+    """
+        hini is used to add extra nurses at each hour
+            hini[h]=0.2 -> means we add 0.1*demand[h] in terms of nurse assigments
+
+    """
+
+    demand = data["demand"]
+    pending = solution["pending"]
+    hours = data["hours"]
+    sumW = [0] * data["nNurses"]
+
+    z = solution["z"]
+    w = solution["w"]
+
+    for h in range(hours):
+
+        # for each hour
+
+        # compute valid candidates
+        #  those who must be assigned (rest constraint)
+        #  those who can be assigned to work
+        #  if h>hini and z[n]== 0 , that nurse cannot work
+        mustWork, canWork = computeAssignments(solution, h, data, sumW)
+
+        # print("h=" + str(h))
+        # print("mustWork")
+        # print(mustWork)
+        # print("canWork")
+        # print(canWork)
+        # print("hini:")
+        # print(hini)
+        # print("demand")
+        # print(data["demand"])
+        # print("pending")
+        # print(solution["pending"])
+
+  
+        #   try to assign if pending[h] > 0 and h >= hini[n]
+        for n in mustWork:
+            # print("nurse :" + str(n) + "  h: " + str(h) + " pending: ")
+            # print(pending)
+            w[n][h] = 1
+            sumW[n] += 1
+            pending[h] -= 1
+            if z[n] == 0:
+                z[n] = 1
+                solution["cost"] += 1
+            #print("w[" + str(n) + "," + str(h) + "] = 1")
+            # pp.pprint(solution["w"])
+
+
+
+        for n in canWork:
+            # print("nurse :" + str(n) + "  h: " + str(h) + " pending: ")
+            # print(pending)
+            if pending[h] + hini[h] > 0:    
+                w[n][h] = 1
+                sumW[n] += 1
+                pending[h] -= 1
+                if z[n] == 0:
+                    z[n] = 1
+                    solution["cost"] += 1
+                #print("w[" + str(n) + "," + str(h) + "] = 1")
+            # print("w[" + str(n) + "]")
+            # pp.pprint(solution["w"])
+
+        # if pending[h] > 0:
+        #     print(" h:" + str(h) + " pending[h]=" + str(pending[h]))
+        # print(solution["pending"])
+        # print("")
+        
+
+    # pp.pprint(data)
+    # pp.pprint(solution["cost"])
+    # exit()
+
+    # compute cost: already updated!
+
+    # compute feasibility: if unfeasible -> fitness should be inf
+    if not isFeasible(solution, data):
+        # assign the max cost
+        solution["cost"] = 200000 * data["nNurses"]
+
+
+def decode_hini_2(ind, data):
+    hini = []
+    
+    for i in range(len(ind['chr'])):
+        therange = data["demand"][i]
+        hi = int(therange * ind['chr'][i])
+        hini.append(hi)
+
+    return hini
+
+
 
 
 def decode_hini(ind, data):
@@ -345,7 +454,8 @@ def decode(population, data):
         # improvement1, use the first hour with demand, instead of 1...
         # improvement2, how to reduce infeasibility?
 
-        hini = decode_hini(ind, data)
+        #hini = decode_hini_simple(ind, data)
+        hini = decode_hini_2(ind, data)
 
         # print("demand:")
         # print(data["demand"])
@@ -364,7 +474,8 @@ def decode(population, data):
             "exceeding": [0] * data["hours"]
         }
 
-        assignNurses(solution, hini, data)
+        #assignNurses(solution, hini, data)
+        assignNurses2(solution, hini, data)
 
         ind['solution'] = solution
 
@@ -373,7 +484,7 @@ def decode(population, data):
 		# print
         #pp.pprint(data["demand"])
         #pp.pprint(solution)
-        #pp.pprint(ind['fitness'])
+        #print(ind['fitness'])
         ##time.sleep(5)
 
     print("breed: " + str(len(population)) + " individuals")
