@@ -19,9 +19,9 @@ if parentPath not in sys.path:
     sys.path.insert(0, parentPath)
 
 from Greedy import *
-from LocalSearch2 import *
+from LocalSearch import *
 from BRKGA_main import *
-from Grasp2 import *
+from Grasp import *
 import main as metaheuristics
 
 """
