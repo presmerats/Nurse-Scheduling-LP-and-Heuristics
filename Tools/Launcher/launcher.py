@@ -8,10 +8,10 @@ from subprocess import call,check_call, Popen, PIPE
 from pathlib import Path, PurePath
 import argparse
 
-parentPath = os.path.abspath("../../Metaheuristics/GRASP_python")
+parentPath = os.path.abspath("../../Metaheuristics/GRASP")
 if parentPath not in sys.path:
     sys.path.insert(0, parentPath)
-parentPath = os.path.abspath("../../Metaheuristics/BRKGA_python")
+parentPath = os.path.abspath("../../Metaheuristics/BRKGA")
 if parentPath not in sys.path:
     sys.path.insert(0, parentPath)
 parentPath = os.path.abspath("../../Metaheuristics")
@@ -19,9 +19,9 @@ if parentPath not in sys.path:
     sys.path.insert(0, parentPath)
 
 from Greedy import *
-from LocalSearch2 import *
+from LocalSearch import *
 from BRKGA_main import *
-from Grasp2 import *
+from Grasp import *
 import main as metaheuristics
 
 """

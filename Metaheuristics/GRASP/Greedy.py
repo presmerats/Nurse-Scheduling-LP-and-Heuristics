@@ -280,164 +280,16 @@ def isValid(data, candidate):
         # print(validity)
     return validity
 
-
-# candidates construction
-def buildCandidatesBaseCase():
-    new_candidates= [Element([0]), Element([1])]
-    new_candidates[0].rest=1
-    new_candidates[0].sumW=0
-    new_candidates[0].start=-1
-    new_candidates[0].end=-1
-    new_candidates[0].consec=0
-    new_candidates[0].rest_1=-1
-    new_candidates[0].rest_2=-1
-    
-    new_candidates[1].rest=0
-    new_candidates[1].sumW=1
-    new_candidates[1].consec=1
-    new_candidates[1].start=1
-    new_candidates[1].end=1
-    new_candidates[1].rest_1=-1
-    new_candidates[1].rest_2=-1
-    
-    #print(new_candidates)
-    return new_candidates
-
-
-def buildCandidatesNormalCase(data, l):
-
-    # call previous level
-    if l == 1:
-        candidates = buildCandidatesBaseCase()
-    else:
-        candidates = buildCandidatesNormalCase(data, l - 1)
-
-    # print("buildCandidatesNormalCase "+str(l))
-
-    # ini new set
-    new_candidates = []
-
-    # print(candidates)
-    # print(type(candidates))
-    # print(len(candidates))
-
-    # create new candidates based on candidates
-    for cand in candidates:
-
-        # print(cand)
-        # print(type(cand))
-        # cand.append(0)
-        # print(cand)
-
-        # construct new cand.
-        newlist = list(cand.schedule)
-        newlist.append(0)
-        aux = Element(newlist, cand)
-        
-        if isValid_ng(data, aux):
-            new_candidates.append(aux)
-
-        # construct new candi.
-        newlist = list(cand.schedule)
-        newlist.append(1)
-        aux =  Element(newlist, cand)
-        
-        if isValid_ng(data, aux):
-            new_candidates.append(aux)
-
-
-    #print(new_candidates)
-    return new_candidates
-
-
-def buildCandidatesNormalCase_simple(data, l):
-
-    # call previous level
-    if l == 1:
-        candidates = buildCandidatesBaseCase()
-    else:
-        candidates = buildCandidatesNormalCase_simple(data, l - 1)
-
-    # print("buildCandidatesNormalCase "+str(l))
-
-    # ini new set
-    new_candidates = []
-
-    # print(candidates)
-    # print(type(candidates))
-    # print(len(candidates))
-
-    # create new candidates based on candidates
-    for cand in candidates:
-
-        # print(cand)
-        # print(type(cand))
-        # cand.append(0)
-        # print(cand)
-
-        # construct new candi.
-        newlist = list(cand.schedule)
-        newlist.append(1)
-        aux =  Element(newlist, cand)
-        
-        if isValid_ng(data, aux):
-            new_candidates.append(aux)
-        else:
-
-            # construct new cand.
-            newlist = list(cand.schedule)
-            newlist.append(0)
-            aux = Element(newlist, cand)
-            
-            if isValid_ng(data, aux):
-                new_candidates.append(aux)
-
-        
-
-    #print(new_candidates)
-    return new_candidates
-
-
-
-
-
-def buildCandidates(data, l):
-
-    # call previous level
-    if l==1:
-        candidates = buildCandidatesBaseCase()
-    else:
-        candidates = buildCandidatesNormalCase_simple(data, l-1)
-
-
-
-    return candidates
-
-
-def buildCandidates02_add1(data, cand):
+def buildCandidates02_add(data, cand, value):
 
     newlist = cand.schedule
-    newlist.append(1)
+    newlist.append(value)
     newcand = Element(newlist, cand)
 
     if isValid_ng(data, newcand):
         return newcand
 
     return None
-
-
-def buildCandidates02_add0(data, cand):
-
-    newlist = cand.schedule
-    newlist.append(0)
-    newcand = Element(newlist, cand)
-
-
-    if isValid_ng(data, newcand):
-        return newcand
-
-    return None
-
 
 def buildCandidates02(data, l):
 
@@ -480,30 +332,30 @@ def buildCandidates02(data, l):
             # first the continuous schedule
             #print("c1")
             if c1:
-                new_c1 = buildCandidates02_add1(data, c1)
+                new_c1 = buildCandidates02_add(data, c1, 1)
                 if new_c1 is None:
                     c1.schedule = c1.schedule[:-1]
-                    new_c1 = buildCandidates02_add0(data, c1)
+                    new_c1 = buildCandidates02_add(data, c1, 0)
                 c1 = new_c1
 
             # then the sparse schedule
             #print("c2")
             if c2:
                 if lastc2 == 0:
-                    new_c2 = buildCandidates02_add1(data, c2)
+                    new_c2 = buildCandidates02_add(data, c2, 1)
                     lastc2 = 1
                     if new_c2 is None:
                         c2.schedule = c2.schedule[:-1]
-                        new_c2 = buildCandidates02_add0(data, c2)
+                        new_c2 = buildCandidates02_add(data, c2, 0)
                         lastc2 = 0
                     c2 = new_c2
 
                 else:
-                    new_c2 = buildCandidates02_add0(data, c2)
+                    new_c2 = buildCandidates02_add(data, c2, 0)
                     lastc2 = 0
                     if new_c2 is None:
                         c2.schedule = c2.schedule[:-1]
-                        new_c2 = buildCandidates02_add1(data, c2)
+                        new_c2 = buildCandidates02_add(data, c2, 1)
                         lastc2 = 1
                     c2 = new_c2
 

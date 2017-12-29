@@ -4,11 +4,11 @@ import pprint
 import time
 pp = pprint.PrettyPrinter(indent=2)
 
-parentPath = os.path.abspath("../GRASP_python")
+parentPath = os.path.abspath("../GRASP")
 if parentPath not in sys.path:
     sys.path.insert(0, parentPath)
-from LocalSearch2 import validCandidate
-from LocalSearch2 import incrementalValidCandidate
+from LocalSearch import validCandidate
+from LocalSearch import incrementalValidCandidate
 from Greedy import isFeasible
 
 
@@ -352,9 +352,11 @@ def decode(population, data):
 
         ind['fitness'] = solution["cost"]
 
-        # pp.pprint(data["demand"])
-        # pp.pprint(solution)
-        #time.sleep(5)
+		# print
+        #pp.pprint(data["demand"])
+        #pp.pprint(solution)
+        pp.pprint(ind['fitness'])
+        time.sleep(5)
 
     print("breed: " + str(len(population)) + " individuals")
     return(population)
