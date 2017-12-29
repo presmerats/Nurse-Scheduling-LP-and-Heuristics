@@ -49,7 +49,20 @@ def readInstance(ipath):
     return data 
 
 
-def writeLog(instancepath, solver, solveTime , solution, data, results_path='../../Results/Final/'):
+def writeLog(instancepath,
+             solver,
+             solveTime,
+             solution,
+             data,
+             results_path='../../Results/Final/',
+             alpha=None,
+             iterations=None,
+             lstype=None,
+             generations=None,
+             eliteprop=None,
+             mutantprop=None,
+             population=None,
+             inheritance=None):
 
     results_list = []
     current_result = {}
@@ -67,6 +80,24 @@ def writeLog(instancepath, solver, solveTime , solution, data, results_path='../
     instance_name = os.path.basename(instancepath)
     instance_name = os.path.splitext(instance_name)[0] + '-' + solver + '.json'
     
+    if alpha and iterations and lstype:
+        instance_name = os.path.splitext(instance_name)[0] \
+            + '-' + solver \
+            + '-a' + str(alpha) \
+            + '-i' + str(iterations) \
+            + '-lst' + str(lstype) \
+            + '.json'
+        
+    if generations and eliteprop and mutantprop and population and inheritance:
+        instance_name = os.path.splitext(instance_name)[0] \
+            + '-' + solver \
+            + '-g' + str(generations) \
+            + '-p' + str(population) \
+            + '-e' + str(eliteprop) \
+            + '-m' + str(mutantprop) \
+            + '-i' + str(inheritance) \
+            + '.json'
+
     logpath = os.path.join(results_path, instance_name)
 
     with open(logpath,'w+') as logfile:
@@ -122,9 +153,34 @@ def run(instancepath, solverType,
     if solution is not None:
         try:
             if results_path:
-                writeLog(instancepath, solverType, solveTime, solution, data, results_path)
+                writeLog(instancepath=instancepath,
+                         solver=solverType,
+                         solveTime=solveTime,
+                         solution=solution,
+                         data=data,
+                         results_path=results_path,
+                         alpha=grasp_alpha,
+                         iterations=grasp_iterations,
+                         lstype=grasp_lstype,
+                         generations=brkga_generations,
+                         eliteprop=brkga_eliteprop,
+                         mutantprop=brkga_mutantprop,
+                         population=brkga_population,
+                         inheritance=brkga_inheritance)
             else:
-                writeLog(instancepath, solverType, solveTime, solution, data)    
+                writeLog(instancepath=instancepath,
+                         solver=solverType,
+                         solveTime=solveTime,
+                         solution=solution,
+                         data=data,
+                         alpha=grasp_alpha,
+                         iterations=grasp_iterations,
+                         lstype=grasp_lstype,
+                         generations=brkga_generations,
+                         eliteprop=brkga_eliteprop,
+                         mutantprop=brkga_mutantprop,
+                         population=brkga_population,
+                         inheritance=brkga_inheritance)    
         except Exception:
             print("Exception in user code:")
             print("-"*60)
