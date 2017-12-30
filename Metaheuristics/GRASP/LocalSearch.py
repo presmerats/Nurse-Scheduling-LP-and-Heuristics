@@ -396,10 +396,50 @@ def electiveCandidate(candidate, n, h, data):
 
         if ni == n:
             continue
-        # elif solution["z"][ni] == 0:
-        #     continue
+        elif candidate["z"][ni] == 0:
+            continue
         elif candidate["w"][ni][h] == 1:
             candidate["w"][ni] = aux_list
+            continue
+        else:
+
+            if printlog or printlog_electiveCandidates:
+                print("exchange " +
+                      str(n) + ", " +
+                      str(h) + " with " +
+                      str(ni) + ", " +
+                      str(h))
+
+            candidate["w"][ni][h] = 1
+            candidate["w"][n][h] = 0
+
+            if isTotallyValid(data, candidate):
+                if printlog or printlog_electiveCandidates:
+                    print("-->valid exchange!")
+                    # pp.pprint(candidate)
+                    print()
+
+                return candidate
+
+            else:
+                # if exchange is not valid, restore state
+                candidate["w"][ni] = aux_list
+                candidate["w"][n][h] = 1
+                candidate["exceeding"] = aux_list2
+
+    # then try to place the hour assignment among nurses that do not work
+    for ni in (range(data["nNurses"])):
+
+        # save state for nurse ni
+        aux_list = list(candidate["w"][ni])
+        aux_list2 = list(candidate["exceeding"])
+
+        # remove all exceeding capacity assignmnts for nurse ni
+        exceedingCapacityRemoval(candidate, ni, data)
+
+        if ni == n:
+            continue
+        elif candidate["z"][ni] == 1:
             continue
         else:
 
