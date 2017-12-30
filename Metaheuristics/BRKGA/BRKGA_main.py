@@ -28,7 +28,8 @@ def brkga_run(data,
     # initializations
 
     # must be derived from instance
-    chrLength = int(data["nNurses"])
+    #chrLength = int(data["nNurses"])
+    chrLength = int(data["hours"])
 
     numIndividuals = int(config['a']) * int(data["nNurses"])
     if population:

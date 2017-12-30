@@ -2,6 +2,7 @@ import numpy as np
 import sys, os
 import pprint
 import time
+from math import *
 pp = pprint.PrettyPrinter(indent=2)
 
 parentPath = os.path.abspath("../GRASP")
@@ -327,13 +328,33 @@ def assignNurses2(solution, hini, data):
         solution["cost"] = 200000 * data["nNurses"]
 
 
+
 def decode_hini_2(ind, data):
     hini = []
+
     
     for i in range(len(ind['chr'])):
+        # option 2
         therange = data["demand"][i]
-        hi = int(therange * ind['chr'][i])
+        # option 2b
+        # therange = 10
+        # option 2c
+        # therange = 1
+        # option 2d
+        # therange = ceil(0.1*data["nNurses"])
+        # option 2e
+        # therange = ceil(0.3*data["nNurses"])
+
+        #hi = int(therange * ind['chr'][i])
+        
+        # option 2f
+        hi = 0
+        if ind['chr'][i] < 0.2:
+            therange = ceil(0.8*data["nNurses"])
+            hi = int(therange * ind['chr'][i])
+
         hini.append(hi)
+
 
     return hini
 
@@ -433,6 +454,12 @@ def decode_hini(ind, data):
     return hini
 
 
+def diversity(population):
+
+    s = set([x['fitness'] for x in population])
+    return len(s)
+
+
 def decode(population, data):
     """
         Idea 1)
@@ -481,11 +508,15 @@ def decode(population, data):
 
         ind['fitness'] = solution["cost"]
 
+
+
 		# print
         #pp.pprint(data["demand"])
         #pp.pprint(solution)
         #print(ind['fitness'])
         ##time.sleep(5)
 
+
     print("breed: " + str(len(population)) + " individuals")
+    print("diversity: " + str(diversity(population)))
     return(population)
