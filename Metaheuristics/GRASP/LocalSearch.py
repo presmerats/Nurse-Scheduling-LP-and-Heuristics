@@ -514,8 +514,8 @@ def findCandidate(solution, data, n):
         # the cost has not decreased
         # but # assignments is reduced,
         # useful for further improvements
-        #return[s]
-        return[]
+        return[s]
+        #return[]
         
     else:
         
@@ -622,7 +622,7 @@ def createNeighborhood2(solution, data):
         last_solution = solution
         zerofound = True
 
-        # print(" point nurse " + str(nurse))
+        #print(" point nurse " + str(nurse))
         last_nurse = 0
         for m in range(0, data["nNurses"], 1):
             last_nurse = m
@@ -631,7 +631,8 @@ def createNeighborhood2(solution, data):
             if solution["z"][n] == 0:
                 continue
 
-            # print(" internal nurse " + str(n))
+            #print(" internal nurse " + str(n))
+            #print(" last_nurse " + str(m))
 
             new_solution = findCandidate(last_solution, data, n)
 
@@ -647,7 +648,12 @@ def createNeighborhood2(solution, data):
             else:
                 # when first non expendable nurse is found-> returns                
                 #print("found impossible reassignment, quitting")
-                break
+
+                # quick advancing, if no reassignment done still
+                # then continue until first reassignment is done
+                # only if reassignments have been done that it stops here
+                if not zerofound:
+                    break
 
         # if not the same sol as solution
         if not zerofound:
@@ -670,7 +676,7 @@ def createNeighborhood2(solution, data):
 def firstImprovementLocalSearch(solution, data):
 
     # 2 types of createNeighborhood2
-    Ns = createNeighborhood2(solution, data)
+    Ns = createNeighborhood(solution, data)
     if printlog or printlog_mainloop:
         print()
         print("new neighborhood")
@@ -724,7 +730,7 @@ def firstImprovementLocalSearch(solution, data):
 
 def bestImprovementLocalSearch(solution, data):
 
-    Ns = createNeighborhood2(solution, data)
+    Ns = createNeighborhood(solution, data)
     if printlog or printlog_mainloop:
         print()
         print("new neighborhood")
