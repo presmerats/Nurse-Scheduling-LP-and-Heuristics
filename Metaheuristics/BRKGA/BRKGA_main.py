@@ -7,7 +7,6 @@ pp = pprint.PrettyPrinter(indent=2)
 
 import BRKGA as brkga
 import DECODER as decoder
-from DATA_DUMMY import data
 from CONFIGURATION import config
 
 
@@ -80,7 +79,8 @@ def brkga_run(data,
 
 
     #pp.pprint(data)
-    pp.pprint(bestIndividual['fitness'])
+    print(bestIndividual["solution"])
+    print('Fitness: ', bestIndividual['fitness'])
     # pp.pprint(bestIndividual.keys())
     # pp.pprint(bestIndividual['solution'].keys())
     return bestIndividual["solution"]

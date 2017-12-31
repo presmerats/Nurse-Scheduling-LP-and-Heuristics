@@ -140,6 +140,92 @@ def computeAssignments(solution, h, data, sumW, hini=None):
 
     return mustWork, canWork
 
+def assignNursesOrder(solution, order, data):
+
+    """
+        hini is used as the highest hour at which a nuser can start working.
+        If at hini a nuses has not started working, that nuser won't work.
+
+        A nurse can work before hini,(if there is enough demand)
+    """
+
+    demand = data["demand"]
+    pending = solution["pending"]
+    hours = data["hours"]
+    sumW = [0] * data["nNurses"]
+
+    z = solution["z"]
+    w = solution["w"]
+
+    for h in order:
+
+        # for each hour
+
+        # compute valid candidates
+        #  those who must be assigned (rest constraint)
+        #  those who can be assigned to work
+        #  if h>hini and z[n]== 0 , that nurse cannot work
+        mustWork, canWork = computeAssignments(solution, h, data, sumW)
+
+        # print("h=" + str(h))
+        # print("mustWork")
+        # print(mustWork)
+        # print("canWork")
+        # print(canWork)
+        # print("hini:")
+        # print(hini)
+        # print("demand")
+        # print(data["demand"])
+        # print("pending")
+        # print(solution["pending"])
+
+  
+        #   try to assign if pending[h] > 0 and h >= hini[n]
+        for n in mustWork:
+            # print("nurse :" + str(n) + "  h: " + str(h) + " pending: ")
+            # print(pending)
+            w[n][h] = 1
+            sumW[n] += 1
+            pending[h] -= 1
+            if z[n] == 0:
+                z[n] = 1
+                solution["cost"] += 1
+            #print("w[" + str(n) + "," + str(h) + "] = 1")
+            # pp.pprint(solution["w"])
+
+
+
+        for n in canWork:
+            # print("nurse :" + str(n) + "  h: " + str(h) + " pending: ")
+            # print(pending)
+            if pending[h] > 0:    
+                w[n][h] = 1
+                sumW[n] += 1
+                pending[h] -= 1
+                if z[n] == 0:
+                    z[n] = 1
+                    solution["cost"] += 1
+                #print("w[" + str(n) + "," + str(h) + "] = 1")
+            # print("w[" + str(n) + "]")
+            # pp.pprint(solution["w"])
+
+        # if pending[h] > 0:
+        #     print(" h:" + str(h) + " pending[h]=" + str(pending[h]))
+        # print(solution["pending"])
+        # print("")
+        
+
+    # pp.pprint(data)
+    # pp.pprint(solution["cost"])
+    # exit()
+
+    # compute cost: already updated!
+
+    # compute feasibility: if unfeasible -> fitness should be inf
+    if not isFeasible(solution, data):
+        # assign the max cost
+        solution["cost"] = 200000 * data["nNurses"]
+
 
 def assignNurses(solution, hini, data):
 
@@ -459,8 +545,52 @@ def diversity(population):
     s = set([x['fitness'] for x in population])
     return len(s)
 
+def decoder_order(data,chromosome):
+    C=list(data["demand"])
+    
+    chr_demand=chromosome[0:len(list(C))]
 
+    demand_order=sorted(range(len(list(C))), key=lambda k: chr_demand[k])
+
+    #print('Demand Order')
+    #print(demand_order)
+
+    # 2) assign work hours to nurses
+    solution = {
+        "cost": 0,
+        "w": [[0] * data["hours"] for n in range(data["nNurses"])],
+        "z": [0] * data["nNurses"],
+        "last_added": 0,
+        "pending": list(data["demand"]),
+        "totalw": 0,
+        "exceeding": [0] * data["hours"]
+    }
+
+    #assignNurses(solution, hini, data)
+    assignNursesOrder(solution, demand_order, data)
+
+    return solution, solution["cost"]
+
+# demand order
 def decode(population, data):
+    """
+        Idea 1)
+            CHR = first work hour of the nurse
+
+        Idea 2)
+            CHR[i] = hi -> nursei start working at hi OR BEFORE
+
+        Idea 3)
+            CHR[i] = hi -> nursei start working at hi OR AFTER
+
+    """
+    for ind in population:
+        solution, fitness=decoder_order(data,ind['chr'])
+        ind['solution']=solution
+        ind['fitness']=fitness    
+    return(population)
+
+def decodeNotOrder(population, data):
     """
         Idea 1)
             CHR = first work hour of the nurse
