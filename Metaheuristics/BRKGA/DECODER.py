@@ -587,7 +587,10 @@ def decode(population, data):
     for ind in population:
         solution, fitness=decoder_order(data,ind['chr'])
         ind['solution']=solution
-        ind['fitness']=fitness    
+        ind['fitness']=fitness   
+
+    print("breed: " + str(len(population)) + " individuals")
+    print("diversity: " + str(diversity(population))) 
     return(population)
 
 def decodeNotOrder(population, data):
