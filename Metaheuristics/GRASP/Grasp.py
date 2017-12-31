@@ -110,6 +110,10 @@ def grasp(data, alpha=None, iterations=None, lstype=None, lsiterations=None):
             solution = solution2
             incumbent = solution2
 
+        if len(incumbent.keys())==0:
+            incumbent = solution
+
+
         numiterations -= 1
 
     print('First LS solution')
