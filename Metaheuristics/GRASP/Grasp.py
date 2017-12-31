@@ -137,6 +137,7 @@ def grasp(data, alpha=None, iterations=None, lstype=None):
     #
 
     print('Final solution')
+    print(incumbent)
     print(incumbent["cost"])
     return incumbent
 

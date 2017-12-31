@@ -15,7 +15,6 @@ from Greedy import *
 from LocalSearch import *
 from Grasp import *
 from BRKGA_main import *
-from instance import *
 
 
 
