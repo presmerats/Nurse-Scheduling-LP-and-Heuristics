@@ -62,7 +62,7 @@ python launcher.py --solver grasp --iterations 5 --alpha 0.15 --ls best
 
 BRKGA parameters:
 `
-python launcher.py --solver brkga --generations 1 --eliteprop 0.3 --mutantprop 0.2 --population 2 --inheritance 0.1
+python launcher.py --solver brkga --generations 1 --eliteprop 0.3 --mutantprop 0.2 --population 2 --inheritance 0.1 --decoder <hini,horder,hexcess>
 `
 
 

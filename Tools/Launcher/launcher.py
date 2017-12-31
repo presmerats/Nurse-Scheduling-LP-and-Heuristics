@@ -144,6 +144,7 @@ if __name__ == '__main__':
     parser.add_argument("--mutantprop",help="brkga mutant proportion", type=float)
     parser.add_argument("--population",help="brkga population size", type=int)
     parser.add_argument("--inheritance",help="brkga inheritance probability", type=float)
+    parser.add_argument("--decoder",help="decoder type=[horder, hini, hexcess]")
 
     args = parser.parse_args()
 
@@ -203,7 +204,8 @@ if __name__ == '__main__':
                         brkga_eliteprop=args.eliteprop,
                         brkga_mutantprop=args.mutantprop,
                         brkga_population=args.population,
-                        brkga_inheritance=args.inheritance
+                        brkga_inheritance=args.inheritance,
+                        brkga_decoder=args.decoder
                         )
 
             except Exception:

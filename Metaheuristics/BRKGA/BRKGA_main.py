@@ -6,7 +6,10 @@ import time
 pp = pprint.PrettyPrinter(indent=2)
 
 import BRKGA as brkga
-import DECODER as decoder
+# import DECODER_hexcess as decoder
+# import DECODER_hini as decoder
+# import DECODER_horder as decoder
+# import DECODER as decoder
 from CONFIGURATION import config
 
 
@@ -15,7 +18,8 @@ def brkga_run(data,
               eliteprop=None,
               mutantprop=None,
               population=None,
-              inheritance=None):
+              inheritance=None,
+              decoder="hexcess"):
 
     # params
     #   - num generations
@@ -24,11 +28,20 @@ def brkga_run(data,
     #   - proportino of elite
     #   - proportion of mutants
 
+
+
+    if decoder == "hexcess":
+        import DECODER_hexcess as decoder
+    elif decoder == "hini":
+        import DECODER_hini as decoder
+    else:
+        import DECODER_horder as decoder
+    
+
     # initializations
 
     # must be derived from instance
-    #chrLength = int(data["nNurses"])
-    chrLength = int(data["hours"])
+    chrLength = decoder.getChrLength(data)
 
     numIndividuals = int(config['a']) * int(data["nNurses"])
     if population:
@@ -79,7 +92,7 @@ def brkga_run(data,
 
 
     #pp.pprint(data)
-    print(bestIndividual["solution"])
+    #print(bestIndividual["solution"])
     print('Fitness: ', bestIndividual['fitness'])
     # pp.pprint(bestIndividual.keys())
     # pp.pprint(bestIndividual['solution'].keys())
