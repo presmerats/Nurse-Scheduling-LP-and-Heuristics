@@ -137,6 +137,7 @@ if __name__ == '__main__':
     parser.add_argument("--alpha",help="grasp alpha param", type=float)
     parser.add_argument("--iterations",help="grasp num iterations param", type=int)
     parser.add_argument("--ls",help="values first or best (improvement)")
+    parser.add_argument("--lsiterations",help="grasp final LS iterations param", type=int)
 
     parser.add_argument("--generations",help="brkga num generations", type=int)
     parser.add_argument("--eliteprop",help="brkga elite proportion", type=float)
@@ -189,7 +190,8 @@ if __name__ == '__main__':
                         results_path=results_folder,
                         grasp_alpha=args.alpha,
                         grasp_iterations=args.iterations,
-                        grasp_lstype=args.ls
+                        grasp_lstype=args.ls,
+                        grasp_lsiterations=args.lsiterations
                         )
                 elif solverType == "brkga":
                     print(solverType)

@@ -484,7 +484,7 @@ def isFeasible(solution, data):
 
         #print(" sum_ nurses "+ str(sum_nurses) + " h=" + str(h) + " pending: " + str(solution["pending"]) + " and demand " +  str(data["demand"]))
 
-    #print(" sum_ nurses "+ str(sum_nurses) + " h=" + str(h) + " pending: " + str(solution["pending"]))
+    # print(" sum_ nurses "+ str(sum_nurses) + " h=" + str(h) + " pending: " + str(solution["pending"]) + " Feasible? " + str(served))
 
     return served
 

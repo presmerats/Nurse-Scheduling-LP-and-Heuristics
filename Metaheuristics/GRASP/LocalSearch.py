@@ -172,6 +172,15 @@ def validCandidate(candidate_sol, d, nurse, verify_minHours = True, whattoreturn
     if set_end > -1:
         stop = set_end + 1
 
+    # look for end
+    end = -1
+    for h in range(len(candidate)):
+        if candidate[h]==1:
+            end = h
+
+    #print(" end " + str(end))
+
+
     for w in range(stop):
 
         # maxHours
@@ -196,10 +205,12 @@ def validCandidate(candidate_sol, d, nurse, verify_minHours = True, whattoreturn
         if end != -1 and start != -1:
             maxPresence_check = d["maxPresence"] >= end - start + 1
 
-
         if end != -1 and start != -1 and w > start and w <= end:
+            #print("validating rest_check")
             if candidate[w - 1] == 0 and candidate[w] == 0:
                 rest_check = False
+                #print(candidate)
+            #print(str(rest_check))
         elif force_rest_check:
 
             # rest
@@ -228,7 +239,7 @@ def validCandidate(candidate_sol, d, nurse, verify_minHours = True, whattoreturn
     # print("validity: ")
 
     # print(candidate)
-    # print(data)
+    # print(d)
     # print(minHours_check)
     # print(maxHours_check)
     # print(maxConsec_check)
@@ -276,8 +287,9 @@ def isTotallyValid(data, candidate):
     validity = True
 
     for nurse in range(len(candidate_sol["w"])):
-
-        validCandidate(candidate_sol, d, nurse)
+        validity = validCandidate(candidate_sol, d, nurse)
+        if not validity:
+            return False
 
     return validity
 
@@ -470,9 +482,9 @@ def electiveCandidate(candidate, n, h, data):
     return candidate
 
 
-def findCandidates(solution, data, n):
+def findCandidate(solution, data, n):
     """ 
-         this function returns solutions that include:
+         this function returns a new solution that include:
             - 0 hours assigned to nurse n
             - all the hours that where assigned to nurse n
               are assigned to other nurses
@@ -502,8 +514,11 @@ def findCandidates(solution, data, n):
         # the cost has not decreased
         # but # assignments is reduced,
         # useful for further improvements
-        return[s]
+        #return[s]
+        return[]
+        
     else:
+        
         return []
 
 
@@ -563,7 +578,7 @@ def createNeighborhood(solution, data):
             print("")
             print("Nurse " + str(n))
 
-        ns = findCandidates(solution, data, n)
+        ns = findCandidate(solution, data, n)
 
         if printlog or printlog_createNeighborhood:
             print(" after findCandidates " + "--" * 10)
@@ -576,9 +591,86 @@ def createNeighborhood(solution, data):
     return Ns
 
 
+def createNeighborhood2(solution, data):
+    """
+    creates a set of solutions that are
+    neighbors to the current solution
+
+    feasibility is not verified at this point
+    (it should be feasible if input solution is feasible)
+
+    removes as many nurses as it cans in the same solution. 
+    starting point matters here! 
+    so calling function should randomize some how the nurse by which
+    this function starts
+    """
+
+    Ns = []
+    
+
+    if printlog:
+        print("Initial solutioni: " + "-" * 24)
+        pp.pprint(solution)
+        print()
+
+    # computes and stores the exceeding capacity
+    exceedingNurseHours(solution, data)
+
+    nurse = 0
+    while nurse < data["nNurses"]:
+    #for nurse in range(0, data["nNurses"], 1):
+        last_solution = solution
+        zerofound = True
+
+        # print(" point nurse " + str(nurse))
+        last_nurse = 0
+        for m in range(0, data["nNurses"], 1):
+            last_nurse = m
+            n = (m + nurse) % data["nNurses"]
+
+            if solution["z"][n] == 0:
+                continue
+
+            # print(" internal nurse " + str(n))
+
+            new_solution = findCandidate(last_solution, data, n)
+
+            if len(new_solution)>0:
+                zerofound = False
+                last_solution = new_solution[0]
+                #print("found reassignment " + str(last_solution["cost"]))
+                #if len(ns) > 0:
+                # it saves all intermediate results
+                # Ns.extend(last_solution)
+                # or just return the one that contains all changes to assignments
+                
+            else:
+                # when first non expendable nurse is found-> returns                
+                #print("found impossible reassignment, quitting")
+                break
+
+        # if not the same sol as solution
+        if not zerofound:
+            #print("finally saving all new assignments")
+            Ns.append(last_solution)
+
+        # could be made advance quicker, like using last nurse reassigned + 1...
+        if last_nurse == 0:
+            nurse = nurse + 1
+        else:
+            nurse = nurse + last_nurse
+
+    # print("----->finished at nurse "+ str(nurse))
+    # for elem in Ns:
+    #    print(elem["cost"])
+
+    return Ns
+
+
 def firstImprovementLocalSearch(solution, data):
 
-    Ns = createNeighborhood(solution, data)
+    # 2 types of createNeighborhood2
+    Ns = createNeighborhood2(solution, data)
     if printlog or printlog_mainloop:
         print()
         print("new neighborhood")
@@ -626,12 +718,13 @@ def firstImprovementLocalSearch(solution, data):
                 if printlog or printlog_mainloop:
                     print("same cost" + str(new_sol["cost"]))
 
+
     return solution
 
 
 def bestImprovementLocalSearch(solution, data):
 
-    Ns = createNeighborhood(solution, data)
+    Ns = createNeighborhood2(solution, data)
     if printlog or printlog_mainloop:
         print()
         print("new neighborhood")

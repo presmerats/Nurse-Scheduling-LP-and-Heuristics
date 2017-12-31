@@ -58,6 +58,7 @@ def writeLog(instancepath,
              alpha=None,
              iterations=None,
              lstype=None,
+             lsiterations=None,
              generations=None,
              eliteprop=None,
              mutantprop=None,
@@ -86,6 +87,7 @@ def writeLog(instancepath,
             + '-a' + str(alpha) \
             + '-i' + str(iterations) \
             + '-lst' + str(lstype) \
+            + '-lsit' + str(lsiterations) \
             + '.json'
         
     if generations and eliteprop and mutantprop and population and inheritance:
@@ -110,6 +112,7 @@ def run(instancepath, solverType,
         grasp_alpha=None,
         grasp_iterations=None,
         grasp_lstype=None,
+        grasp_lsiterations=None,
         brkga_generations=None,
         brkga_eliteprop=None,
         brkga_mutantprop=None,
@@ -133,7 +136,8 @@ def run(instancepath, solverType,
         solution = grasp(data,
                          alpha=grasp_alpha,
                          iterations=grasp_iterations,
-                         lstype=grasp_lstype)
+                         lstype=grasp_lstype,
+                         lsiterations=grasp_lsiterations)
     elif solverType == "brkga":
         solution = brkga_run(data,
                              generations=brkga_generations,
@@ -149,6 +153,12 @@ def run(instancepath, solverType,
     t2 = time.time()
     solveTime = t2 - t1
 
+    # final verification
+    valid_feasible = isTotallyValid(data, solution)
+    if valid_feasible:
+        valid_feasible = isFeasible(solution, data)
+    print("Valid and Feasible?: " + str(valid_feasible) )
+
 
     if solution is not None:
         try:
@@ -162,6 +172,7 @@ def run(instancepath, solverType,
                          alpha=grasp_alpha,
                          iterations=grasp_iterations,
                          lstype=grasp_lstype,
+                         lsiterations=grasp_lsiterations,
                          generations=brkga_generations,
                          eliteprop=brkga_eliteprop,
                          mutantprop=brkga_mutantprop,
@@ -176,6 +187,7 @@ def run(instancepath, solverType,
                          alpha=grasp_alpha,
                          iterations=grasp_iterations,
                          lstype=grasp_lstype,
+                         lsiterations=grasp_lsiterations,
                          generations=brkga_generations,
                          eliteprop=brkga_eliteprop,
                          mutantprop=brkga_mutantprop,

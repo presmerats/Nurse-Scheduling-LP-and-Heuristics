@@ -70,7 +70,7 @@ def GraspConstructive(data, alpha_param=None):
 
 
 
-def grasp(data, alpha=None, iterations=None, lstype=None):
+def grasp(data, alpha=None, iterations=None, lstype=None, lsiterations=None):
 
     # params
     #  - first improve or best improvement
@@ -79,9 +79,12 @@ def grasp(data, alpha=None, iterations=None, lstype=None):
 
 
     numiterations = 5
-    maxFailed = 5
     if iterations:
         numiterations = iterations
+
+    maxFailed = 5
+    if lsiterations:
+        maxFailed = lsiterations
 
     ls = "first"
     if lstype:
