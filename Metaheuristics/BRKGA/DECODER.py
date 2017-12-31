@@ -550,31 +550,26 @@ def decoder_order(data,chromosome):
     
     chr_demand=chromosome[0:len(list(C))]
 
-    demand_order=sorted(range(len(list(T))), key=lambda k: chr_demand[k])
-    computer_order=sorted(range(len(list(C))), key=lambda k: chr_computer[k])
+    demand_order=sorted(range(len(list(C))), key=lambda k: chr_demand[k])
 
-    print('Task Order')
-    print(task_order)
-    print('Computer Order')
-    print(computer_order)
+    #print('Demand Order')
+    #print(demand_order)
 
-    for i in task_order:
-        #print('Task')
-        #print(i)
-        assigned=False
-        for roundUsed in [True,False]:
-            for j in computer_order:
-                if(used[j]==roundUsed and C[j]-T[i]<0):continue
-                if(used[j]==0): used[j]=1
-                solution[i]=j
-                C[j]-=T[i]
-                if rem>(C[j]/Caux[j]): rem=(C[j]/Caux[j])
-                assigned=True
-                break
-            if assigned: break
-        if not assigned: return None, sys.maxint
-    fitness=sum(np.multiply(used,list(cost)))+rem
-    return solution, fitness
+    # 2) assign work hours to nurses
+    solution = {
+        "cost": 0,
+        "w": [[0] * data["hours"] for n in range(data["nNurses"])],
+        "z": [0] * data["nNurses"],
+        "last_added": 0,
+        "pending": list(data["demand"]),
+        "totalw": 0,
+        "exceeding": [0] * data["hours"]
+    }
+
+    #assignNurses(solution, hini, data)
+    assignNursesOrder(solution, demand_order, data)
+
+    return solution, solution["cost"]
 
 # demand order
 def decode(population, data):
@@ -593,54 +588,6 @@ def decode(population, data):
         solution, fitness=decoder_order(data,ind['chr'])
         ind['solution']=solution
         ind['fitness']=fitness    
-    return(population)
-    
-    for ind in population:
-
-        # 1) transform from chr[i] to hini
-
-        hours = data["hours"]
-        # improvement1, use the first hour with demand, instead of 1...
-        # improvement2, how to reduce infeasibility?
-
-        #hini = decode_hini_simple(ind, data)
-        hini = decode_hini_2(ind, data)
-
-        # print("demand:")
-        # print(data["demand"])
-        # print("hini:")
-        # print(hini)
-
-
-        # 2) assign work hours to nurses
-        solution = {
-            "cost": 0,
-            "w": [[0] * data["hours"] for n in range(data["nNurses"])],
-            "z": [0] * data["nNurses"],
-            "last_added": 0,
-            "pending": list(data["demand"]),
-            "totalw": 0,
-            "exceeding": [0] * data["hours"]
-        }
-
-        #assignNurses(solution, hini, data)
-        assignNursesOrder(solution, demandOrder, data)
-
-        ind['solution'] = solution
-
-        ind['fitness'] = solution["cost"]
-
-
-
-		# print
-        #pp.pprint(data["demand"])
-        #pp.pprint(solution)
-        #print(ind['fitness'])
-        ##time.sleep(5)
-
-
-    print("breed: " + str(len(population)) + " individuals")
-    print("diversity: " + str(diversity(population)))
     return(population)
 
 def decodeNotOrder(population, data):
