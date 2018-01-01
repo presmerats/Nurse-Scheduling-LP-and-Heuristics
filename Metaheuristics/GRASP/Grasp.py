@@ -88,17 +88,15 @@ def grasp(data, alpha=None, iterations=None, lstype=None, lsiterations=None):
         solution = GraspConstructive(data, alpha)
         t2 = time.time()
         greedytime = t2 - t1 
-        print(" greedyconstructive time: " + str(greedytime) )
-        print("")
-        print("")
-        
+        print("|")
+        print("-->greedyconstructive time: " + str(greedytime) )
 
         t3 = time.time()
         solution2 = firstImprovementLocalSearch(solution, data)
         t4 = time.time()
         lstime = t4 - t3 
-        print(" lstime: " + str(lstime) )
-        print("")
+        print("|")
+        print("-->lstime: " + str(lstime) )
         print("")
 
         if solution2["cost"] < solution["cost"]:
@@ -116,27 +114,18 @@ def grasp(data, alpha=None, iterations=None, lstype=None, lsiterations=None):
     
     # Final intensive LS
     print('Intensive LS')
-    failed_iterations = 0
-    while failed_iterations < maxFailed:
-
-        solution2 = []
-        if ls == "first":
-            solution2 = firstImprovementLocalSearch(incumbent, data)
-        else:
-            solution2 = bestImprovementLocalSearch(incumbent, data)
-
-        if solution2["cost"] >= incumbent["cost"]:
-            print("     Searching, Cost=" +
-                  str(solution2["cost"]) +
-                  " Total_W=" +
-                  str(solution2["totalw"]))
-            failed_iterations += 1
-        else:
-            print(" --> Improvement: " + str(solution2["cost"]))
-            failed_iterations = 0
-        
-        incumbent = solution2
-    #
+    t5 = time.time()
+    solution2 = []
+    if ls == "first":
+        solution2 = firstImprovementLocalSearch_intensive(incumbent, maxFailed, data)
+    else:
+        solution2 = bestImprovementLocalSearch_complex(incumbent, data)        
+    incumbent = solution2
+    t6 = time.time()
+    flstime = t6 - t5 
+    print("|")
+    print("-->flstime: " + str(flstime) )
+    print("")
 
     print('Final solution')
     print(incumbent)

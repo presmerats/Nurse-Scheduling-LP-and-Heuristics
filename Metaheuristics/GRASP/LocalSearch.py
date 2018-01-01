@@ -490,6 +490,8 @@ def createNeighborhood(solution, data):
 
     feasibility is not verified at this point
     (it should be feasible if input solution is feasible)
+
+    each neighbor only changes one nurse!
     """
 
     Ns = []
@@ -604,45 +606,120 @@ def createNeighborhood2(solution, data):
 
     return Ns
 
+def createNeighborhood3(solution, data):
+    """
+        performs a firstImprovement (change nurses until no improvement)
+        but starting from different positions (for n in range 0,nNurses)
 
-def firstImprovementLocalSearch_(solution, data):
+    """
 
     # computes and stores the exceeding capacity
     exceedingNurseHours(solution, data)
 
-    for n in range(0, data["nNurses"], 1):
-        if solution["z"][n] == 0:
-            continue
+    Ns = []
+    new_sol = {}
+    
+    best_cost = solution["cost"]
 
-        ns = findCandidate(solution, data, n)
+    for nini in range(0, data["nNurses"]):
+        print("nini " + str(nini))
 
-        if len(ns) > 0:
-            new_sol = ns[0]
+        improved = True
+        old_cost = solution["cost"]
+        current_solution = deepcopy(solution)
+        while improved:
 
-            # look for feasibility
-            # and for cost[new_solution] < cost[solution]
-            if isFeasible(new_sol, data) and new_sol["cost"] < solution["cost"]:
-                solution = new_sol
-                return solution
+            improved = False
+            for n in range(0, data["nNurses"], 1):
+                if current_solution["z"][n] == 0:
+                    continue
 
+                ns = findCandidate(current_solution, data, n)
+
+                if len(ns) > 0:
+                    new_sol = ns[0]
+
+                    # look for feasibility
+                    # and for cost[new_solution] < cost[solution]
+                    if isFeasible(new_sol, data) and new_sol["cost"] < old_cost:
+                        improved = True
+                        current_solution = new_sol
+                        print(" --> Improvement: " + str(new_sol["cost"]))
+                        break
+
+            old_cost = new_sol["cost"]
+
+        if new_sol["cost"] < best_cost:
+            Ns.append(new_sol)
+            best_cost = new_sol["cost"]
+
+    return Ns
+
+
+
+def firstImprovementLocalSearch(solution, data):
+    # first improvement Local search: looks for new sols while improves
+
+    # computes and stores the exceeding capacity
+    exceedingNurseHours(solution, data)
+
+    improved = True
+
+    while improved:
+
+        improved = False
+        for n in range(0, data["nNurses"], 1):
+            if solution["z"][n] == 0:
+                continue
+
+            ns = findCandidate(solution, data, n)
+
+            if len(ns) > 0:
+                new_sol = ns[0]
+
+                # look for feasibility
+                # and for cost[new_solution] < cost[solution]
+                if isFeasible(new_sol, data) and new_sol["cost"] < solution["cost"]:
+                    solution = new_sol
+                    improved = True
+                    break
+                    
     return solution
 
 
-def bestImprovementLocalSearch(solution, data):
 
-    Ns = createNeighborhood(solution, data)
-    if printlog or printlog_mainloop:
-        print()
-        print("new neighborhood")
-        pp.pprint(Ns)
+
+
+def firstImprovementLocalSearch_intensive(incumbent, maxFailed, data):
+
+    failed_iterations = 0
+    while failed_iterations < maxFailed:
+
+        solution2 = firstImprovementLocalSearch(incumbent, data)
+        
+        if solution2["cost"] >= incumbent["cost"]:
+            print("     Searching, Cost=" +
+                  str(solution2["cost"]) +
+                  " Total_W=" +
+                  str(solution2["totalw"]))
+            failed_iterations += 1
+        else:
+            print(" --> Improvement: " + str(solution2["cost"]))
+            failed_iterations = 0
+
+        incumbent = solution2
+
+    return incumbent
+
+def bestImprovementLocalSearch_complex(solution, data):
+
+    Ns = createNeighborhood3(solution, data)
 
     for i in range(len(Ns)):
 
         new_sol = Ns[i]
 
         if not isFeasible(new_sol, data):
-            if printlog or printlog_mainloop:
-                print("unfeasible")
             continue
         else:
 
