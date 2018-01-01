@@ -116,7 +116,8 @@ def run(instancepath, solverType,
         brkga_eliteprop=None,
         brkga_mutantprop=None,
         brkga_population=None,
-        brkga_inheritance=None
+        brkga_inheritance=None,
+        brkga_decoder=None
         ):
 
     # pass a set of params **kargvs
