@@ -104,8 +104,7 @@ def grasp(data, alpha=None, iterations=None, lstype=None, lsiterations=None):
 
         numiterations -= 1
 
-    print('Quick LS -> Solution')
-    print(incumbent["cost"])
+    print('Quick LS -> Solution cost: ' + str(incumbent["cost"]))
     
     # Final intensive LS
     print('Intensive LS')

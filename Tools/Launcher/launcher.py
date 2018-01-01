@@ -1,3 +1,14 @@
+"""
+    this script 
+        1- takes instances from ../../Instances/Pending
+    and then for each instance:
+        2- prepares a .mod file that executes the instance and writes to a log file in ../../Results/Pending/log-<instance>.json
+        3- that .mod file must save a key value "solver" : "ILP" inside the written json file
+    executes
+        4- executes in shell the command "oplrun -v <name>.mod" with the env var LD_LIBRARY_PATH=/opt/ibm/ILOG/CPLEX_Studio126/opl/bin/x86-64_linux
+
+"""
+
 import json
 import sys
 import os
@@ -24,16 +35,6 @@ from BRKGA_main import *
 from Grasp import *
 import main as metaheuristics
 
-"""
-    this script 
-        1- takes instances from ../../Instances/Pending
-    and then for each instance:
-        2- prepares a .mod file that executes the instance and writes to a log file in ../../Results/Pending/log-<instance>.json
-        3- that .mod file must save a key value "solver" : "ILP" inside the written json file
-    executes
-        4- executes in shell the command "oplrun -v <name>.mod" with the env var LD_LIBRARY_PATH=/opt/ibm/ILOG/CPLEX_Studio126/opl/bin/x86-64_linux
-
-"""
 mod_header_template = os.path.abspath('../Instance_Generator/Complex Generator/Test-header2.template')
 mod_footer_template = os.path.abspath('../Instance_Generator/Complex Generator/Test-footer.template')
 
@@ -177,15 +178,17 @@ if __name__ == '__main__':
                 if instanceType != 'all':
                     if not acceptInstance(instance):
                         continue
+                    
+                if solverType not in ('ILP', 'grasp', 'brkga'):
+                    print('You need to define a solving method: grasp or brkga')
+                    sys.exit(1)
 
                 instancepath = os.path.join(root, instance)
-                print("processing instance " + instance)
+                print("Processing instance: " + instance)
 
                 if solverType == "ILP":
                     solveInstanceWithILP(instancepath)
                 elif solverType == "grasp":
-                    print(solverType)
-
                     metaheuristics.run(instancepath=instancepath,
                         solverType=solverType,
                         results_path=results_folder,
@@ -195,8 +198,6 @@ if __name__ == '__main__':
                         grasp_lsiterations=args.lsiterations
                         )
                 elif solverType == "brkga":
-                    print(solverType)
-
                     metaheuristics.run(instancepath=instancepath,
                         solverType=solverType,
                         results_path=results_folder,

@@ -272,8 +272,8 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         solverType = sys.argv[1]
 
-        if solverType not in ["greedy", "grasp", "brkga"]:
-            print("Usage: python main.py <metaheuristic_algorithm>")
+        if solverType not in ["grasp", "brkga"]:
+            print("Usage: python main.py <metaheuristic_algorithm (brkga or grasp)>")
     else:
         #solverType = "greedy"
         #solverType = "brkga"
