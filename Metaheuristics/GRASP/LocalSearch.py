@@ -606,6 +606,10 @@ def createNeighborhood2(solution, data):
 
     return Ns
 
+
+
+
+
 def createNeighborhood3(solution, data):
     """
         performs a firstImprovement (change nurses until no improvement)
@@ -687,6 +691,56 @@ def firstImprovementLocalSearch(solution, data):
     return solution
 
 
+def mp_aux(solution, data, n):
+
+    if solution["z"][n] == 0:
+        return None
+
+    ns = findCandidate(solution, data, n)
+
+    if len(ns) > 0:
+        new_sol = ns[0]
+
+        # look for feasibility
+        # and for cost[new_solution] < cost[solution]
+        if isFeasible(new_sol, data) and new_sol["cost"] < solution["cost"]:
+            return new_sol
+
+    return None
+            
+
+def firstImprovementLocalSearch_mp(solution, data):
+    # first improvement Local search: looks for new sols while improves
+
+    # computes and stores the exceeding capacity
+    exceedingNurseHours(solution, data)
+
+    improved = True
+
+    while improved:
+
+        improved = False
+
+        # launch each n in a difference process,
+        # don't wait all to finish
+        # as soon as one finishes verify if feasible or if not null
+        # as soon as one is not null -> break and start again
+        # current benchmark 0035-i-.. -> takes 30~80 seconds this part!
+        # with mp           0035-i-.. -> takes 34~25 seconds
+        
+        pool = mp.Pool(processes= mp.cpu_count())
+        results = [pool.apply_async(mp_aux,args=(solution, data, n)) for n in range(data["nNurses"])]
+        for p in results:
+            new_sol = p.get()
+            if new_sol:
+                pool.terminate()
+                solution = new_sol
+                improved = True
+                #print(" --> improvement: " + str(solution["cost"]))
+                #print("terminating all pool processes")
+                break
+                    
+    return solution
 
 
 
