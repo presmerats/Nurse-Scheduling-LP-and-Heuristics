@@ -1,19 +1,10 @@
-import math
-import matplotlib.pyplot as pyplot
-import numpy as np
-import pprint
-from copy import copy, deepcopy
-import os, sys
+# -*- coding: utf-8 -*-
+"""
+@author: Adrian Rodrigez Bazaga, Pau Rodriguez Esmerats
+"""
 
-# parentPath = os.path.abspath("../../Metaheuristics/GRASP_python")
-# if parentPath not in sys.path:
-#     sys.path.insert(0, parentPath)
-# parentPath = os.path.abspath("../GRASP_python")
-# if parentPath not in sys.path:
-#     sys.path.insert(0, parentPath)
-# parentPath = os.path.abspath(".")
-# if parentPath not in sys.path:
-#     sys.path.insert(0, parentPath)
+import pprint
+import os, sys
 
 parentPath = os.path.abspath(".")
 if parentPath not in sys.path:
@@ -21,7 +12,6 @@ if parentPath not in sys.path:
 
 pp = pprint.PrettyPrinter(indent=2)
 
-#from Greedy import Greedy.isFeasible
 from Greedy import *
 
 
@@ -68,33 +58,17 @@ def incrementalValidCandidate(candidate_sol, d, nurse, verify_minHours = True, w
         if start == -1:
             if candidate[w] == 1:
                 start = w + 1
-        #if end == -1:
+                
         if candidate[w] == 1:
             end = w + 1
-        # if candidate[stop - w - 1] == 1:
-        #     end = stop - w
 
         if end != -1 and start != -1:
             maxPresence_check = d["maxPresence"] >= end - start + 1
 
-        # print("           end "+str(end))
-        # print("           start "+str(start))
-        # print("           w[n]["+str(w)+"]="+str(candidate[w]))
         if end != -1 and start != -1 and w > start:
             if candidate[w - 1] == 0 and candidate[w] == 0:
                 rest_check = False
         elif force_rest_check:
-
-            # rest
-            # print(start)
-            # print(end)
-            # print(w)
-            # try:
-            #     print(candidate[w - 1])
-            #     print(candidate[w])
-            #     print(candidate[w - 1] == 1 or candidate[w - 1] == 0 and not candidate[w] == 0)
-            # except:
-            #     pass
             if w - 1 >= 0 and candidate[w - 1] == 0 and candidate[w] == 0:
                 rest_check = False
 
@@ -107,18 +81,6 @@ def incrementalValidCandidate(candidate_sol, d, nurse, verify_minHours = True, w
         maxConsec_check and \
         maxPresence_check and \
         rest_check
-    
-    # print("validity: ")
-
-    # print(candidate)
-    # print(data)
-    # print(minHours_check)
-    # print(maxHours_check)
-    # print(maxConsec_check)
-    # print(maxPresence_check)
-    # print(rest_check)
-    # print("=")
-    # print(validity)
 
     if not validity:
 
@@ -150,10 +112,6 @@ def incrementalValidCandidate(candidate_sol, d, nurse, verify_minHours = True, w
 
     return validity
 
-
-
-
-
 def validCandidate(candidate_sol, d, nurse, verify_minHours = True, whattoreturn = 'summary', force_rest_check = False, set_end=-1):
 
     candidate = candidate_sol["w"][nurse]
@@ -177,9 +135,6 @@ def validCandidate(candidate_sol, d, nurse, verify_minHours = True, whattoreturn
     for h in range(len(candidate)):
         if candidate[h]==1:
             end = h
-
-    #print(" end " + str(end))
-
 
     for w in range(stop):
 
@@ -212,17 +167,6 @@ def validCandidate(candidate_sol, d, nurse, verify_minHours = True, whattoreturn
                 #print(candidate)
             #print(str(rest_check))
         elif force_rest_check:
-
-            # rest
-            # print(start)
-            # print(end)
-            # print(w)
-            # try:
-            #     print(candidate[w - 1])
-            #     print(candidate[w])
-            #     print(candidate[w - 1] == 1 or candidate[w - 1] == 0 and not candidate[w] == 0)
-            # except:
-            #     pass
             if w - 1 >= 0 and candidate[w - 1] == 0 and candidate[w] == 0:
                 rest_check = False
 
@@ -235,18 +179,6 @@ def validCandidate(candidate_sol, d, nurse, verify_minHours = True, whattoreturn
         maxConsec_check and \
         maxPresence_check and \
         rest_check
-    
-    # print("validity: ")
-
-    # print(candidate)
-    # print(d)
-    # print(minHours_check)
-    # print(maxHours_check)
-    # print(maxConsec_check)
-    # print(maxPresence_check)
-    # print(rest_check)
-    # print("=")
-    # print(validity)
 
     if not validity:
 

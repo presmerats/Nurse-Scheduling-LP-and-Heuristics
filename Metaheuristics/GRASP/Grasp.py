@@ -1,8 +1,3 @@
-import math
-import matplotlib.pyplot as pyplot
-import numpy as np
-import pprint
-from copy import copy, deepcopy
 from random import randrange
 import time
 
@@ -54,18 +49,11 @@ def GraspConstructive(data, alpha_param=None):
         if isFeasible(solution, data):
             break
 
-        #update(solution, elements, data)
-
-
-    #pp.pprint(solution)
-    #print(solution["w"])
-    #print(solution["z"])
-    #pp.pprint(data)
     print()
-    print("after greedy loop finished: elements left=" + str(len(elements)) + " and isFeasible(soluion)" +  str(isFeasible(solution, data)) )
+    print("After greedy loop finished -> Elements remaining=" + str(len(elements)) + " and isFeasible(solution)=" +  str(isFeasible(solution, data)) )
 
     solution["cost"], solution["totalw"] = computeCost(solution, data)
-    print("solution cost"+ str(solution["cost"]) )
+    print("Solution cost="+ str(solution["cost"]) )
     return solution
 
 
@@ -74,7 +62,7 @@ def grasp(data, alpha=None, iterations=None, lstype=None, lsiterations=None):
 
     # params
     #  - first improve or best improvement
-    #  - num iteartions
+    #  - num iterations
     #  - alpha 
 
 
@@ -106,7 +94,7 @@ def grasp(data, alpha=None, iterations=None, lstype=None, lsiterations=None):
             solution2 = bestImprovementLocalSearch(solution, data)
 
         if solution2["cost"] < solution["cost"]:
-            print(" quick LS --> improvement: " + str(solution2["cost"]))
+            print("Quick LS -> Improvement: " + str(solution2["cost"]))
             solution = solution2
             incumbent = solution2
 
@@ -116,7 +104,7 @@ def grasp(data, alpha=None, iterations=None, lstype=None, lsiterations=None):
 
         numiterations -= 1
 
-    print('First LS solution')
+    print('Quick LS -> Solution')
     print(incumbent["cost"])
     
     # Final intensive LS
@@ -131,13 +119,13 @@ def grasp(data, alpha=None, iterations=None, lstype=None, lsiterations=None):
             solution2 = bestImprovementLocalSearch(incumbent, data)
 
         if solution2["cost"] >= incumbent["cost"]:
-            print("     searching, cost" +
+            print("     Searching, Cost=" +
                   str(solution2["cost"]) +
-                  " total_w:" +
+                  " Total_W=" +
                   str(solution2["totalw"]))
             failed_iterations += 1
         else:
-            print(" --> improvement: " + str(solution2["cost"]))
+            print(" --> Improvement: " + str(solution2["cost"]))
             failed_iterations = 0
         
         incumbent = solution2
@@ -147,34 +135,3 @@ def grasp(data, alpha=None, iterations=None, lstype=None, lsiterations=None):
     print(incumbent)
     print(incumbent["cost"])
     return incumbent
-
-def greedyPlusLocalSearch(data):
-
-    solution = GreedyConstructive(data)
-    print(" GREEDY SOLUTION: ")
-    pp.pprint(solution["cost"])
-    print(time.time())
-    print("")
-    print("")
-
-    failed_iterations = 0
-    while failed_iterations < 5:
-
-        solution2 = firstImprovementLocalSearch(solution, data)
-        #solution2 = bestImprovementLocalSearch(solution, data)
-
-        if solution2["cost"] >= solution["cost"]:
-            print("     searching, cost" + str(solution2["cost"]) + " total_w:" + str(solution2["totalw"]))
-            failed_iterations += 1
-        else:
-            print(" --> improvement: " + str(solution2["cost"]))
-            failed_iterations = 0
-
-        solution = solution2
-
-    print(" LOCAL SEARCH SOLUTION: ")
-    pp.pprint(solution["w"])
-    print(solution["z"])
-    pp.pprint(solution["cost"])
-
-    return solution

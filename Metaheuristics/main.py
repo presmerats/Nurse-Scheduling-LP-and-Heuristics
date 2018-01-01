@@ -1,3 +1,8 @@
+# -*- coding: utf-8 -*-
+"""
+@author: Adrian Rodrigez Bazaga, Pau Rodriguez Esmerats
+"""
+
 import time
 import sys
 import os
@@ -130,9 +135,7 @@ def run(instancepath, solverType,
     t1 = time.time()
     solution = None
 
-    if solverType == "greedy":
-        solution = greedyPlusLocalSearch(data)
-    elif solverType == "grasp":
+    if solverType == "grasp":
         solution = grasp(data,
                          alpha=grasp_alpha,
                          iterations=grasp_iterations,
@@ -147,17 +150,17 @@ def run(instancepath, solverType,
                              inheritance=brkga_inheritance)
     
     else:
-        solverType = "greedy"
-        solution = greedyPlusLocalSearch(data)
+        print('You need to define a solving method: grasp or brkga')
+        sys.exit(1)
 
     t2 = time.time()
     solveTime = t2 - t1
 
-    # final verification
+    # Final check
     valid_feasible = isTotallyValid(data, solution)
     if valid_feasible:
         valid_feasible = isFeasible(solution, data)
-    print("Valid and Feasible?: " + str(valid_feasible) )
+    print("Is the solution Valid and Feasible? = " + str(valid_feasible) )
 
 
     if solution is not None:
@@ -266,21 +269,15 @@ if __name__ == '__main__':
 
     #instancepath = '../Instances/Final/1661-i-ng-60-128-80-24h-16mxP-5mxC-10mxH-1mnH-3Cnt-20171218_23-49-58683.dat'
 
-
-
-
-
     if len(sys.argv) > 1:
-
         solverType = sys.argv[1]
 
         if solverType not in ["greedy", "grasp", "brkga"]:
             print("Usage: python main.py <metaheuristic_algorithm>")
     else:
-        solverType = "greedy"
+        #solverType = "greedy"
+        #solverType = "brkga"
         solverType = "grasp"
-        solverType = "brkga"
 
     cProfile.run('run(instancepath, solverType)')   
-    #run(instancepath, solverType)
 

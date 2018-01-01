@@ -1,15 +1,13 @@
 # -*- coding: utf-8 -*-
 """
-Created on Fri Dec 29 18:29:40 2017
-
 @author: Adrian Rodrigez Bazaga, Pau Rodriguez Esmerats
 """
 
 class Nurse:
 
-    def __init__(self, schedule, element=None):
+    def __init__(self, schedule, other=None):
 
-        if element is None:
+        if other is None:
             self.schedule = schedule
             self.sumW = 0
             self.consec = 0
@@ -22,35 +20,31 @@ class Nurse:
         else:
 
             self.schedule = schedule
-            self.sumW = element.sumW
-            self.consec = element.consec
-            self.start = element.start
+            self.sumW = other.sumW
+            self.consec = other.consec
+            self.start = other.start
             self.end = -1
             self.rest = -1
-            self.rest_1 = element.rest
+            self.rest_1 = other.rest
             self.rest_2 = -1
             if len(schedule) > 2:
-                self.rest_2 = element.rest_1
+                self.rest_2 = other.rest_1
 
             self.gc = float("inf")       
 
             # update information
             if schedule[-1] == 1:
-                self.sumW = element.sumW + 1
-                self.consec = element.consec + 1
-                if element.start == -1:
+                self.sumW = other.sumW + 1
+                self.consec = other.consec + 1
+                if other.start == -1:
                     self.start = len(schedule)
                 self.end = len(schedule)
                 self.rest = 0
             else:
-                self.sumW = element.sumW 
+                self.sumW = other.sumW 
                 self.consec = 0
-                self.end = element.end
+                self.end = other.end
                 self.rest = 1  
-
-            #element.myprint()
-        
-        #self.myprint()
 
 
     def myprint_long(self):

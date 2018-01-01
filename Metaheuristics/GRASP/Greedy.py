@@ -1,12 +1,6 @@
-import math
-import matplotlib.pyplot as pyplot
-import numpy as np
 import pprint
-from copy import copy, deepcopy
 import logging
-import time
-import os
-import sys
+from copy import copy, deepcopy
 
 from Common.Nurse import *
 
@@ -89,24 +83,6 @@ def isValid_ng(data, candidate):
         maxConsec_check and \
         maxPresence_check and \
         rest_check
-        
-    # print("validity: ")
-    # print(candidate.schedule)
-    # print(candidate.start)
-    # print(candidate.end)
-    # print(candidate.sumW)
-    # print(candidate.rest)
-    # print(candidate.rest_1)
-    # print(candidate.consec)
-    # pp.pprint(data)
-
-    # print(minHours_check)
-    # print(maxHours_check)
-    # print(maxConsec_check)
-    # print(maxPresence_check)
-    # print(rest_check)
-    # print("=")
-    # print(validity)
 
     return validity
 
@@ -200,19 +176,9 @@ def isValid(data, candidate):
             maxPresence_check and \
             rest_check
         
-        # print("validity: ")
-
-        # print(candidate)
-        # print(minHours_check)
-        # print(maxHours_check)
-        # print(maxConsec_check)
-        # print(maxPresence_check)
-        # print(rest_check)
-        # print("=")
-        # print(validity)
     return validity
 
-def buildCandidates02_add(data, cand, value):
+def buildCandidates_addCandidate(data, cand, value):
 
     newlist = cand.schedule
     newlist.append(value)
@@ -223,15 +189,12 @@ def buildCandidates02_add(data, cand, value):
 
     return None
 
-def buildCandidates02(data, l):
+def buildCandidates(data, l):
 
 
     candidates = []
     # call previous level
     for hini in range(data["hours"]):
-
-        #print("-"*10 + "hini=" + str(hini))
-
         c1 = Nurse([0]*hini)
         c1.rest=1
         c1.sumW=0
@@ -250,73 +213,47 @@ def buildCandidates02(data, l):
         c2.rest_1=-1
         c2.rest_2=-1
 
-
-        # c1.myprint()
-        # c2.myprint()
-        # pp.pprint(data)
-        # print("-"*10)
-
         # first hour is schedule outside of the loop
         lastc2 = 0
         for h in range(hini+1,data["hours"] + 1):
 
 
             # first the continuous schedule
-            #print("c1")
             if c1:
-                new_c1 = buildCandidates02_add(data, c1, 1)
+                new_c1 = buildCandidates_addCandidate(data, c1, 1)
                 if new_c1 is None:
                     c1.schedule = c1.schedule[:-1]
-                    new_c1 = buildCandidates02_add(data, c1, 0)
+                    new_c1 = buildCandidates_addCandidate(data, c1, 0)
                 c1 = new_c1
 
             # then the sparse schedule
-            #print("c2")
             if c2:
                 if lastc2 == 0:
-                    new_c2 = buildCandidates02_add(data, c2, 1)
+                    new_c2 = buildCandidates_addCandidate(data, c2, 1)
                     lastc2 = 1
                     if new_c2 is None:
                         c2.schedule = c2.schedule[:-1]
-                        new_c2 = buildCandidates02_add(data, c2, 0)
+                        new_c2 = buildCandidates_addCandidate(data, c2, 0)
                         lastc2 = 0
                     c2 = new_c2
 
                 else:
-                    new_c2 = buildCandidates02_add(data, c2, 0)
+                    new_c2 = buildCandidates_addCandidate(data, c2, 0)
                     lastc2 = 0
                     if new_c2 is None:
                         c2.schedule = c2.schedule[:-1]
-                        new_c2 = buildCandidates02_add(data, c2, 1)
+                        new_c2 = buildCandidates_addCandidate(data, c2, 1)
                         lastc2 = 1
                     c2 = new_c2
 
             if c1 is None and c2 is None:
                 break
 
-            # print("after the iteration: ")
-            # if c1:
-            #     c1.myprint()
-            # if c2:
-            #     c2.myprint()
-            # print("-"*5)
-            # print()
-
-        
-
-       
-
         if c1:
-            #c1.myprint()
             candidates.append(c1)
         
         if c2:
-            #c2.myprint()
             candidates.append(c2)
-
-        
-    # for c in candidates:
-    #     c.myprint_short()
 
     return candidates
 
@@ -341,7 +278,6 @@ def initializeCandidates(data):
                 ]
         all possible schedules of a nurse, 
         taking into account the restriccions
-
     """
 
     elements = []
@@ -352,8 +288,7 @@ def initializeCandidates(data):
     # recursive alg implemented in iterative structure?
 
 
-    #candidates = buildCandidates(data, data["hours"])
-    candidates = buildCandidates02(data, data["hours"])
+    candidates = buildCandidates(data, data["hours"])
 
 
     # duplicate those elements for each nurse?
@@ -377,16 +312,12 @@ def update(solution, elements, data):
     """
     w = solution["w"]
     
-    #print(solution["pending"])
     for h in range(len(solution["pending"])):
         sum_col=0
         for n in range(data["nNurses"]):
             sum_col += w[n][h]
 
         solution["pending"][h] = max(0, data["demand"][h] - sum_col)
-
-    #print("updated: ")
-    #print(solution["pending"])
 
 
 def computeGreedyCost(solution, elements,  data):
@@ -414,32 +345,8 @@ def computeGreedyCost(solution, elements,  data):
             pendingh = solution["pending"][h]
             element.gc -= element.schedule[h] * pendingh
 
-        #     partial_sum +=  dh * element.schedule[h]
-
-        # if partial_sum > 0:
-        #     element.gc = 1.0 / partial_sum
-        # else:
-        #     element.gc = float("inf")
-            
-        # print("")
-        #element.myprint()
-
-
 
 def addElement(solution, e, data):
-
-    """
-        solution = {
-            "cost": data["nNurses"],
-            "w": [[0] * data["hours"]] * data["nNurses"],
-            "z": [0] * data["nNurses"],
-            "last_added": 0,
-            "pending": [0] * data["hours"] 
-        }
-    """
-
-    #pp.pprint(solution)
-
     z = solution["z"]
     w = solution["w"]
     i = solution["last_added"] + 1
@@ -458,9 +365,6 @@ def addElement(solution, e, data):
 
         solution["pending"][h] = max(0, data["demand"][h] - sum_col)
 
-    # print("----------------------------addElement: ")
-    # pp.pprint(solution)
-
     return solution
 
 
@@ -469,6 +373,7 @@ def isFeasible(solution, data):
         feasibility:
             - all demand is fulfilled
     """
+    
     d = data["demand"]
     w = solution["w"]
     served = True
@@ -482,92 +387,16 @@ def isFeasible(solution, data):
             served = False
             break
 
-        #print(" sum_ nurses "+ str(sum_nurses) + " h=" + str(h) + " pending: " + str(solution["pending"]) + " and demand " +  str(data["demand"]))
-
-    # print(" sum_ nurses "+ str(sum_nurses) + " h=" + str(h) + " pending: " + str(solution["pending"]) + " Feasible? " + str(served))
-
     return served
 
-
-
-
 def computeCost(solution, data):
-    """
-        
-    """
-
-    # pp.pprint(data)
-    # pp.pprint(solution)
-
     cost = 0
     totalw = 0
     for n in range(len(solution["z"])):
         cost += solution["z"][n]
 
-        #print("nurse: " + str(n))
         for h in range(data["hours"]):
-
-            # if printlog:
-            #     print(" hours " + str(h))
             totalw += solution["w"][n][h]
 
 
     return cost, totalw
-
-def GreedyConstructive(data):
-
-    # initialize solution and cost
-    solution = {
-        "cost": data["nNurses"],
-        "w": [[0] * data["hours"]] * data["nNurses"],
-        "z": [0] * data["nNurses"],
-        "last_added": -1,
-        "pending": list(data["demand"])
-    }
-
-    # initialize candidates
-    elements = initializeCandidates(data)
-    # for e in elements:
-    #     e.myprint_short()
-
-    while len(elements) > 0:
-
-        computeGreedyCost(solution, elements, data)
-
-
-        # for e in elements:
-        #     if e.schedule[0] == 1:
-        #         e.myprint()
-        # print("")
-
-        elements = sorted(elements, key=lambda element: element.gc)
-
-
-        # for e in elements[:5]:
-        #     e.myprint()
-        # print(len(elements))
-        # print("")
-
-        e = elements.pop(0)
-        #e.myprint()
-        solution = addElement(solution, e, data)
-
-
-        if isFeasible(solution, data):
-            break
-
-        #update(solution, elements, data)
-
-
-    pp.pprint(solution)
-    pp.pprint(data)
-    print()
-    print("after greedy loop finished: elements left=" + str(len(elements)) + " and isFeasible(soluion)" +  str(isFeasible(solution, data)) )
-
-    solution["cost"], solution["totalw"] = computeCost(solution, data)
-    print("solution cost"+ str(solution["cost"]) )
-    return solution
-
-
-
-
