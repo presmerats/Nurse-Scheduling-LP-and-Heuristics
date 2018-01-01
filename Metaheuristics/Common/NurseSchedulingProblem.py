@@ -177,7 +177,7 @@ def isFeasible(solution, data):
 
     return served
 
-def incrementalValidCandidate(candidate_sol, d, nurse, verify_minHours = True, whattoreturn = 'summary', force_rest_check = False, set_end=-1):
+def incremental_schedule_validation(candidate_sol, d, nurse, verify_minHours = True, whattoreturn = 'summary', force_rest_check = False, set_end=-1):
 
     candidate = candidate_sol["w"][nurse]
 
@@ -267,7 +267,7 @@ def incrementalValidCandidate(candidate_sol, d, nurse, verify_minHours = True, w
 
     return validity
 
-def validCandidate(candidate_sol, d, nurse, verify_minHours = True, whattoreturn = 'summary', force_rest_check = False, set_end=-1):
+def complete_schedule_validation(candidate_sol, d, nurse, verify_minHours = True, whattoreturn = 'summary', force_rest_check = False, set_end=-1):
 
     candidate = candidate_sol["w"][nurse]
 
@@ -366,7 +366,7 @@ def validCandidate(candidate_sol, d, nurse, verify_minHours = True, whattoreturn
     return validity
 
 
-def isTotallyValid(data, candidate):
+def complete_solution_validation(data, candidate):
     d = data
 
     candidate_sol = candidate
