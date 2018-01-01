@@ -209,17 +209,10 @@ def assignNurses(solution, hini, data):
             # print("w[" + str(n) + "]")
             # pp.pprint(solution["w"])
 
-        # if pending[h] > 0:
-        #     print(" h:" + str(h) + " pending[h]=" + str(pending[h]))
-        # print(solution["pending"])
-        # print("")
-        
-
     # pp.pprint(data)
     # pp.pprint(solution["cost"])
     # exit()
 
-    # compute cost: already updated!
 
     # compute feasibility: if unfeasible -> fitness should be inf
     if not isFeasible(solution, data):
@@ -231,7 +224,6 @@ def assignNurses(solution, hini, data):
 def decode_hexcess(ind, data):
     hini = []
 
-    
     for i in range(len(ind['chr'])):
         # option 2
         therange = data["demand"][i]
@@ -249,15 +241,12 @@ def decode_hexcess(ind, data):
         # option 2f
         hi = 0
         if ind['chr'][i] < 0.2:
-            therange = ceil(0.8*data["nNurses"])
+            therange = ceil(0.8 * data["nNurses"])
             hi = int(therange * ind['chr'][i])
 
         hini.append(hi)
 
-
     return hini
-
-
 
 
 def diversity(population):
@@ -266,37 +255,15 @@ def diversity(population):
     return len(s)
 
 
-
-# diversify by excees of assignments per hour
 def decode(population, data):
     """
-        Idea 1)
-            CHR = first work hour of the nurse
-
-        Idea 2)
-            CHR[i] = hi -> nursei start working at hi OR BEFORE
-
-        Idea 3)
-            CHR[i] = hi -> nursei start working at hi OR AFTER
+        # diversify by excees of assignments per hour
 
     """
 
     for ind in population:
 
-        # 1) transform from chr[i] to hini
-
-        hours = data["hours"]
-        # improvement1, use the first hour with demand, instead of 1...
-        # improvement2, how to reduce infeasibility?
-
-        #hini = decode_hini_simple(ind, data)
         hini = decode_hexcess(ind, data)
-
-        # print("demand:")
-        # print(data["demand"])
-        # print("hini:")
-        # print(hini)
-
 
         # 2) assign work hours to nurses
         solution = {
@@ -308,26 +275,51 @@ def decode(population, data):
             "totalw": 0,
             "exceeding": [0] * data["hours"]
         }
-    
+
         assignNurses(solution, hini, data)
 
         ind['solution'] = solution
 
         ind['fitness'] = solution["cost"]
 
-
-
-		# print
-        #pp.pprint(data["demand"])
-        #pp.pprint(solution)
-        #print(ind['fitness'])
-        ##time.sleep(5)
-
-
     print("breed: " + str(len(population)) + " individuals")
     print("diversity: " + str(diversity(population)))
     return(population)
 
+
+def decode_mp_aux(population, data, ind):
+
+    hini = decode_hexcess(ind, data)
+
+    solution = {
+        "cost": 0,
+        "w": [[0] * data["hours"] for n in range(data["nNurses"])],
+        "z": [0] * data["nNurses"],
+        "last_added": 0,
+        "pending": list(data["demand"]),
+        "totalw": 0,
+        "exceeding": [0] * data["hours"]
+    }
+
+    assignNurses(solution, hini, data)
+
+    ind['solution'] = solution
+
+    ind['fitness'] = solution["cost"]
+
+    return ind
+
+def decode_mp(population, data):
+    """
+        # diversify by excees of assignments per hour
+    """
+    pool = mp.Pool(processes=mp.cpu_count())
+    population_w_cost = [pool.apply(decode_mp_aux,
+                          args=(population, data, ind))
+               for ind in population]
+    print("breed: " + str(len(population_w_cost)) + " individuals")
+    print("diversity: " + str(diversity(population_w_cost)))
+    return(population_w_cost)
 
 
 def getChrLength(data):
