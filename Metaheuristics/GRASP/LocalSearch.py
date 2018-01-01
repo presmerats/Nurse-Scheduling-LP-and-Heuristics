@@ -605,57 +605,25 @@ def createNeighborhood2(solution, data):
     return Ns
 
 
-def firstImprovementLocalSearch(solution, data):
+def firstImprovementLocalSearch_(solution, data):
 
-    # 2 types of createNeighborhood2
-    Ns = createNeighborhood(solution, data)
-    if printlog or printlog_mainloop:
-        print()
-        print("new neighborhood")
-        # pp.pprint(Ns)
-    
-    for i in range(len(Ns)):
+    # computes and stores the exceeding capacity
+    exceedingNurseHours(solution, data)
 
-        new_sol = Ns[i]
-
-        if printlog or printlog_mainloop:
-            print("new_sol")
-            # pp.pprint(new_sol["z"])
-            pp.pprint(new_sol["cost"])
-            pp.pprint(new_sol["totalw"])
-            print()
-
-        if not isFeasible(new_sol, data):
-            if printlog or printlog_mainloop:
-                print("unfeasible")
+    for n in range(0, data["nNurses"], 1):
+        if solution["z"][n] == 0:
             continue
-        else:
 
-            if new_sol["cost"] < solution["cost"]:
+        ns = findCandidate(solution, data, n)
 
-                if printlog or printlog_mainloop:
-                    print("-->IMPROVEMENT")
-                    print("   " + str(new_sol["cost"]) +
-                          " total_w:" + str(solution["totalw"]))
+        if len(ns) > 0:
+            new_sol = ns[0]
 
+            # look for feasibility
+            # and for cost[new_solution] < cost[solution]
+            if isFeasible(new_sol, data) and new_sol["cost"] < solution["cost"]:
                 solution = new_sol
                 return solution
-
-            elif (new_sol["cost"] == solution["cost"] and
-                  new_sol["totalw"] < solution["totalw"]):
-
-                if printlog or printlog_mainloop:
-                    print("-->IMPROVEMENT")
-                    print("   " + str(new_sol["cost"]) +
-                          " total_w:" + str(solution["totalw"]))
-
-                solution = new_sol
-
-            elif new_sol["cost"] == solution["cost"]:
-
-                if printlog or printlog_mainloop:
-                    print("same cost" + str(new_sol["cost"]))
-
 
     return solution
 

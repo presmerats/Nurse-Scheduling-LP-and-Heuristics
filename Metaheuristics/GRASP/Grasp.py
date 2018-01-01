@@ -92,11 +92,14 @@ def grasp(data, alpha=None, iterations=None, lstype=None, lsiterations=None):
         print("")
         print("")
         
-        solution2 = []
-        if ls == "first":
-            solution2 = firstImprovementLocalSearch(solution, data)
-        else:
-            solution2 = bestImprovementLocalSearch(solution, data)
+
+        t3 = time.time()
+        solution2 = firstImprovementLocalSearch(solution, data)
+        t4 = time.time()
+        lstime = t4 - t3 
+        print(" lstime: " + str(lstime) )
+        print("")
+        print("")
 
         if solution2["cost"] < solution["cost"]:
             print("Quick LS -> Improvement: " + str(solution2["cost"]))
@@ -109,7 +112,7 @@ def grasp(data, alpha=None, iterations=None, lstype=None, lsiterations=None):
 
         numiterations -= 1
 
-    print('Quick LS -> Solution cost: ' + str(incumbent["cost"]))
+    print('Incumbent cost: ' + str(incumbent["cost"]))
     
     # Final intensive LS
     print('Intensive LS')

@@ -357,7 +357,7 @@ def initializeCandidates(data):
     # [0 0] or [0 1], [1 0], [1 1] -> recursive or dynamic programming?
     # recursive alg implemented in iterative structure?
 
-    use_mp = False
+    use_mp = True
     candidates = []
 
     if use_mp:
