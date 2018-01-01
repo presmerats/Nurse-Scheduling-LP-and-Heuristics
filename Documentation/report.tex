@@ -1,0 +1,85 @@
+\documentclass[a4paper]{article}
+
+%%%%%%%% CREATE DOCUMENT STRUCTURE %%%%%%%%
+%% Language and font encodings
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+%\usepackage{subfig}
+
+%% Sets page size and margins
+\usepackage[a4paper,top=3cm,bottom=2cm,left=2cm,right=2cm,marginparwidth=1.75cm]{geometry}
+
+%% Useful packages
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage{caption}
+\usepackage{subcaption}
+%\usepackage{sectsty}
+%\usepackage{apacite}
+\usepackage{float}
+\usepackage{titling} 
+\usepackage{blindtext}
+\usepackage[square,sort,comma,numbers]{natbib}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{xcolor}
+\definecolor{darkgreen}{rgb}{0.0, 0.4, 0.0}
+
+%%%%%%%% DOCUMENT %%%%%%%%
+\begin{document}
+
+
+
+%%%% Title Page
+\begin{titlepage}
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} 							% horizontal line and its thickness
+\center 
+ 
+% University
+\textsc{\LARGE Facultat Informàtica de Barcelona}\\[1cm]
+
+% Document info
+\textsc{\Large Algorithmic Methods for Mathematical Modeling}\\[0.2cm]
+\textsc{\large AMMM(MIRI)}\\[1cm] 										% Course Code
+\HRule \\[0.8cm]
+{ \huge \bfseries AMMM Project}\\[0.7cm]								% Assignment
+\HRule \\[2cm]
+\large
+\emph{Authors: }\\
+Adrian Rodriguez Bazaga,\\[0.25cm]
+Pau Rodriguez Esmerats\\[1.5cm]													% Author info
+{\large \today}\\[2.5cm]
+\includegraphics[width=0.4\textwidth]{./img/fib-upc-v2-transparent.png}\\[0.8cm] 	% University logo
+\vfill 
+\end{titlepage}
+
+\tableofcontents
+
+\pagebreak
+
+\section{Introduction}
+\input{./tex/Introduction.tex}
+
+\section{Models}
+\input{./tex/ILPmodel.tex}
+
+\input{./tex/Metaheuristics-grasp.tex}
+
+\input{./tex/Metaheuristics-brkga.tex}
+
+\section{Tests}
+\input{./tex/Instances.tex}
+
+\input{./tex/ILPvsMetaheuristics.tex}
+
+\input{./tex/MetaheuristicsPerformance.tex}
+
+\section{Conclusion}
+\input{./tex/Conclusion.tex}
+
+\end{document}

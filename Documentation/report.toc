@@ -1,0 +1,28 @@
+\select@language {english}
+\contentsline {section}{\numberline {1}Introduction}{2}{section.1}
+\contentsline {section}{\numberline {2}Models}{3}{section.2}
+\contentsline {subsection}{\numberline {2.1} ILP Model }{3}{subsection.2.1}
+\contentsline {subsubsection}{\numberline {2.1.1}Mathematical formulation of the model}{3}{subsubsection.2.1.1}
+\contentsline {paragraph}{ Decision vars }{3}{section*.2}
+\contentsline {paragraph}{ Known instance variables }{3}{section*.3}
+\contentsline {paragraph}{ Objective function }{3}{section*.4}
+\contentsline {paragraph}{ Constraints }{3}{section*.5}
+\contentsline {subsubsection}{\numberline {2.1.2}ILOG script implementation of the ILP model}{4}{subsubsection.2.1.2}
+\contentsline {subsubsection}{\numberline {2.1.3}Testing the ILP model}{4}{subsubsection.2.1.3}
+\contentsline {subsection}{\numberline {2.2}GRASP model}{5}{subsection.2.2}
+\contentsline {subsubsection}{\numberline {2.2.1}GRASP model pseudocode}{5}{subsubsection.2.2.1}
+\contentsline {subsubsection}{\numberline {2.2.2}GRASP model test}{5}{subsubsection.2.2.2}
+\contentsline {subsection}{\numberline {2.3}BRKGA model}{6}{subsection.2.3}
+\contentsline {subsubsection}{\numberline {2.3.1}BRKGA model pseudocode}{6}{subsubsection.2.3.1}
+\contentsline {subsubsection}{\numberline {2.3.2}BRKGA model test}{6}{subsubsection.2.3.2}
+\contentsline {section}{\numberline {3}Tests}{7}{section.3}
+\contentsline {subsection}{\numberline {3.1}Instance generation}{7}{subsection.3.1}
+\contentsline {subsubsection}{\numberline {3.1.1}Instance generation}{7}{subsubsection.3.1.1}
+\contentsline {subsubsection}{\numberline {3.1.2}Medium Set}{7}{subsubsection.3.1.2}
+\contentsline {subsubsection}{\numberline {3.1.3}Large Set}{7}{subsubsection.3.1.3}
+\contentsline {subsection}{\numberline {3.2}Comparison of ILP and Metaheuristics models}{8}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.3}Comparison of GRASP and BRKGA models}{10}{subsection.3.3}
+\contentsline {subsubsection}{\numberline {3.3.1}GRASP parameter selection}{10}{subsubsection.3.3.1}
+\contentsline {subsubsection}{\numberline {3.3.2}BRKGA parameter selection}{10}{subsubsection.3.3.2}
+\contentsline {subsubsection}{\numberline {3.3.3}Metaheuristic models comparision}{10}{subsubsection.3.3.3}
+\contentsline {section}{\numberline {4}Conclusion}{11}{section.4}
