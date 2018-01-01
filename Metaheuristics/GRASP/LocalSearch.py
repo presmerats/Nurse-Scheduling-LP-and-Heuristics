@@ -50,7 +50,7 @@ def exceedingCapacityRemoval(candidate, n, data):
             candidate["w"][n][h] = 0
 
             # validate
-            if isTotallyValid(data, candidate):
+            if complete_solution_validation(data, candidate):
                 if printlog or printlog_electiveCandidates:
                     print("-->valid elimination!  n" + str(n) + " h:" + str(h))
                     pp.pprint(candidate)
@@ -108,7 +108,7 @@ def electiveCandidate(candidate, n, h, data):
         candidate["w"][n][h] = 0
 
         # validate
-        if isTotallyValid(data, candidate):
+        if complete_solution_validation(data, candidate):
             if printlog or \
                printlog_electiveCandidates or \
                printlog_findCandidates:
@@ -153,7 +153,7 @@ def electiveCandidate(candidate, n, h, data):
             candidate["w"][ni][h] = 1
             candidate["w"][n][h] = 0
 
-            if isTotallyValid(data, candidate):
+            if complete_solution_validation(data, candidate):
                 if printlog or printlog_electiveCandidates:
                     print("-->valid exchange!")
                     # pp.pprint(candidate)
@@ -193,7 +193,7 @@ def electiveCandidate(candidate, n, h, data):
             candidate["w"][ni][h] = 1
             candidate["w"][n][h] = 0
 
-            if isTotallyValid(data, candidate):
+            if complete_solution_validation(data, candidate):
                 if printlog or printlog_electiveCandidates:
                     print("-->valid exchange!")
                     # pp.pprint(candidate)

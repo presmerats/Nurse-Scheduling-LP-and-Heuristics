@@ -374,7 +374,7 @@ def complete_solution_validation(data, candidate):
     validity = True
 
     for nurse in range(len(candidate_sol["w"])):
-        validity = validCandidate(candidate_sol, d, nurse)
+        validity = complete_schedule_validation(candidate_sol, d, nurse)
         if not validity:
             return False
 
