@@ -1,6 +1,8 @@
 import pprint
 import logging
 from copy import copy, deepcopy
+import multiprocessing as mp
+import time
 
 from Common.Nurse import *
 
@@ -189,8 +191,7 @@ def buildCandidates_addHourAssignment(data, cand, value):
 
     return None
 
-def buildCandidates(data, l):
-
+def buildCandidates(data):
 
     candidates = []
     # call previous level
@@ -258,6 +259,75 @@ def buildCandidates(data, l):
     return candidates
 
 
+def buildCandidates_mp(data, hini):
+
+    candidates = []
+
+    c1 = Nurse([0]*hini)
+    c1.rest = 1
+    c1.sumW = 0
+    c1.start = -1
+    c1.end = -1
+    c1.consec = 0
+    c1.rest_1 = -1
+    c1.rest_2 = -1
+
+    c2 = Nurse([0]*hini)
+    c2.rest=1
+    c2.sumW=0
+    c2.start=-1
+    c2.end=-1
+    c2.consec=0
+    c2.rest_1=-1
+    c2.rest_2=-1
+
+    # first hour is schedule outside of the loop
+    lastc2 = 0
+    for h in range(hini+1,data["hours"] + 1):
+
+
+        # first the continuous schedule
+        if c1:
+            new_c1 = buildCandidates_addHourAssignment(data, c1, 1)
+            if new_c1 is None:
+                c1.schedule = c1.schedule[:-1]
+                new_c1 = buildCandidates_addHourAssignment(data, c1, 0)
+            c1 = new_c1
+
+        # then the sparse schedule
+        if c2:
+            if lastc2 == 0:
+                new_c2 = buildCandidates_addHourAssignment(data, c2, 1)
+                lastc2 = 1
+                if new_c2 is None:
+                    c2.schedule = c2.schedule[:-1]
+                    new_c2 = buildCandidates_addHourAssignment(data, c2, 0)
+                    lastc2 = 0
+                c2 = new_c2
+
+            else:
+                new_c2 = buildCandidates_addHourAssignment(data, c2, 0)
+                lastc2 = 0
+                if new_c2 is None:
+                    c2.schedule = c2.schedule[:-1]
+                    new_c2 = buildCandidates_addHourAssignment(data, c2, 1)
+                    lastc2 = 1
+                c2 = new_c2
+
+        if c1 is None and c2 is None:
+            break
+
+    if c1:
+        candidates.append(c1)
+    
+    if c2:
+        candidates.append(c2)
+
+    return candidates
+
+
+
+
 def initializeCandidates(data):
     """
         in:
@@ -287,19 +357,46 @@ def initializeCandidates(data):
     # [0 0] or [0 1], [1 0], [1 1] -> recursive or dynamic programming?
     # recursive alg implemented in iterative structure?
 
+    use_mp = False
+    candidates = []
 
-    candidates = buildCandidates(data, data["hours"])
+    if use_mp:
+        cpus = mp.cpu_count() - 1
+        pool = mp.Pool(processes=cpus)
+
+        results = [pool.apply(buildCandidates_mp, args=(data,hini))
+                      for hini in range(data["hours"])]
+
+        # duplicate those elements for each nurse?
+        # or save a counter for each elements and when assigning it, subtract it
+        for i in range(data["nNurses"]):
+            for p in results:
+                for nurse in p:
+                    elements.append(Nurse(nurse.schedule, nurse))
 
 
-    # duplicate those elements for each nurse?
-    # or save a counter for each elements and when assigning it, subtract it
-    for i in range(data["nNurses"]):
-        elements.extend(deepcopy(candidates))
+    else:
+        candidates = buildCandidates(data)
+
+        # duplicate those elements for each nurse?
+        # or save a counter for each elements and when assigning it, subtract it
+        # for i in range(data["nNurses"]):
+        #     elements.extend(deepcopy(candidates))
+
+        # this step is only needed before localsearch! but not here in greedy
+        # copying schedules to avoid modifying one schedule modifies the others
+        # if this is done later, then 
+        for i in range(data["nNurses"]):
+            for nurse in candidates:
+                elements.append(Nurse(nurse.schedule, nurse))
+
 
 
     # print("----------------------------candidates: ")
     # pp.pprint([ e.schedule for e in elements])
     # print("")
+
+
 
     return elements
 

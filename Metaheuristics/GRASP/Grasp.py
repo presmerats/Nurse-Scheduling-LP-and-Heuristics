@@ -54,6 +54,7 @@ def GraspConstructive(data, alpha_param=None):
 
     solution["cost"], solution["totalw"] = computeCost(solution, data)
     print("Solution cost="+ str(solution["cost"]) )
+
     return solution
 
 
@@ -82,8 +83,12 @@ def grasp(data, alpha=None, iterations=None, lstype=None, lsiterations=None):
     incumbent = {}
     
     while numiterations > 0:
+
+        t1 = time.time()
         solution = GraspConstructive(data, alpha)
-        print(time.time())
+        t2 = time.time()
+        greedytime = t2 - t1 
+        print(" greedyconstructive time: " + str(greedytime) )
         print("")
         print("")
         
