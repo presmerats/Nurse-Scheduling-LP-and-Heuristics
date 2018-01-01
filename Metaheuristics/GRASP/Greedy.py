@@ -178,7 +178,7 @@ def isValid(data, candidate):
         
     return validity
 
-def buildCandidates_addCandidate(data, cand, value):
+def buildCandidates_addHourAssignment(data, cand, value):
 
     newlist = cand.schedule
     newlist.append(value)
@@ -220,29 +220,29 @@ def buildCandidates(data, l):
 
             # first the continuous schedule
             if c1:
-                new_c1 = buildCandidates_addCandidate(data, c1, 1)
+                new_c1 = buildCandidates_addHourAssignment(data, c1, 1)
                 if new_c1 is None:
                     c1.schedule = c1.schedule[:-1]
-                    new_c1 = buildCandidates_addCandidate(data, c1, 0)
+                    new_c1 = buildCandidates_addHourAssignment(data, c1, 0)
                 c1 = new_c1
 
             # then the sparse schedule
             if c2:
                 if lastc2 == 0:
-                    new_c2 = buildCandidates_addCandidate(data, c2, 1)
+                    new_c2 = buildCandidates_addHourAssignment(data, c2, 1)
                     lastc2 = 1
                     if new_c2 is None:
                         c2.schedule = c2.schedule[:-1]
-                        new_c2 = buildCandidates_addCandidate(data, c2, 0)
+                        new_c2 = buildCandidates_addHourAssignment(data, c2, 0)
                         lastc2 = 0
                     c2 = new_c2
 
                 else:
-                    new_c2 = buildCandidates_addCandidate(data, c2, 0)
+                    new_c2 = buildCandidates_addHourAssignment(data, c2, 0)
                     lastc2 = 0
                     if new_c2 is None:
                         c2.schedule = c2.schedule[:-1]
-                        new_c2 = buildCandidates_addCandidate(data, c2, 1)
+                        new_c2 = buildCandidates_addHourAssignment(data, c2, 1)
                         lastc2 = 1
                     c2 = new_c2
 
