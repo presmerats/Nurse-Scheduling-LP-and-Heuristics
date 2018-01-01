@@ -20,6 +20,7 @@ from Greedy import *
 from LocalSearch import *
 from Grasp import *
 from BRKGA_main import *
+from Common.NurseSchedulingProblem import *
 
 
 
@@ -157,7 +158,7 @@ def run(instancepath, solverType,
     solveTime = t2 - t1
 
     # Final check
-    valid_feasible = isTotallyValid(data, solution)
+    valid_feasible = complete_solution_validation(data, solution)
     if valid_feasible:
         valid_feasible = isFeasible(solution, data)
     print("Is the solution Valid and Feasible? = " + str(valid_feasible) )

@@ -8,8 +8,7 @@ pp = pprint.PrettyPrinter(indent=2)
 parentPath = os.path.abspath("../GRASP")
 if parentPath not in sys.path:
     sys.path.insert(0, parentPath)
-from LocalSearch import validCandidate
-from LocalSearch import incrementalValidCandidate
+from Common.NurseSchedulingProblem import *
 from Greedy import isFeasible
 
 
@@ -37,7 +36,7 @@ def checkIfCanWork(solution, h, n, data, sumW, hini=None):
         verify_minHours=True
 
     # verify max rest constraint if not working
-    rest_check, maxPresence_check, maxConsec_check, maxHours_check, minHours_check = validCandidate(solution, data, n, verify_minHours=verify_minHours, whattoreturn='All')
+    rest_check, maxPresence_check, maxConsec_check, maxHours_check, minHours_check = complete_schedule_validation(solution, data, n, verify_minHours=verify_minHours, whattoreturn='All')
 
     # undo changes, just a verification
     w[n][h] = aux
@@ -69,7 +68,7 @@ def checkIfMustWork(solution, h, n, data, sumW, canWork_check, hini=None):
         verify_minHours = True
 
     # verify max rest constraint if not working
-    rest_check, maxPresence_check, maxConsec_check, maxHours_check, minHours_check = incrementalValidCandidate(solution, data, n, verify_minHours=verify_minHours, whattoreturn='All', force_rest_check=False, set_end=h)
+    rest_check, maxPresence_check, maxConsec_check, maxHours_check, minHours_check = incremental_schedule_validation(solution, data, n, verify_minHours=verify_minHours, whattoreturn='All', force_rest_check=False, set_end=h)
 
     # undo changes, just a verification
     w[n][h] = aux
