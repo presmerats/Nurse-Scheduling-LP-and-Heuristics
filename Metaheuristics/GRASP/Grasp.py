@@ -80,7 +80,7 @@ def grasp(data, alpha=None, iterations=None, lstype=None, lsiterations=None):
         ls = lstype
 
     solution = []
-    incumbent = {}
+    incumbent = GraspConstructive(data, 0)
     
     while numiterations > 0:
 
