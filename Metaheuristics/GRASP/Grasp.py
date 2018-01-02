@@ -81,32 +81,35 @@ def grasp(data, alpha=None, iterations=None, lstype=None, lsiterations=None):
 
     solution = []
     incumbent = GraspConstructive(data, 0)
+    solution = firstImprovementLocalSearch_mp(incumbent, data)
+    if solution["cost"] < incumbent["cost"]:
+        incumbent = solution
     
     while numiterations > 0:
 
-        t1 = time.time()
+        # t1 = time.time()
         solution = GraspConstructive(data, alpha)
-        t2 = time.time()
-        greedytime = t2 - t1 
-        print("|")
-        print("-->greedyconstructive time: " + str(greedytime) )
+        # t2 = time.time()
+        # greedytime = t2 - t1
+        # print("|")
+        # print("-->greedyconstructive time: " + str(greedytime) )
 
-        t3 = time.time()
+        # t3 = time.time()
         solution2 = firstImprovementLocalSearch_mp(solution, data)
-        t4 = time.time()
-        lstime = t4 - t3 
-        print("|")
-        print("-->lstime: " + str(lstime) )
-        print("")
+        # t4 = time.time()
+        # lstime = t4 - t3
+        # print("|")
+        # print("-->lstime: " + str(lstime) )
+        # print("")
 
         if solution2["cost"] < solution["cost"]:
             print("Quick LS -> Improvement: " + str(solution2["cost"]))
             solution = solution2
-            incumbent = solution2
 
-        if len(incumbent.keys())==0:
+        if len(incumbent.keys()) == 0:
             incumbent = solution
-
+        elif solution["cost"] < incumbent["cost"]:
+            incumbent = solution
 
         numiterations -= 1
 
@@ -114,18 +117,18 @@ def grasp(data, alpha=None, iterations=None, lstype=None, lsiterations=None):
     
     # Final intensive LS
     print('Intensive LS')
-    t5 = time.time()
+    # t5 = time.time()
     solution2 = []
     if ls == "first":
         solution2 = firstImprovementLocalSearch_intensive(incumbent, maxFailed, data)
     else:
         solution2 = bestImprovementLocalSearch_complex(incumbent, data)        
     incumbent = solution2
-    t6 = time.time()
-    flstime = t6 - t5 
-    print("|")
-    print("-->flstime: " + str(flstime) )
-    print("")
+    # t6 = time.time()
+    # flstime = t6 - t5 
+    # print("|")
+    # print("-->flstime: " + str(flstime) )
+    # print("")
 
     print('Final solution')
     print(incumbent)
