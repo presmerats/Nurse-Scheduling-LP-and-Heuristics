@@ -4,6 +4,7 @@ import pprint
 import time
 from math import *
 pp = pprint.PrettyPrinter(indent=2)
+import multiprocessing as mp
 
 parentPath = os.path.abspath("../GRASP")
 if parentPath not in sys.path:
@@ -96,6 +97,130 @@ def checkIfMustWork(solution, h, n, data, sumW, canWork_check, hini=None):
         return canWork_check
 
     return False
+
+
+
+def computeAssignments_mp_aux(solution, h, n, data, sumW, hini):
+
+    # canWork Check-------------------------------
+    mustWork_check = False
+    canWork_check = checkIfCanWork(solution, h, n, data, sumW, hini)
+    if canWork_check:
+       
+        # mustWork Check-------------------------------
+        # avoid repeating canWork_check
+        mustWork_check = checkIfMustWork(solution, h, n, data, sumW, canWork_check, hini)
+
+    return (mustWork_check, canWork_check)
+
+def computeAssignments_mp(solution, h, data, sumW, hini=None):
+    """
+        for each nurse,
+            if hini != None and h>hini[n] and z[n]==0 -> that nurse cannot work
+            compute which nurses must work at time h to be valid
+            compute which nurses can work at time h and still be valid
+
+    """
+    minHours = data["minHours"]
+    hours = data["hours"]
+    z = solution["z"]
+    w = solution["w"]
+
+    mustWork = []
+    canWork = []
+
+    # sort nurses, first by those who work
+    sorted_nurses = sorted(range(data["nNurses"]), key=lambda n: solution["z"][n], reverse=True)
+    # print(solution["z"])
+    # print(sorted_nurses)
+    # print("")
+
+    pool = mp.Pool(processes=mp.cpu_count())
+    mustWork_canWork = [pool.apply(computeAssignments_mp_aux, args=(solution, h, n, data, sumW, hini)) for n in sorted_nurses] 
+
+    return mustWork_canWork
+
+
+
+def assignNurses_mp(solution, hini, data):
+
+    """
+        hini is used to add extra nurses at each hour
+            hini[h]=0.2 -> means we add 0.1*demand[h] in terms of nurse assigments
+
+    """
+
+    demand = data["demand"]
+    pending = solution["pending"]
+    hours = data["hours"]
+    sumW = [0] * data["nNurses"]
+
+    z = solution["z"]
+    w = solution["w"]
+
+    for h in range(hours):
+
+        # for each hour
+
+        # compute valid candidates
+        #  those who must be assigned (rest constraint)
+        #  those who can be assigned to work
+        #  if h>hini and z[n]== 0 , that nurse cannot work
+        mustWork_canWork = computeAssignments_mp(solution, h, data, sumW)
+
+        # print("h=" + str(h))
+        # print("mustWork")
+        # print(mustWork)
+        # print("canWork")
+        # print(canWork)
+        # print("hini:")
+        # print(hini)
+        # print("demand")
+        # print(data["demand"])
+        # print("pending")
+        # print(solution["pending"])
+
+  
+        #   try to assign if pending[h] > 0 and h >= hini[n]
+        for n in range(len(mustWork_canWork)):
+            if mustWork_canWork[n][0]:
+                # print("nurse :" + str(n) + "  h: " + str(h) + " pending: ")
+                # print(pending)
+                w[n][h] = 1
+                sumW[n] += 1
+                pending[h] -= 1
+                if z[n] == 0:
+                    z[n] = 1
+                    solution["cost"] += 1
+                #print("w[" + str(n) + "," + str(h) + "] = 1")
+                # pp.pprint(solution["w"])
+
+
+
+        for n in range(len(mustWork_canWork)):
+            if not mustWork_canWork[n][0] and mustWork_canWork[n][1]:
+                # print("nurse :" + str(n) + "  h: " + str(h) + " pending: ")
+                # print(pending)
+                if pending[h] + hini[h] > 0:    
+                    w[n][h] = 1
+                    sumW[n] += 1
+                    pending[h] -= 1
+                    if z[n] == 0:
+                        z[n] = 1
+                        solution["cost"] += 1
+                    #print("w[" + str(n) + "," + str(h) + "] = 1")
+                # print("w[" + str(n) + "]")
+                # pp.pprint(solution["w"])
+
+    # pp.pprint(data)
+    # pp.pprint(solution["cost"])
+    # exit()
+
+
+    # compute feasibility: if unfeasible -> fitness should be inf
+    if not isFeasible(solution, data):
+        # assign the max cost
+        solution["cost"] = 200000 * data["nNurses"]
 
 
 def computeAssignments(solution, h, data, sumW, hini=None):
@@ -220,6 +345,24 @@ def assignNurses(solution, hini, data):
         solution["cost"] = 200000 * data["nNurses"]
 
 
+def decode_hexcess_mp_aux(ind, n):
+    # option 2f
+    hi = 0
+    if ind < 0.2:
+        therange = ceil(0.8 * n)
+        hi = int(therange * ind)
+
+    return hi
+
+
+def decode_hexcess_mp(ind, data):
+
+    print(len(ind["chr"]))
+    pool = mp.Pool(processes=1)
+    hini = [pool.apply(decode_hexcess_mp_aux, args=(ind['chr'][i], data["nNurses"])) for i in range((len(ind['chr'])) )  ]
+
+    return hini
+
 
 def decode_hexcess(ind, data):
     hini = []
@@ -255,7 +398,7 @@ def diversity(population):
     return len(s)
 
 
-def decode(population, data):
+def decode_normal(population, data):
     """
         # diversify by excees of assignments per hour
 
@@ -263,7 +406,11 @@ def decode(population, data):
 
     for ind in population:
 
-        hini = decode_hexcess(ind, data)
+        #  decode_hexcess 65.8s
+        # hini = decode_hexcess(ind, data)
+        # decode_hexcess_mp 
+        hini = decode_hexcess_mp(ind, data)
+
 
         # 2) assign work hours to nurses
         solution = {
@@ -277,6 +424,7 @@ def decode(population, data):
         }
 
         assignNurses(solution, hini, data)
+        #assignNurses_mp(solution, hini, data)
 
         ind['solution'] = solution
 
@@ -312,6 +460,9 @@ def decode_mp_aux(population, data, ind):
 def decode_mp(population, data):
     """
         # diversify by excees of assignments per hour
+
+        decode_normal with 0035-i-ng   -> 64.81s
+        decode_mp     with 0035-i-ng   -> 135.69 
     """
     pool = mp.Pool(processes=mp.cpu_count())
     population_w_cost = [pool.apply(decode_mp_aux,
@@ -322,5 +473,12 @@ def decode_mp(population, data):
     return(population_w_cost)
 
 
+def decode(population, data):
+
+    return decode_normal(population, data)
+    #return decode_mp(population, data)
+
 def getChrLength(data):
     return int(data["hours"])
+
+
