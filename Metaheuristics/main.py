@@ -148,7 +148,8 @@ def run(instancepath, solverType,
                              eliteprop=brkga_eliteprop,
                              mutantprop=brkga_mutantprop,
                              population=brkga_population,
-                             inheritance=brkga_inheritance)
+                             inheritance=brkga_inheritance,
+                             decoder=brkga_decoder)
     
     else:
         print('You need to define a solving method: grasp or brkga')

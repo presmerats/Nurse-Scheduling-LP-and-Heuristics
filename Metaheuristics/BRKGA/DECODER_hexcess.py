@@ -407,9 +407,9 @@ def decode_normal(population, data):
     for ind in population:
 
         #  decode_hexcess 65.8s
-        # hini = decode_hexcess(ind, data)
+        hini = decode_hexcess(ind, data)
         # decode_hexcess_mp 
-        hini = decode_hexcess_mp(ind, data)
+        # hini = decode_hexcess_mp(ind, data)
 
 
         # 2) assign work hours to nurses
@@ -463,6 +463,9 @@ def decode_mp(population, data):
 
         decode_normal with 0035-i-ng   -> 64.81s
         decode_mp     with 0035-i-ng   -> 135.69 
+
+        0619-i-ng    decode_mp -> 
+        0619-i-ng    decode_normal ->
     """
     pool = mp.Pool(processes=mp.cpu_count())
     population_w_cost = [pool.apply(decode_mp_aux,
