@@ -59,7 +59,7 @@ def writeLog(instancepath,
              solveTime,
              solution,
              data,
-             results_path='../../Results/Final/',
+             results_path='/home/abazaga/Desktop/AMMM-Proj/AMMM-Project/Results/Final/',
              alpha=None,
              iterations=None,
              lstype=None,
@@ -108,6 +108,8 @@ def writeLog(instancepath,
     logpath = os.path.join(results_path, instance_name)
 
     with open(logpath,'w+') as logfile:
+        print('wtf')
+        print(logpath)
         json.dump(results_list, logfile)
         print("written result to: " + logpath )
 
