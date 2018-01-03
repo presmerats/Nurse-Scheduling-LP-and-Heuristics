@@ -45,10 +45,11 @@ def GraspConstructive(data, alpha_param=None):
         #print("GRASP: selected element with cost " + str(e.gc) + " left: " + str(len(elements)))
         solution = addElement(solution, e, data)
 
+        #print(" last added " + str(solution["last_added"]) + " len(solution['w']" +str(len(solution['w']) ))
 
         if isFeasible(solution, data):
             break
-        elif solution["last_added"] == len(solution["w"]):
+        elif solution["last_added"] > len(solution["w"]) - 2:
             break
 
 
@@ -84,7 +85,8 @@ def grasp(data, alpha=None, iterations=None, lstype=None, lsiterations=None):
 
     solution = []
     incumbent = GraspConstructive(data, 0)
-    solution = firstImprovementLocalSearch_mp(incumbent, data)
+    #solution = firstImprovementLocalSearch_mp(incumbent, data)
+    solution = firstImprovementLocalSearch(incumbent, data)
     if solution["cost"] < incumbent["cost"]:
         incumbent = solution
     
