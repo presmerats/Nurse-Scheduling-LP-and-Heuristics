@@ -105,6 +105,10 @@ def writeLog(instancepath,
             + '-i' + str(inheritance) \
             + '.json'
 
+    if not os.path.exists(results_path):
+        # create dir
+        os.makedrs(results_path)
+
     logpath = os.path.join(results_path, instance_name)
 
     with open(logpath,'w+') as logfile:

@@ -50,8 +50,10 @@ import shutil
 import re
 from pathlib import Path, PurePath
 import argparse
+import time
+from launcher import *
 
-
+demo = True
 
                 
 
@@ -90,20 +92,25 @@ class Execution:
 def update_instance_list_aux(folder, filename, listname, status_list, listtype):
 
     status_list[listname] = []
+    
+    try:
+        with open(os.path.join(folder,filename), 'r+') as f:
+            current_list = []
 
-    with open(os.path.join(folder,filename), 'r') as f:
-        current_list = []
+            for line in f:
+                if line.endswith('\n'):
+                    line = line[:-1]
+                if listtype == "list":
+                    current_list.append(line)
+                elif listtype == "dict":
+                    linesplit = line.split(",")
+                    current_list.append([linesplit[0], linesplit[1]]) 
 
-        for line in f:
-            if line.endswith('\n'):
-                line = line[:-1]
-            if listtype == "list":
-                current_list.append(line)
-            elif listtype == "dict":
-                linesplit = line.split(",")
-                current_list.append([linesplit[0], linesplit[1]]) 
+            status_list[listname] = current_list
+    except:
+        pass
 
-        status_list[listname] = current_list
+ 
 
 def update_instance_list(folder):
     """
@@ -133,8 +140,8 @@ def update_instance_list(folder):
 
     update_instance_list_aux(
         folder=folder,
-        filename='done_alphas.txt',
-        listname="alphas",
+        filename='done_alpha.txt',
+        listname="alpha",
         status_list=status_list,
         listtype="list"
         )
@@ -149,8 +156,8 @@ def update_instance_list(folder):
 
     update_instance_list_aux(
         folder=folder,
-        filename='done_maxiters.txt',
-        listname="maxiters",
+        filename='done_maxiter.txt',
+        listname="maxiter",
         status_list=status_list,
         listtype="list"
         )
@@ -164,8 +171,8 @@ def update_instance_list(folder):
 
     update_instance_list_aux(
         folder=folder,
-        filename='done_lstypes.txt',
-        listname="lstypes",
+        filename='done_lstype.txt',
+        listname="lstype",
         status_list=status_list,
         listtype="list"
         )
@@ -179,8 +186,8 @@ def update_instance_list(folder):
 
     update_instance_list_aux(
         folder=folder,
-        filename='done_lsiterations.txt',
-        listname="lsiterations",
+        filename='done_lsiteration.txt',
+        listname="lsiteration",
         status_list=status_list,
         listtype="list"
         )
@@ -194,8 +201,8 @@ def update_instance_list(folder):
 
     update_instance_list_aux(
         folder=folder,
-        filename='done_generations.txt',
-        listname="generations",
+        filename='done_generation.txt',
+        listname="generation",
         status_list=status_list,
         listtype="list"
         )
@@ -210,8 +217,8 @@ def update_instance_list(folder):
 
     update_instance_list_aux(
         folder=folder,
-        filename='done_eliteprops.txt',
-        listname="eliteprops",
+        filename='done_eliteprop.txt',
+        listname="eliteprop",
         status_list=status_list,
         listtype="list"
         )
@@ -226,8 +233,8 @@ def update_instance_list(folder):
 
     update_instance_list_aux(
         folder=folder,
-        filename='done_mutantprops.txt',
-        listname="mutantprops",
+        filename='done_mutantprop.txt',
+        listname="mutantprop",
         status_list=status_list,
         listtype="list"
         )
@@ -242,8 +249,8 @@ def update_instance_list(folder):
 
     update_instance_list_aux(
         folder=folder,
-        filename='done_inheritances.txt',
-        listname="inheritances",
+        filename='done_inheritance.txt',
+        listname="inheritance",
         status_list=status_list,
         listtype="list"
         )
@@ -258,8 +265,8 @@ def update_instance_list(folder):
 
     update_instance_list_aux(
         folder=folder,
-        filename='done_populations.txt',
-        listname="populations",
+        filename='done_population.txt',
+        listname="population",
         status_list=status_list,
         listtype="list"
         )
@@ -272,10 +279,13 @@ def update_instance_list(folder):
         listtype="dict"
         )
 
+    return status_list
 
-def done(instance, status_list, param, paramvalue = None):
+
+def done(instance, status_list, param, paramvalue=None):
 
     if paramvalue is None:
+
         return instance in status_list[param]
     else:
         for elemdone in status_list[param]:
@@ -290,7 +300,7 @@ def makeRunInstance(instance,
         solver,
         params,
         selected_param,
-        param_value)
+        param_value):
 
     """
         results folders:
@@ -302,7 +312,12 @@ def makeRunInstance(instance,
                     ...
 
     """
-    
+    global demo 
+    if demo:
+        time.sleep(0.5)
+        return True
+
+
     resultsfolder = os.path.join(
         '../../Results/Final/LargeSet',
         selected_param)
@@ -335,31 +350,98 @@ def makeRunInstance(instance,
             brkga_inheritance=None,
             brkga_decoder=None)
 
-    runInstance(
+    return runInstance(
         instancepath=instance,
         results_folder=resultsfolder,
         instanceType='all',
         solverType=solver,
         args=args
         )
-    
 
 
 def update_partial_results_lists(
     progress_files_folder,
     instance,
-    "alphas",
+    parameter,
     alpha):
-    pass
+
+    """
+        done_alpha_current_instance.txt
+                instance_path1 , alpha1
+                instance_path1 , alpha2
+
+
+        update_instance_list_aux(
+            folder=folder,
+            filename='done_alpha_current_instance.txt',
+            listname="current_alpha",
+            status_list=status_list,
+            listtype="dict"
+            )
+    """
+
+    filename = "done_" + str(parameter)  + "_current_instance.txt"
+    with open(os.path.join(progress_files_folder, filename), 'a+') as f:
+        f.write(instance + "," + str(alpha) + "\n")
+
 
 
 def update_results_list(
     progress_files_folder,
     instance,
-    "alphas"):
-    pass
+    parameter):
+    
+    # update progress list
+
+    filename = "done_" + str(parameter)  + ".txt"
+    with open(os.path.join(progress_files_folder, filename), 'a+') as f:
+        f.write(instance + "\n")
+
+    # wipe current instance progress list
+    filename = "done_" + str(parameter)  + "_current_instance.txt"
+    with open(os.path.join(progress_files_folder, filename), 'w+') as f:
+        f.write("")
 
 
+def parameter_executions_loop(
+    instance,
+    status_list,
+    parameter_name,
+    parameter_values_list,
+    parameter_solver,
+    solver_basic_params,
+    progress_files_folder):
+
+    if not done(instance, status_list, parameter_name):
+        for param_value in parameter_values_list:
+            if not done(instance, status_list, "current_" + str(parameter_name), param_value):
+                success = makeRunInstance(
+                    instance=instance,
+                    solver=parameter_solver,
+                    params=solver_basic_params,
+                    selected_param=parameter_name,
+                    param_value=param_value
+                )
+                if success:
+                    # updates done_current_alpha.txt
+                    # -> has current instance and done alphas
+                    update_partial_results_lists(
+                        progress_files_folder,
+                        instance,
+                        parameter_name,
+                        param_value)
+                else:
+                    print("Error running " + str(instance) +
+                          " for param " + parameter_name +
+                          "=" + param_value +
+                          " solver " + parameter_solver)
+
+        # updates done_alphas.txt
+        # -> has each instance done with all alphas
+        update_results_list(
+            progress_files_folder,
+            instance,
+            parameter_name)
 
 
 if __name__ == '__main__':
@@ -368,8 +450,14 @@ if __name__ == '__main__':
     parser.add_argument(
         "folder",
         help="instances folder where to read instances files from")
+    parser.add_argument(
+        "--demo",
+        help="demo mode", action='store_true')
     args = parser.parse_args()
     instances_folder = args.folder
+
+
+    demo = args.demo
 
     if not os.path.exists(instances_folder):
         print("check folder paths!")
@@ -401,7 +489,7 @@ if __name__ == '__main__':
     generations = range(1,10)
     eliteprops = [0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.6, 0.7, 0.8, 0.9]
     mutantprops = [0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.6, 0.7, 0.8, 0.9]
-    inheritances = range(0, 1, 0.1)
+    inheritances = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.75, 0.8, 0.85, 0.9]
     populations = range(1,6)
     decoder = "hexcess"
 
@@ -414,33 +502,84 @@ if __name__ == '__main__':
             try:
 
                 instance = os.path.join(root,inst)
-
                 status_list = update_instance_list(progress_files_folder)
-                if not done(instance, status_list, "alphas"):
-                    for alpha in alphas:
-                        if not done(instance, status_list, "current_alpha", alpha):
-                            success = makeRunInstance(
-                                instance=instance,
-                                solver="grasp",
-                                params=basic_params_grasp,
-                                selected_param="alpha",
-                                param_value=alpha
-                                )
-                            if success:
-                                # updates done_current_alpha.txt 
-                                # -> has current instance and done alphas
-                                update_partial_results_lists(
-                                    progress_files_folder,
-                                    instance,
-                                    "alphas",
-                                    alpha)
 
-                    # updates done_alphas.txt
-                    # -> has each instance done with all alphas
-                    update_results_list(
-                        progress_files_folder,
-                        instance,
-                        "alphas")
+                parameter_executions_loop(
+                    instance,
+                    status_list,
+                    parameter_name="alpha",
+                    parameter_values_list=alphas,
+                    parameter_solver="grasp",
+                    solver_basic_params=basic_params_grasp,
+                    progress_files_folder=progress_files_folder)
+
+                parameter_executions_loop(
+                    instance,
+                    status_list,
+                    parameter_name="maxiter",
+                    parameter_values_list=maxiters,
+                    parameter_solver="grasp",
+                    solver_basic_params=basic_params_grasp,
+                    progress_files_folder=progress_files_folder)
+
+                parameter_executions_loop(
+                    instance,
+                    status_list,
+                    parameter_name="lsiteration",
+                    parameter_values_list=lsiterations,
+                    parameter_solver="grasp",
+                    solver_basic_params=basic_params_grasp,
+                    progress_files_folder=progress_files_folder)
+
+                parameter_executions_loop(
+                    instance,
+                    status_list,
+                    parameter_name="generation",
+                    parameter_values_list=generations,
+                    parameter_solver="brkga",
+                    solver_basic_params=basic_params_brkga,
+                    progress_files_folder=progress_files_folder)
+
+
+                parameter_executions_loop(
+                    instance,
+                    status_list,
+                    parameter_name="eliteprop",
+                    parameter_values_list=eliteprops,
+                    parameter_solver="brkga",
+                    solver_basic_params=basic_params_brkga,
+                    progress_files_folder=progress_files_folder)
+
+
+                parameter_executions_loop(
+                    instance,
+                    status_list,
+                    parameter_name="mutantprop",
+                    parameter_values_list=mutantprops,
+                    parameter_solver="brkga",
+                    solver_basic_params=basic_params_brkga,
+                    progress_files_folder=progress_files_folder)
+
+
+                parameter_executions_loop(
+                    instance,
+                    status_list,
+                    parameter_name="inheritance",
+                    parameter_values_list=inheritances,
+                    parameter_solver="brkga",
+                    solver_basic_params=basic_params_brkga,
+                    progress_files_folder=progress_files_folder)
+
+
+                parameter_executions_loop(
+                    instance,
+                    status_list,
+                    parameter_name="population",
+                    parameter_values_list=populations,
+                    parameter_solver="brkga",
+                    solver_basic_params=basic_params_brkga,
+                    progress_files_folder=progress_files_folder)
+
 
             except Exception:
                 all_ok = False

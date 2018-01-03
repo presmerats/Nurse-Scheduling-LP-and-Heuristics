@@ -136,7 +136,7 @@ def runInstance(instancepath,
 
         if instanceType != 'all':
             if not acceptInstance(instance):
-                continue
+                return False
             
         if solverType not in ('ILP', 'grasp', 'brkga'):
             print('You need to define a solving method: grasp or brkga')
