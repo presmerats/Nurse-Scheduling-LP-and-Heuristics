@@ -239,10 +239,13 @@ def initializeCandidates(data):
         # this step is only needed before localsearch! but not here in greedy
         # copying schedules to avoid modifying one schedule modifies the others
         # if this is done later, then 
-        for i in range(data["nNurses"]):
-            for nurse in candidates:
-                elements.append(Nurse(nurse.schedule, nurse))
+        # for i in range(data["nNurses"]):
+        #     for nurse in candidates:
+        #         elements.append(Nurse(nurse.schedule, nurse))
 
+        #improvement 20180103
+        for nurse in candidates:
+            elements.append(Nurse(nurse.schedule, nurse))
 
 
     # print("----------------------------candidates: ")
