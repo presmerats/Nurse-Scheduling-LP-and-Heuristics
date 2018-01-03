@@ -4,7 +4,7 @@ import pprint
 import time
 from math import *
 pp = pprint.PrettyPrinter(indent=2)
-import multiprocessing as mp
+
 
 parentPath = os.path.abspath("../GRASP")
 if parentPath not in sys.path:

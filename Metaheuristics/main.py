@@ -8,7 +8,7 @@ import sys
 import os
 import json
 import cProfile
-
+import traceback
 
 parentPath = os.path.abspath("./GRASP")
 if parentPath not in sys.path:
@@ -107,7 +107,7 @@ def writeLog(instancepath,
 
     if not os.path.exists(results_path):
         # create dir
-        os.makedrs(results_path)
+        os.makedirs(results_path)
 
     logpath = os.path.join(results_path, instance_name)
 

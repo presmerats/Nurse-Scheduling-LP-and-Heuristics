@@ -319,7 +319,7 @@ def makeRunInstance(instance,
 
 
     resultsfolder = os.path.join(
-        '../../Results/Final/LargeSet',
+        '../../Results/Final/LargeSet_20180103',
         selected_param)
 
     # parameteres
@@ -433,8 +433,8 @@ def parameter_executions_loop(
                 else:
                     print("Error running " + str(instance) +
                           " for param " + parameter_name +
-                          "=" + param_value +
-                          " solver " + parameter_solver)
+                          "=" + str(param_value) +
+                          " solver " + str(parameter_solver))
 
         # updates done_alphas.txt
         # -> has each instance done with all alphas

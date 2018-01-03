@@ -95,7 +95,7 @@ def grasp(data, alpha=None, iterations=None, lstype=None, lsiterations=None):
         # print("-->greedyconstructive time: " + str(greedytime) )
 
         # t3 = time.time()
-        solution2 = firstImprovementLocalSearch_mp(solution, data)
+        solution2 = firstImprovementLocalSearch(solution, data)
         # t4 = time.time()
         # lstime = t4 - t3
         # print("|")
