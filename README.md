@@ -64,6 +64,22 @@ BRKGA parameters:
 `
 python launcher.py --solver brkga --generations 1 --eliteprop 0.3 --mutantprop 0.2 --population 2 --inheritance 0.1 --decoder <hini,horder,hexcess>
 `
+### Larget Set (parameter validation)
+
+Quick demo of the files and dirs created in ../../Results/Final/LargeSet_20180103/. It does not execute any solver, just time.sleep(0.5)
+`
+cd Tools/Launcher
+python megalauncher.py --demo ../../Instances/Final/LargeSet
+`
+
+
+Real execution
+`
+cd Tools/Launcher
+python megalauncher.py ../../Instances/Final/LargeSet
+`
+See results in ../../Results/Final/LargeSet_20180103/
+See progress files in ../../Results/Progress/
 
 
 ### Other options
