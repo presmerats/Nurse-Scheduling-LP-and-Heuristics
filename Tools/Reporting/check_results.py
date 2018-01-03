@@ -70,7 +70,7 @@ def initResultsFile():
 
     filepath = os.path.abspath('../../Results/check/checked_list' +
           '{0:%Y%m%d_%H-%M-%S}'.format(datetime.now()) +
-          '.txt')
+          '.csv')
 
     with open(filepath, 'w+') as f:
         f.write("")
