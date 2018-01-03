@@ -339,16 +339,16 @@ def makeRunInstance(instance,
 
     else:
         args = Execution(
-            grasp_alpha=params["alpha"],
-            grasp_iterations=params["maxiter"],
-            grasp_lstype=params["lstype"],
-            grasp_lsiterations=params["lsiterations"],
-            brkga_generations=None,
-            brkga_eliteprop=None,
-            brkga_mutantprop=None,
-            brkga_population=None,
-            brkga_inheritance=None,
-            brkga_decoder=None)
+            grasp_alpha=None,
+            grasp_iterations=None,
+            grasp_lstype=None,
+            grasp_lsiterations=None,
+            brkga_generations=params["generations"],
+            brkga_eliteprop=params["eliteprop"],
+            brkga_mutantprop=params["mutantprop"],
+            brkga_population=params["population"],
+            brkga_inheritance=params["inheritance"],
+            brkga_decoder=params["decoder"])
 
     return runInstance(
         instancepath=instance,
