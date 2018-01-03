@@ -7,7 +7,7 @@ from LocalSearch import *
 def GraspConstructive(data, alpha_param=None):
 
     alpha = 0.5
-    if alpha_param:
+    if alpha_param is not None:
         alpha = alpha_param
 
     # initialize solution and cost
@@ -131,6 +131,6 @@ def grasp(data, alpha=None, iterations=None, lstype=None, lsiterations=None):
     # print("")
 
     print('Final solution')
-    print(incumbent)
+    #print(incumbent)
     print(incumbent["cost"])
     return incumbent
