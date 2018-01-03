@@ -3,6 +3,7 @@ import logging
 from copy import copy, deepcopy
 import multiprocessing as mp
 import time
+from random import random
 
 from Common.Nurse import *
 from Common.NurseSchedulingProblem import *
@@ -67,8 +68,37 @@ def buildCandidates(data):
         c2.rest_1=-1
         c2.rest_2=-1
 
+        c3 = Nurse([0]*hini)
+        c3.rest=1
+        c3.sumW=0
+        c3.start=-1
+        c3.end=-1
+        c3.consec=0
+        c3.rest_1=-1
+        c3.rest_2=-1
+
+        c4 = Nurse([0]*hini)
+        c4.rest=1
+        c4.sumW=0
+        c4.start=-1
+        c4.end=-1
+        c4.consec=0
+        c4.rest_1=-1
+        c4.rest_2=-1
+
+        c5 = Nurse([0]*hini)
+        c5.rest=1
+        c5.sumW=0
+        c5.start=-1
+        c5.end=-1
+        c5.consec=0
+        c5.rest_1=-1
+        c5.rest_2=-1
+
         # first hour is schedule outside of the loop
         lastc2 = 0
+        counter = 1
+        
         for h in range(hini+1,data["hours"] + 1):
 
 
@@ -100,7 +130,77 @@ def buildCandidates(data):
                         lastc2 = 1
                     c2 = new_c2
 
-            if c1 is None and c2 is None:
+            # then a randomized one
+            if c3:
+                #randc3 = random() > 0.3
+                # now randc3 uses a modulo condition
+                randc3 = counter % 5 != 0 
+                if randc3:
+                    new_c3 = buildCandidates_addHourAssignment(data, c3, 1)
+                    #c3counter += 1
+                    if new_c3 is None:
+                        c3.schedule = c3.schedule[:-1]
+                        new_c3 = buildCandidates_addHourAssignment(data, c3, 0)
+                    
+                    c3 = new_c3
+
+                else:
+                    new_c3 = buildCandidates_addHourAssignment(data, c3, 0)
+                    
+                    if new_c3 is None:
+                        c3.schedule = c3.schedule[:-1]
+                        new_c3 = buildCandidates_addHourAssignment(data, c3, 1)
+                        #c3counter += 1
+                    c3 = new_c3
+
+                counter += 1
+
+            # then a second randomized one
+            if c4:
+                # randc4 = random() <= 0.3
+                # now randc3 uses a modulo condition
+                randc4 = counter % 8 != 0 
+                if randc4:
+                    new_c4 = buildCandidates_addHourAssignment(data, c4, 1)
+                    if new_c4 is None:
+                        c4.schedule = c4.schedule[:-1]
+                        new_c4 = buildCandidates_addHourAssignment(data, c4, 0)
+                    c4 = new_c4
+
+                else:
+                    new_c4 = buildCandidates_addHourAssignment(data, c4, 0)
+                    
+                    if new_c4 is None:
+                        c4.schedule = c4.schedule[:-1]
+                        new_c4 = buildCandidates_addHourAssignment(data, c4, 1)
+                        
+                    c4 = new_c4
+
+                counter += 1
+
+            if c5:
+                # randc4 = random() <= 0.3
+                # now randc3 uses a modulo condition
+                randc5 = counter % 4 != 0 
+                if randc5:
+                    new_c5 = buildCandidates_addHourAssignment(data, c5, 1)
+                    if new_c5 is None:
+                        c5.schedule = c5.schedule[:-1]
+                        new_c5 = buildCandidates_addHourAssignment(data, c5, 0)
+                    c5 = new_c5
+
+                else:
+                    new_c5 = buildCandidates_addHourAssignment(data, c5, 0)
+                    
+                    if new_c5 is None:
+                        c5.schedule = c5.schedule[:-1]
+                        new_c5 = buildCandidates_addHourAssignment(data, c5, 1)
+                        
+                    c5 = new_c5
+
+                counter += 1
+
+            if c1 is None and c2 is None and c3 is None and c4 is None and c5 is None:
                 break
 
         if c1:
@@ -108,6 +208,17 @@ def buildCandidates(data):
         
         if c2:
             candidates.append(c2)
+
+        if c3:
+            candidates.append(c3)
+            
+        if c4:
+            candidates.append(c4)
+        
+        if c5:
+            candidates.append(c5)
+        
+
 
     return candidates
 

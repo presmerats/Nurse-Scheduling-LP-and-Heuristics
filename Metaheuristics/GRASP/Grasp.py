@@ -47,7 +47,7 @@ def GraspConstructive(data, alpha_param=None):
         #e = elements.pop(randrange(i))
         e = elements[0]
 
-        #print("GRASP: selected element with cost " + str(e.gc) + " left: " + str(len(elements)))
+        # print("GRASP: selected element with cost " + str(e.gc) + " len: " + ",".join([ str(h) for h in  e.schedule]))
         solution = addElement(solution, e, data)
 
         #print(" last added " + str(solution["last_added"]) + " len(solution['w']" +str(len(solution['w']) ))
@@ -63,7 +63,8 @@ def GraspConstructive(data, alpha_param=None):
 
     solution["cost"], solution["totalw"] = computeCost(solution, data)
     print("Solution cost="+ str(solution["cost"]) )
-
+    print(" pending:")
+    print(solution["pending"])
     return solution
 
 
