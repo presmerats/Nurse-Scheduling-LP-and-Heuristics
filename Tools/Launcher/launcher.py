@@ -122,48 +122,69 @@ def acceptInstance(instance):
 
 
 
-if __name__ == '__main__':
 
-    # set instances folder
-    # set results folder
-    # set model params (alpha_grasp, num-iterations, inheritance, num pop, num generations, num mutatns)
+def runInstance(instancepath,
+                 results_folder,
+                 instanceType,
+                 solverType,
+                 args):
+
+    if not os.path.exists(instancepath):
+        return False
+
+    try:
+
+        if instanceType != 'all':
+            if not acceptInstance(instance):
+                continue
+            
+        if solverType not in ('ILP', 'grasp', 'brkga'):
+            print('You need to define a solving method: grasp or brkga')
+            sys.exit(1)
+
+        print("Processing instance: " + instancepath)
+
+        if solverType == "ILP":
+            solveInstanceWithILP(instancepath)
+        elif solverType == "grasp":
+            metaheuristics.run(instancepath=instancepath,
+                solverType=solverType,
+                results_path=results_folder,
+                grasp_alpha=args.alpha,
+                grasp_iterations=args.iterations,
+                grasp_lstype=args.ls,
+                grasp_lsiterations=args.lsiterations
+                )
+        elif solverType == "brkga":
+            metaheuristics.run(instancepath=instancepath,
+                solverType=solverType,
+                results_path=results_folder,
+                brkga_generations=args.generations,
+                brkga_eliteprop=args.eliteprop,
+                brkga_mutantprop=args.mutantprop,
+                brkga_population=args.population,
+                brkga_inheritance=args.inheritance,
+                brkga_decoder=args.decoder
+                )
+
+        return True
+
+    except Exception:
+        all_ok = False
+        print("Exception in user code:")
+        print("-"*60)
+        traceback.print_exc(file=sys.stdout)
+        print("-"*60)
+
+        return False
 
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--solver",help="solver model/algorithm to use [ILP, grasp, brkga]")
-    parser.add_argument("--instances",help="instances folder where to read instances files from")
-    parser.add_argument("--results",help="results folder where to save result files to")
-    parser.add_argument("--type",help="instance type, selects instances by timelimit")
 
-    parser.add_argument("--alpha",help="grasp alpha param", type=float)
-    parser.add_argument("--iterations",help="grasp num iterations param", type=int)
-    parser.add_argument("--ls",help="values first or best (improvement)")
-    parser.add_argument("--lsiterations",help="grasp final LS iterations param", type=int)
-
-    parser.add_argument("--generations",help="brkga num generations", type=int)
-    parser.add_argument("--eliteprop",help="brkga elite proportion", type=float)
-    parser.add_argument("--mutantprop",help="brkga mutant proportion", type=float)
-    parser.add_argument("--population",help="brkga population size", type=int)
-    parser.add_argument("--inheritance",help="brkga inheritance probability", type=float)
-    parser.add_argument("--decoder",help="decoder type=[horder, hini, hexcess]")
-
-    args = parser.parse_args()
-
-    solverType = "ILP"
-    if args.solver:
-        solverType = args.solver
-
-    instanceType = 'all'
-    if args.type:
-        instanceType = args.type
-
-    instances_folder = "../../Instances/Pending/"
-    if args.instances:
-        instances_folder = args.instances
-
-    results_folder = "../../Results/Pending/"
-    if args.results:
-        results_folder = args.results
+def runInstances(instances_folder,
+                 results_folder,
+                 instanceType,
+                 solverType,
+                 args):
 
     if not os.path.exists(instances_folder):
         print("check folder paths!")
@@ -216,4 +237,63 @@ if __name__ == '__main__':
                 traceback.print_exc(file=sys.stdout)
                 print("-"*60)
         
-                
+
+
+if __name__ == '__main__':
+
+    # set instances folder
+    # set results folder
+    # set model params (alpha_grasp, num-iterations, inheritance, num pop, num generations, num mutatns)
+
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--solver",help="solver model/algorithm to use [ILP, grasp, brkga]")
+    parser.add_argument("--instances",help="instances folder where to read instances files from")
+    parser.add_argument("--results",help="results folder where to save result files to")
+    parser.add_argument("--type",help="instance type, selects instances by timelimit")
+
+    parser.add_argument("--alpha",help="grasp alpha param", type=float)
+    parser.add_argument("--iterations",help="grasp num iterations param", type=int)
+    parser.add_argument("--ls",help="values first or best (improvement)")
+    parser.add_argument("--lsiterations",help="grasp final LS iterations param", type=int)
+
+    parser.add_argument("--generations",help="brkga num generations", type=int)
+    parser.add_argument("--eliteprop",help="brkga elite proportion", type=float)
+    parser.add_argument("--mutantprop",help="brkga mutant proportion", type=float)
+    parser.add_argument("--population",help="brkga population size", type=int)
+    parser.add_argument("--inheritance",help="brkga inheritance probability", type=float)
+    parser.add_argument("--decoder",help="decoder type=[horder, hini, hexcess]")
+
+    args = parser.parse_args()
+
+    solverType = "ILP"
+    if args.solver:
+        solverType = args.solver
+
+    instanceType = 'all'
+    if args.type:
+        instanceType = args.type
+
+    instances_folder = "../../Instances/Pending/"
+    if args.instances:
+        instances_folder = args.instances
+
+    results_folder = "../../Results/Pending/"
+    if args.results:
+        results_folder = args.results
+
+    if not os.path.exists(instances_folder):
+        print("check folder paths!")
+        exit()
+
+
+    runInstances(
+        instances_folder,
+        results_folder,
+        instanceType,
+        solverType,
+        args
+        )
+
+
+    
