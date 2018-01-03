@@ -48,6 +48,9 @@ def GraspConstructive(data, alpha_param=None):
 
         if isFeasible(solution, data):
             break
+        elif solution["last_added"] == len(solution["w"]):
+            break
+
 
     print()
     print("After greedy loop finished -> Elements remaining=" + str(len(elements)) + " and isFeasible(solution)=" +  str(isFeasible(solution, data)) )
