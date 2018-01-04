@@ -112,9 +112,10 @@ def writeLog(instancepath,
     logpath = os.path.join(results_path, instance_name)
 
     with open(logpath,'w+') as logfile:
-        print(logpath)
         json.dump(results_list, logfile)
-        print("written result to: " + os.path.abspath(logpath) )
+        print("     written result to: " + os.path.abspath(logpath) )
+        print("")
+        print("")
 
 
 
@@ -166,10 +167,10 @@ def run(instancepath, solverType,
     solveTime = t2 - t1
 
     # Final check
-    valid_feasible = complete_solution_validation(data, solution)
-    if valid_feasible:
-        valid_feasible = isFeasible(solution, data)
-    print("Is the solution Valid and Feasible? = " + str(valid_feasible) )
+    # valid_feasible = complete_solution_validation(data, solution)
+    # if valid_feasible:
+    #     valid_feasible = isFeasible(solution, data)
+    # print("Is the solution Valid and Feasible? = " + str(valid_feasible) )
 
 
     if solution is not None:

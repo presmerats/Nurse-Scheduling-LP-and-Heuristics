@@ -473,19 +473,21 @@ def firstImprovementLocalSearch(solution, data):
 
 
 
-        # verify that solution is feasible (shoulld not be necessary)
-        #print("feasibility: " + str(isFeasible(s,data)))
-        if isFeasible(s,data):
-            solution = s
 
         cost = 0
         for z in range(data["nNurses"]):
             cost += solution["z"][z]
 
-        print(" cost " + str(cost))
+        if s["cost"] < solution["cost"]: 
+            print("     Local search - cost " + str(cost))
+        
         solution["cost"] = cost
     
-                    
+        # verify that solution is feasible (shoulld not be necessary)
+        #print("feasibility: " + str(isFeasible(s,data)))
+        if isFeasible(s,data):
+            solution = s
+
     return solution
 
 

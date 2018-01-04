@@ -59,13 +59,15 @@ def GraspConstructive(data, alpha_param=None):
 
 
     #print()
-    print("After greedy loop finished -> Elements remaining=" + str(len(elements)) + " and isFeasible(solution)=" +  str(isFeasible(solution, data)) )
-
     solution["cost"], solution["totalw"] = computeCost(solution, data)
-    print("Solution cost="+ str(solution["cost"]) )
+    
+    greedytype = ""
+    if alpha > 0:
+        greedytype= "Randomized "
+
+    print( greedytype + "Greedy Constructive - cost:" + str(solution["cost"]) +  " Elements remaining=" + str(len(elements)) + " and isFeasible(solution)=" +  str(isFeasible(solution, data)) )
     #print(" pending:")
     #print(solution["pending"])
-    print("")
     # for sched in solution["w"]:
     #     print(sched)
 
@@ -99,8 +101,7 @@ def grasp(data, alpha=None, iterations=None, lstype=None, lsiterations=None):
     incumbent = GraspConstructive(data, 0)
     t2 = time.time()
     greedytime = t2 - t1
-    print("|")
-    print("-->greedyconstructive time: " + str(greedytime) )
+    print("     -->greedyconstructive time: " + str(greedytime) )
 
 
     t3 = time.time()
@@ -108,9 +109,8 @@ def grasp(data, alpha=None, iterations=None, lstype=None, lsiterations=None):
     solution = firstImprovementLocalSearch(incumbent, data)
     t4 = time.time()
     lstime = t4 - t3
-    print("|")
-    print("-->lstime: " + str(lstime) )
-    print("")     
+    print("     -->lstime: " + str(lstime) )
+
 
 
     if solution["cost"] < incumbent["cost"]:
@@ -122,16 +122,14 @@ def grasp(data, alpha=None, iterations=None, lstype=None, lsiterations=None):
         solution = GraspConstructive(data, alpha)
         t2 = time.time()
         greedytime = t2 - t1
-        print("|")
-        print("-->greedyconstructive time: " + str(greedytime) )
+        print("     -->greedyconstructive time: " + str(greedytime) )
 
         t3 = time.time()
         solution2 = firstImprovementLocalSearch(solution, data)
         t4 = time.time()
         lstime = t4 - t3
-        print("|")
-        print("-->lstime: " + str(lstime) )
-        print("")
+        print("     -->lstime: " + str(lstime) )
+        
 
         if solution2["cost"] < solution["cost"]:
             print("Quick LS -> Improvement: " + str(solution2["cost"]))
@@ -164,7 +162,7 @@ def grasp(data, alpha=None, iterations=None, lstype=None, lsiterations=None):
     # print("-->flstime: " + str(flstime) )
     # print("")
 
-    print('Final solution')
+    print('Final solution - cost: ' + str(incumbent["cost"]) )
     #print(incumbent)
-    print(incumbent["cost"])
+
     return incumbent
