@@ -6,87 +6,11 @@ from matplotlib.backends.backend_pdf import PdfPages
 from random import randrange
 import re
 import traceback
-
-def sortlists(fileoutput, sortkey, newlist ):
-    if not os.path.exists(fileoutput):
-        f= open(fileoutput,'w+')
-        f.close()
-        
-    f = open(fileoutput,'r+')
-    current_lines = f.readlines()
-    f.close()
-
-    byint = []
-    if current_lines:
-        current_lines = current_lines.remove("instance,solve_time(s),intvars\n")
-
-    if current_lines:
-        for elem in current_lines:
-            id, time, intvars = elem[:-1].split(",")
-            byint.append({ 
-                "id" : id , 
-                "time": float(time), 
-                "int_vars": int(intvars)  
-                })
-
-    if newlist and len(newlist)>0:
-        if byint:
-            newlist = sorted(
-                byint.extend(newlist),
-                key=lambda k: k[sortkey])
-
-    f = open(fileoutput,"w+")
-    f.write("instance,solve_time(s),intvars\n")
-    for elem in newlist:
-        f.write(elem["id"] + "," + str(elem["time"]) + ","  + str(elem["int_vars"]) + "\n")
-    f.close()
-
-    # plot
-    x=[]
-    y=[]
-    for elem in newlist:
-        if sortkey == "time":
-            x.append(elem["id"]) 
-        elif sortkey == "int_vars":
-            x.append(str(elem["int_vars"])+"_"+str(randrange(1000)))
-        else:
-            x.append(elem["id"])
-        y.append(elem["time"])
-
-    
-    
-
-
-    # prepare pdf
-    pp = PdfPages(fileoutput+'_plot.pdf')
-
-    # plot 
-    fig, ax = plt.subplots() 
-    plt.plot(range(len(x)),y, marker='o', color='g', ls='')
-
-    #plt.bar(range(len(y)),y, align='center')
-    plt.xticks(range(len(x)),x)
-
-    #plt.xticks(rotation='vertical')
-    plt.xticks(rotation=45, ha='right')
-
-    plt.xlabel('instance')
-    plt.ylabel('Solve time(s)')
-
-    #fig.subplots_adjust(bottom=0.9)
-    fig.tight_layout()
-    #plt.axis([0, len(results), 0, max(y)])
-
-    plt.savefig(pp, format='pdf')
-    pp.close()
-
-    plt.show()
+from datetime import datetime
 
 
 
-
-
-def buildChart(data):
+def buildChart(data, name, gap):
     """
         data = {
         'bi' : [],
@@ -100,16 +24,13 @@ def buildChart(data):
     fig, ax = plt.subplots() 
 
     colors = ['b', 'g', 'r', 'c', 'm', 'y', 'k', 'w']
-    thehandles = []
-    thelabels = []
     i = 0
     for k, v in data.items():
 
         filename = k
-        i1 = filename.find('/')
-        i2 = filename.find('-')
-        mylabel = filename[i1:i2]
-
+        subnames = filename.split("-")
+        mylabel = subnames[0]
+        
 
         bi = v['bi']
         bb = v['bb']
@@ -117,8 +38,8 @@ def buildChart(data):
         j = i % len(colors)
         thecolor = colors[j]
 
-        thehandle = plt.plot(range(len(bi)),bi, marker='.', color=thecolor, ls='-', label=mylabel)        
-        plt.plot(range(len(bb)),bb, marker='.', color=thecolor, ls='-', label=mylabel)
+        plt.plot(range(len(bi)),bi, marker='.', color=thecolor, ls='-', label=mylabel)        
+        plt.plot(range(len(bb)),bb, marker='.', color=thecolor, ls='-', label=mylabel )
 
 
 
@@ -128,14 +49,14 @@ def buildChart(data):
         #plt.xticks(rotation='vertical')
         #plt.xticks(rotation=45, ha='right')
 
-        thehandles.append(thehandle)
-        thelabels.append(mylabel)
         i +=1
 
-    plt.xlabel('Steps')
+    ax.legend(loc='upper right', fontsize='small')
+
+    plt.xlabel('Steps( gap =' +  str(gap) + ')')
     plt.ylabel('Best Integer/Bound')
 
-    ax.legend(handles=thehandles, labels=thelabels, loc='upper left')
+
 
     #fig.subplots_adjust(bottom=0.9)
     fig.tight_layout()
@@ -143,8 +64,11 @@ def buildChart(data):
 
     # plt.savefig(pp, format='pdf')
     # pp.close()
+    plt.savefig('../../Results/Final/ILPEvolution/' + name  + '.png')
 
     plt.show()
+
+    plt.close()
 
 
 
@@ -231,4 +155,4 @@ if __name__ == '__main__':
                     traceback.print_exc(file=sys.stdout)
                     print("-"*60)
         
-    buildChart(gapChart)
+    buildChart(gapChart, 'Gap_' + '{0:%Y%m%d_%H-%M-%S}'.format(datetime.now()), 0.05 )
