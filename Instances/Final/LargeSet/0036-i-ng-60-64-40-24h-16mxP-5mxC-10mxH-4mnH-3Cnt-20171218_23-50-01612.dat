@@ -11,4 +11,3 @@ minHours=4;
 hours=24;
 demand= [32 38 37 29 19 28 31 36 32 38 16 10 3 4 3 4 3 3 1 1 0 1 0 1  ];
 nNurses=64;
-centroides=3;

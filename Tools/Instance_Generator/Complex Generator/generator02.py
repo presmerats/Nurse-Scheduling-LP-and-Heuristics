@@ -61,6 +61,8 @@ def write(instance, instance_type="", path='.'):
                 f.write(' ];\n')
             elif k in ["nNurses-limit","surplus"]:
                 continue
+            elif k in ["centroides"]:
+                continue
             else:
                 f.write(k + '=' + str(v) +';\n')
         f.close()

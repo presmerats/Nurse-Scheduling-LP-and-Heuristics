@@ -1,4 +1,3 @@
-centroides = 0;
 nNurses = 56;
 hours = 21;
 demand = [7 1 10 9 1 11 10 10 0 10 2 0 9 9 10 3 2 12 0 12 11];
