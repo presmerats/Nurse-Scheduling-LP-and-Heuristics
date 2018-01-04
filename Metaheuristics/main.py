@@ -112,10 +112,11 @@ def writeLog(instancepath,
     logpath = os.path.join(results_path, instance_name)
 
     with open(logpath,'w+') as logfile:
-        print('wtf')
         print(logpath)
         json.dump(results_list, logfile)
-        print("written result to: " + logpath )
+        print("written result to: " + os.path.abspath(logpath) )
+
+
 
 
 def run(instancepath, solverType,

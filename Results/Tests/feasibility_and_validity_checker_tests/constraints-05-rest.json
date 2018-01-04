@@ -1,0 +1,17 @@
+[{"constraints-05-rest.dat": {"solver": "brkga", "time": "0.05", "ObjectiveFunction": "1", "isMIP?": "False", 
+"data": 
+{"nNurses": 3, "hours": 11,
+ "demand": [0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0], 
+"minHours": 1, 
+"maxHours": 5, 
+"maxConsec": 5,
+"maxPresence": 5}, 
+"solution": {
+"cost": 1, 
+"w": 
+[
+[0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]], 
+"z": [1, 0, 0], 
+"last_added": 0, "pending": [0, 0, 0, 0, 0], "totalw": 0, "exceeding": [0, 0, 0, 0, 0]}}}]

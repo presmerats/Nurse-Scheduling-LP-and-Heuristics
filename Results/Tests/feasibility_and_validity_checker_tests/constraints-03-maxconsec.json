@@ -1,0 +1,17 @@
+[{"constraints-03-maxConsec.dat": {"solver": "brkga", "time": "0.05", "ObjectiveFunction": "1", "isMIP?": "False", 
+"data": 
+{"nNurses": 3, "hours": 5,
+ "demand": [1, 1, 1, 0, 1], 
+"minHours": 1, 
+"maxHours": 5, 
+"maxConsec": 2, 
+"maxPresence": 5}, 
+"solution": {
+"cost": 1, 
+"w": 
+[
+[1, 1, 1, 0, 1],
+[0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0]], 
+"z": [1, 0, 0], 
+"last_added": 0, "pending": [0, 0, 0, 0, 0], "totalw": 0, "exceeding": [0, 0, 0, 0, 0]}}}]

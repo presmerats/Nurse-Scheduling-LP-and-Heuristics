@@ -181,7 +181,7 @@ def buildCandidates(data):
             if c5:
                 # randc4 = random() <= 0.3
                 # now randc3 uses a modulo condition
-                randc5 = counter % 4 != 0 
+                randc5 = counter % 3 != 0 
                 if randc5:
                     new_c5 = buildCandidates_addHourAssignment(data, c5, 1)
                     if new_c5 is None:

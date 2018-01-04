@@ -350,6 +350,7 @@ def complete_schedule_validation(candidate_sol, d, nurse, verify_minHours = True
             print("=")
             print(validity)
 
+
     if whattoreturn == 'All':
         return (rest_check, maxPresence_check, maxConsec_check, maxHours_check, minHours_check )
     elif whattoreturn == 'rest':
@@ -366,18 +367,52 @@ def complete_schedule_validation(candidate_sol, d, nurse, verify_minHours = True
     return validity
 
 
-def complete_solution_validation(data, candidate):
+def complete_solution_validation(data, candidate, whattoreturn='summary'):
     d = data
 
     candidate_sol = candidate
 
     validity = True
 
-    for nurse in range(len(candidate_sol["w"])):
-        validity = complete_schedule_validation(candidate_sol, d, nurse)
-        if not validity:
-            return False
+    whattoreturn2 = whattoreturn
+    if whattoreturn == 'check_function':
+        whattoreturn2 = 'All'
 
+
+    for nurse in range(len(candidate_sol["w"])):
+        retval = complete_schedule_validation(candidate_sol, d, nurse, verify_minHours=True, whattoreturn=whattoreturn2)
+        
+        if whattoreturn == 'check_function':
+            validity = retval[0] and retval[1] and retval[2] and retval[3] and retval[4] 
+
+            if not validity:
+                
+                cause = " "
+                if not retval[0]:
+                    cause += "rest "
+                
+                if not retval[1]:
+                    cause += "maxPresence "
+                
+                if not retval[2]:
+                    cause += "maxConsec "
+
+                if not retval[3]:
+                    cause += "maxHours "
+
+                if not retval[4]:
+                    cause += "minHours "
+
+                return validity, cause
+
+
+        else:
+            validity = retval
+            if not validity:
+                return False
+
+    if whattoreturn == 'check_function':
+        return validity, ""
     return validity
 
 

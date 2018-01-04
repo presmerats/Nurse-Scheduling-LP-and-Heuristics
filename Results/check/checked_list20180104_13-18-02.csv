@@ -1,0 +1,6 @@
+./constraints-02-maxhours.json, constraints-02-maxhours.dat, not valid  maxHours 
+./constraints-03-maxconsec.json, constraints-03-maxConsec.dat, not valid  maxConsec 
+./constraints-01-minhours.json, constraints-01-minhours.dat, not valid  minHours 
+./constraints-04-maxpresence.json, constraints-04-maxpresence.dat, not valid  maxPresence 
+./constraints-06-rest.json, constraints-06-rest.dat, valid & feasible 
+./constraints-05-rest.json, constraints-05-rest.dat, not valid  rest 

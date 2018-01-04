@@ -58,13 +58,13 @@ def GraspConstructive(data, alpha_param=None):
             break
 
 
-    print()
+    #print()
     print("After greedy loop finished -> Elements remaining=" + str(len(elements)) + " and isFeasible(solution)=" +  str(isFeasible(solution, data)) )
 
     solution["cost"], solution["totalw"] = computeCost(solution, data)
     print("Solution cost="+ str(solution["cost"]) )
-    print(" pending:")
-    print(solution["pending"])
+    #print(" pending:")
+    #print(solution["pending"])
     print("")
     # for sched in solution["w"]:
     #     print(sched)

@@ -48,7 +48,7 @@ def checkResult(key, v):
     if isinstance(v[solkey], basestring):
         valid = True
     else:
-        valid = complete_solution_validation(v[datakey], v[solkey])
+        valid, cause = complete_solution_validation(v[datakey], v[solkey],'check_function')
 
     # check feasibility
     feasible = False
@@ -57,13 +57,13 @@ def checkResult(key, v):
     elif isinstance(v[solkey], dict):
         feasible = isFeasible(v[solkey], v[datakey])
 
-    return_value = "valid & feasible"
+    return_value = "valid & feasible " + cause
     if not valid and not feasible:
-        return_value = "not valid nor feasible"
+        return_value = "not feasible and not valid (" + cause + ")"
     elif not feasible:
         return_value = "not feasible"
     elif not valid:
-        return_value = "not valid"
+        return_value = "not valid " + cause
 
 
     return filename, return_value
