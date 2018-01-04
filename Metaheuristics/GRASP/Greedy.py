@@ -92,6 +92,11 @@ def buildCandidates(data):
         c3 = newCandidate(hini)
         c4 = newCandidate(hini)
         c5 = newCandidate(hini)
+        c6 = newCandidate(hini)
+        c7 = newCandidate(hini)
+        c8 = newCandidate(hini)
+        c9 = newCandidate(hini)
+        c10 = newCandidate(hini)
 
         # first hour is schedule outside of the loop
         lastc2 = 0
@@ -129,16 +134,30 @@ def buildCandidates(data):
                     c2 = new_c2
 
             if c3:
-                c3 = updateCandidate(data, c3, counter=counter, modulo=5)
-
+                c3 = updateCandidate(data, c3, counter=counter, modulo=3)
             if c4:
-                c4 = updateCandidate(data, c4, counter=counter, modulo=8)
-
+                c4 = updateCandidate(data, c4, counter=counter, modulo=4)
             if c5:
-                c5 = updateCandidate(data, c5, counter=counter, modulo=3)
-
+                c5 = updateCandidate(data, c5, counter=counter, modulo=5)
+            if c6:
+                c6 = updateCandidate(data, c6, counter=counter, modulo=6)
+            if c7:
+                c7 = updateCandidate(data, c7, counter=counter, modulo=7)
+            if c8:
+                c8 = updateCandidate(data, c8, counter=counter, modulo=8)
+            if c9:
+                c9 = updateCandidate(data, c9, counter=counter, modulo=9)
+            if c10:
+                c10 = updateCandidate(data, c10, counter=counter, modulo=10)
                 
-            if c1 is None and c2 is None and c3 is None and c4 is None and c5 is None:
+                
+                
+                
+            if c1 is None and c2 is None and \
+               c3 is None and c4 is None and \
+               c5 is None and c6 is None and \
+               c7 is None and c8 is None and \
+               c9 is None and c10 is None:
                 break
 
             counter += 1
@@ -146,20 +165,24 @@ def buildCandidates(data):
 
         if c1:
             candidates.append(c1)
-        
         if c2:
             candidates.append(c2)
-
         if c3:
             candidates.append(c3)
-            
         if c4:
             candidates.append(c4)
-        
         if c5:
             candidates.append(c5)
-        
-
+        if c6:
+            candidates.append(c6)
+        if c7:
+            candidates.append(c7)
+        #if c8:
+        #    candidates.append(c8)
+        # if c9:
+        #     candidates.append(c9)
+        # if c10:
+        #     candidates.append(c10)
 
     return candidates
 
