@@ -13,90 +13,90 @@ from Common.NurseSchedulingProblem import *
 from Greedy import isFeasible
 
 
-def checkIfCanWork(solution, h, n, data, sumW, hini=None):
-    minHours = data["minHours"]
-    hours = data["hours"]
-    z = solution["z"]
-    w = solution["w"]
+# def checkIfCanWork(solution, h, n, data, sumW, hini=None):
+#     minHours = data["minHours"]
+#     hours = data["hours"]
+#     z = solution["z"]
+#     w = solution["w"]
 
-    #print(z[n])
-    #if z[n]==0:
-    #    print("nurse " + str(n) + " check can work at " + str(h) + " cause hini =" + str(hini[n]) + " z[n]" + str(z[n]) + " can work?:"+ str(hini[n] < h and z[n]==0))
+#     #print(z[n])
+#     #if z[n]==0:
+#     #    print("nurse " + str(n) + " check can work at " + str(h) + " cause hini =" + str(hini[n]) + " z[n]" + str(z[n]) + " can work?:"+ str(hini[n] < h and z[n]==0))
         
-    if hini:
-        if hini[n] < h and z[n]==0:
-            #print("nurse " + str(n) + "cannot work at " + str(h) + " cause hini =" + str(hini[n]))
-            return False
+#     if hini:
+#         if hini[n] < h and z[n]==0:
+#             #print("nurse " + str(n) + "cannot work at " + str(h) + " cause hini =" + str(hini[n]))
+#             return False
 
-    aux = w[n][h]
-    w[n][h] = 1
+#     aux = w[n][h]
+#     w[n][h] = 1
 
-    # minHours validity
-    verify_minHours = False
-    if z[n] == 1 and hours - h + 1 < minHours - sumW[n]:
-        verify_minHours=True
+#     # minHours validity
+#     verify_minHours = False
+#     if z[n] == 1 and hours - h + 1 < minHours - sumW[n]:
+#         verify_minHours=True
 
-    # verify max rest constraint if not working
-    rest_check, maxPresence_check, maxConsec_check, maxHours_check, minHours_check = complete_schedule_validation(solution, data, n, verify_minHours=verify_minHours, whattoreturn='All')
+#     # verify max rest constraint if not working
+#     rest_check, maxPresence_check, maxConsec_check, maxHours_check, minHours_check = complete_schedule_validation(solution, data, n, verify_minHours=verify_minHours, whattoreturn='All')
 
-    # undo changes, just a verification
-    w[n][h] = aux
+#     # undo changes, just a verification
+#     w[n][h] = aux
 
-    if rest_check and \
-        maxPresence_check and \
-        maxConsec_check and  \
-        maxHours_check and \
-        minHours_check:
-
-
-        return True
-
-    return False
+#     if rest_check and \
+#         maxPresence_check and \
+#         maxConsec_check and  \
+#         maxHours_check and \
+#         minHours_check:
 
 
-def checkIfMustWork(solution, h, n, data, sumW, canWork_check, hini=None):
-    minHours = data["minHours"]
-    hours = data["hours"]
-    z = solution["z"]
-    w = solution["w"]
-    aux = w[n][h]
+#         return True
 
-    w[n][h] = 0
+#     return False
 
-    # minHours validity
-    verify_minHours = False
-    if z[n] == 1 and hours - h + 1 < minHours - sumW[n]:
-        verify_minHours = True
 
-    # verify max rest constraint if not working
-    rest_check, maxPresence_check, maxConsec_check, maxHours_check, minHours_check = incremental_schedule_validation(solution, data, n, verify_minHours=verify_minHours, whattoreturn='All', force_rest_check=False, set_end=h)
+# def checkIfMustWork(solution, h, n, data, sumW, canWork_check, hini=None):
+#     minHours = data["minHours"]
+#     hours = data["hours"]
+#     z = solution["z"]
+#     w = solution["w"]
+#     aux = w[n][h]
 
-    # undo changes, just a verification
-    w[n][h] = aux
+#     w[n][h] = 0
 
-    # print("CanRest w[" + str(n) + "][" + str(h) + "] = " + str(w[n][h]) + " ?:")
-    # # print(rest_check)
-    # print("rest_checkt " + str(rest_check))
-    # print("minHours_checkt " + str(minHours_check))
-    # print("maxHours_checkt " + str(maxHours_check))
-    # print("maxConsec_checkt " + str(maxConsec_check))
-    # print("maxPresence_checkt " + str(maxPresence_check))
+#     # minHours validity
+#     verify_minHours = False
+#     if z[n] == 1 and hours - h + 1 < minHours - sumW[n]:
+#         verify_minHours = True
 
-    if ((not rest_check and minHours_check) or \
-        (not rest_check and not minHours_check) or \
-        (rest_check and not minHours_check)) and \
-       maxPresence_check and \
-       maxConsec_check and  \
-       maxHours_check :
+#     # verify max rest constraint if not working
+#     rest_check, maxPresence_check, maxConsec_check, maxHours_check, minHours_check = incremental_schedule_validation(solution, data, n, verify_minHours=verify_minHours, whattoreturn='All', force_rest_check=False, set_end=h)
 
-        # cannot rest!, verify if can work:
-        # should always be true at the same time!
-        if not canWork_check:
-            print(" INCOHERENCE DETECTED cannot rest but cannot work!")
+#     # undo changes, just a verification
+#     w[n][h] = aux
 
-        return canWork_check
+#     # print("CanRest w[" + str(n) + "][" + str(h) + "] = " + str(w[n][h]) + " ?:")
+#     # # print(rest_check)
+#     # print("rest_checkt " + str(rest_check))
+#     # print("minHours_checkt " + str(minHours_check))
+#     # print("maxHours_checkt " + str(maxHours_check))
+#     # print("maxConsec_checkt " + str(maxConsec_check))
+#     # print("maxPresence_checkt " + str(maxPresence_check))
 
-    return False
+#     if ((not rest_check and minHours_check) or \
+#         (not rest_check and not minHours_check) or \
+#         (rest_check and not minHours_check)) and \
+#        maxPresence_check and \
+#        maxConsec_check and  \
+#        maxHours_check :
+
+#         # cannot rest!, verify if can work:
+#         # should always be true at the same time!
+#         if not canWork_check:
+#             print(" INCOHERENCE DETECTED cannot rest but cannot work!")
+
+#         return canWork_check
+
+#     return False
 
 
 

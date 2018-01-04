@@ -2,7 +2,7 @@ from random import randrange
 import time
 
 from Greedy import *
-from LocalSearch import *
+from LocalSearch2 import *
 
 def GraspConstructive(data, alpha_param=None):
 
@@ -65,6 +65,10 @@ def GraspConstructive(data, alpha_param=None):
     print("Solution cost="+ str(solution["cost"]) )
     print(" pending:")
     print(solution["pending"])
+    print("")
+    # for sched in solution["w"]:
+    #     print(sched)
+
     return solution
 
 
@@ -150,7 +154,10 @@ def grasp(data, alpha=None, iterations=None, lstype=None, lsiterations=None):
         solution2 = firstImprovementLocalSearch_intensive(incumbent, maxFailed, data)
     else:
         solution2 = bestImprovementLocalSearch_complex(incumbent, data)        
-    incumbent = solution2
+    
+    if solution2["cost"] < incumbent["cost"]:
+        incumbent = solution2
+
     # t6 = time.time()
     # flstime = t6 - t5 
     # print("|")
@@ -158,6 +165,6 @@ def grasp(data, alpha=None, iterations=None, lstype=None, lsiterations=None):
     # print("")
 
     print('Final solution')
-    print(incumbent)
+    #print(incumbent)
     print(incumbent["cost"])
     return incumbent

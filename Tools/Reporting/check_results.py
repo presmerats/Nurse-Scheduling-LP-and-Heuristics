@@ -57,7 +57,16 @@ def checkResult(key, v):
     elif isinstance(v[solkey], dict):
         feasible = isFeasible(v[solkey], v[datakey])
 
-    return filename, valid & feasible
+    return_value = "valid & feasible"
+    if not valid and not feasible:
+        return_value = "not valid nor feasible"
+    elif not feasible:
+        return_value = "not feasible"
+    elif not valid:
+        return_value = "not valid"
+
+
+    return filename, return_value
 
 
 def writeResult(filename, name, status, filepath):
