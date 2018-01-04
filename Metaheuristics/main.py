@@ -109,6 +109,10 @@ def writeLog(instancepath,
         # create dir
         os.makedirs(results_path)
 
+    current_dir = os.getcwd()
+    if current_dir.find("/Instances/Final")>-1:
+        results_path = "../" + results_path
+
     logpath = os.path.join(results_path, instance_name)
 
     with open(logpath,'w+') as logfile:
