@@ -8,6 +8,7 @@ import re
 import traceback
 from datetime import datetime
 import argparse
+import operator
 
 def buildGapChart(data, name, namei):
     """
@@ -19,7 +20,36 @@ def buildGapChart(data, name, namei):
     # plot 
     fig, ax = plt.subplots() 
 
-    colors = ['b', 'g', 'r', 'c', 'm', 'y', 'k']
+    #colors = ['b', 'g', 'r', 'c', 'm', 'y', 'k', 'w']
+    colors = [
+        'xkcd:green',
+        'xkcd:purple',
+        'xkcd:blue',
+        'xkcd:pink',
+        'xkcd:brown',
+        'xkcd:red',
+        'xkcd:light blue',
+        'xkcd:teal',
+        'xkcd:orange',
+        'xkcd:light green',
+        'xkcd:magenta',
+        'xkcd:yellow',
+        'xkcd:sky blue',
+        'xkcd:grey',
+        'xkcd:lime green',
+        'xkcd:violet',
+        'xkcd:dark green',
+        'xkcd:olive',
+        'xkcd:dark purple',
+        'xkcd:forest green',
+        'xkcd:tan',
+        'xkcd:royal blue',
+        'xkcd:black',
+        'xkcd:beige',
+        'xkcd:peach',
+        'xkcd:indigo',
+        'xkcd:mustard'
+    ]
     i = 0
     for k, v in data.items():
 
@@ -45,10 +75,18 @@ def buildGapChart(data, name, namei):
 
         i +=1
 
-    ax.legend(loc='upper right', fontsize='small')
-
+    
     plt.xlabel('Steps')
     plt.ylabel('Gap(%)')
+
+    handles, labels = ax.get_legend_handles_labels()
+    hl = sorted(zip(handles, labels),
+                key=lambda x: float(str(x[1])) )
+
+    handles2, labels2 = zip(*hl)
+    print(labels2)
+    ax.legend(handles2, labels2, loc='upper right', fontsize='small')
+
 
 
 
@@ -79,7 +117,36 @@ def buildChart(data, name, gap):
     # plot 
     fig, ax = plt.subplots() 
 
-    colors = ['b', 'g', 'r', 'c', 'm', 'y', 'k', 'w']
+    #colors = ['b', 'g', 'r', 'c', 'm', 'y', 'k', 'w']
+    colors = [
+        'xkcd:green',
+        'xkcd:purple',
+        'xkcd:blue',
+        'xkcd:pink',
+        'xkcd:brown',
+        'xkcd:red',
+        'xkcd:light blue',
+        'xkcd:teal',
+        'xkcd:orange',
+        'xkcd:light green',
+        'xkcd:magent',
+        'xkcd:yellow',
+        'xkcd:sky blue',
+        'xkcd:grey',
+        'xkcd:lime green',
+        'xkcd:violet',
+        'xkcd:dark green',
+        'xkcd:olive',
+        'xkcd:dark purple',
+        'xkcd:forest green',
+        'xkcd:tan',
+        'xkcd:royal blue',
+        'xkcd:black',
+        'xkcd:beige',
+        'xkcd:peach',
+        'xkcd:indigo',
+        'xkcd:mustard'
+    ]
     i = 0
     for k, v in data.items():
 
@@ -107,7 +174,13 @@ def buildChart(data, name, gap):
 
         i +=1
 
-    ax.legend(loc='upper right', fontsize='small')
+    handles, labels = ax.get_legend_handles_labels()
+    hl = sorted(zip(handles, labels),
+                key= lambda x: float(operator.itemgetter(1)[:-1]) )
+
+    handles2, labels2 = zip(*hl)
+    print(labels2)
+    ax.legend(handles2, labels2, loc='upper right', fontsize='small')
 
     plt.xlabel('Steps( gap =' +  str(gap) + ')')
     plt.ylabel('Best Integer/Bound')
@@ -120,7 +193,7 @@ def buildChart(data, name, gap):
 
     # plt.savefig(pp, format='pdf')
     # pp.close()
-    print(os.getcwd())
+
     plt.savefig('../graphs/' + name  + '.png')
 
     plt.show()
