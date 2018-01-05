@@ -7,7 +7,63 @@ from random import randrange
 import re
 import traceback
 from datetime import datetime
+import argparse
 
+def buildGapChart(data, name, namei):
+    """
+        data = {
+        'gap' :[]
+        }
+    """
+    
+    # plot 
+    fig, ax = plt.subplots() 
+
+    colors = ['b', 'g', 'r', 'c', 'm', 'y', 'k']
+    i = 0
+    for k, v in data.items():
+
+        filename = k
+        subnames = filename.split("-")
+        mylabel = subnames[3]
+        if namei is not None:
+            mylabel = subnames[int(namei)]
+        
+
+        gap = v['gap']
+
+        j = i % len(colors)
+        thecolor = colors[j]
+
+        plt.plot(range(len(gap)),gap, marker='+', color=thecolor, ls='-', label=mylabel)
+
+        #plt.bar(range(len(y)),y, align='center')
+        #plt.xticks(range(len(x)),x)
+
+        #plt.xticks(rotation='vertical')
+        #plt.xticks(rotation=45, ha='right')
+
+        i +=1
+
+    ax.legend(loc='upper right', fontsize='small')
+
+    plt.xlabel('Steps')
+    plt.ylabel('Gap(%)')
+
+
+
+    #fig.subplots_adjust(bottom=0.9)
+    fig.tight_layout()
+    #plt.axis([0, len(results), 0, max(y)])
+
+    # plt.savefig(pp, format='pdf')
+    # pp.close()
+    print(os.getcwd())
+    plt.savefig('../graphs/' + name  + '_gap.png')
+
+    plt.show()
+
+    plt.close()
 
 
 def buildChart(data, name, gap):
@@ -29,7 +85,7 @@ def buildChart(data, name, gap):
 
         filename = k
         subnames = filename.split("-")
-        mylabel = subnames[0]
+        mylabel = subnames[3]
         
 
         bi = v['bi']
@@ -64,7 +120,8 @@ def buildChart(data, name, gap):
 
     # plt.savefig(pp, format='pdf')
     # pp.close()
-    plt.savefig('../../Results/Final/ILPEvolution/' + name  + '.png')
+    print(os.getcwd())
+    plt.savefig('../graphs/' + name  + '.png')
 
     plt.show()
 
@@ -77,7 +134,8 @@ def parsefile(fileobject, gapChart, filename):
 
     data = {
         'bi' : [],
-        'bb' :[]
+        'bb' : [],
+        'gap': []
     }
 
     lines = fileobject.readlines()
@@ -105,25 +163,33 @@ def parsefile(fileobject, gapChart, filename):
             # starts with "\**[\s\t]+[0-9]+\+*[\s\t]+" or "*     0"
             if  p.match(line):
                 # extract Best Integer and Best Bound
-                results = p2.findall(line)
-                if len(results)>0:
-                    # Best integer
-                    result = results[0]
-                    i1 = result.find(",")
-                    i2 = i1 + 1 + result[i1+1:].find(",")
-                    bi = result[:i1+4]
+                # results = p2.findall(line)
+                # if len(results)>0:
+                #     # Best integer
+                #     result = results[0]
+                #     i1 = result.find(",")
+                #     i2 = i1 + 1 + result[i1+1:].find(",")
+                #     bi = result[:i1+4]
                     
 
-                    # Best Bound
-                    extra = result[i1+4:i2+5]
-                    results2 = [ w for w in extra.split(" ") if "," in w]
-                    # i3 = i1 + 4 + 
-                    # bb = result[i3:i2+6]
-                    if len(results2)>0:
-                        bb = results2[0]
-                        # print(" BestInteger " + str(bi) + " BestBound " + str(bb))
-                        data['bi'].append(float(bi.replace(",",".")))
-                        data['bb'].append(float(bb.replace(",",".")))
+                #     # Best Bound
+                #     extra = result[i1+4:i2+5]
+                #     results2 = [ w for w in extra.split(" ") if "," in w]
+                #     # i3 = i1 + 4 + 
+                #     # bb = result[i3:i2+6]
+                #     if len(results2)>0:
+                #         bb = results2[0]
+
+                #         # print(" BestInteger " + str(bi) + " BestBound " + str(bb))
+                #         data['bi'].append(float(bi.replace(",",".")))
+                #         data['bb'].append(float(bb.replace(",",".")))
+                        
+                # Gap
+                results3 = [ w for w in line.split(" ") if '%' in w]
+                if len(results3) > 0:
+                    print("gap: " + results3[-1] )
+                    gap = results3[-1][:-2].replace(",",".")
+                    data['gap'].append(float(gap))
 
 
     # save to the data object
@@ -133,7 +199,18 @@ def parsefile(fileobject, gapChart, filename):
 
 if __name__ == '__main__':
 
-    results_folder = '../../Results/Pending6'
+    results_folder = '../../Results/Final/ILPEvolution/nurses'
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--folder",help="folder where to read results from")
+    parser.add_argument("--nameindex",help="name index", type=int)
+
+    args = parser.parse_args()
+
+
+    if args.folder:
+        results_folder = os.path.join(args.folder,'data')
+
     gapChart = {}
 
     os.chdir(results_folder)
@@ -155,4 +232,5 @@ if __name__ == '__main__':
                     traceback.print_exc(file=sys.stdout)
                     print("-"*60)
         
-    buildChart(gapChart, 'Gap_' + '{0:%Y%m%d_%H-%M-%S}'.format(datetime.now()), 0.05 )
+    #buildChart(gapChart, 'Gap_' + '{0:%Y%m%d_%H-%M-%S}'.format(datetime.now()), 0.2 )
+    buildGapChart(gapChart, 'Gap_' + '{0:%Y%m%d_%H-%M-%S}'.format(datetime.now()), args.nameindex)

@@ -1,0 +1,6 @@
+[
+{ "./nurses/data/i-ng-60-2048-1280-24h-16mxP-4mxC-10mxH-1mnH-3Cnt-20180105_00-40-51250.dat" : {"expected_output" : "SUCCESS",
+"computed_output" : "false",
+"desired_objfunc" : "1",
+"Data" : "maxConsec = 4;\nmaxPresence = 16;\nmaxHours = 10;\nminHours = 1;\nhours = 24;\ndemand = [977 1280 1280 638 1280 785 977 1280 957 1121 798 477 303 159 0 0 0\n         0 0 0 0 0 0 0];\nnNurses = 2048;\n"
+}},{"end":"end"}]

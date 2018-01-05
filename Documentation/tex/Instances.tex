@@ -14,7 +14,44 @@ pseudocode\\
 comments\\
 how feasibility is assured\\
 tests on how to increment solving time, including some graphs with the Best Integer and Best Bound evolution for different variations of the same instance\\
-Conclusion on how to increase the "size" of the instance without computing the solving time of the ILP model.
+Conclusion on how to increase the "size" of the instance without computing the solving time of the ILP model.\\
+
+The next figures show different executions of a small modification of a problem instance. In each figure, a parameter of the problem is modified to increase the time it takes to Cplex to solve the instance problem. This gives us an idea of what parameters increase the size of the problem instance.\\
+
+\begin{center}
+\includegraphics[width=0.5\textwidth]{./img/instances_nurses_ilp_evol.png}
+\captionof{figure}{Evolution of Gap in similar problem instances with different number of nurses}
+\end{center}
+
+\begin{center}
+\includegraphics[width=0.5\textwidth]{./img/instances_hours_ilp_evol.png}\\[0.4cm] 
+\captionof{figure}{Evolution of Gap in similar problem instances with different number of hours}
+\end{center}
+
+\begin{center}
+\includegraphics[width=0.5\textwidth]{./img/instances_maxpresence_ilp_evol.png}
+\captionof{figure}{Evolution of Gap in similar problem instances with different values of maxPresence parameter}
+\end{center}
+
+\begin{center}
+\includegraphics[width=0.5\textwidth]{./img/instances_maxconsec_ilp_evol.png}
+\captionof{figure}{Evolution of Gap in similar problem instances with different values of maxConsec parameter}
+\end{center}
+
+\begin{center}
+\includegraphics[width=0.5\textwidth]{./img/instances_maxhours_ilp_evol.png}
+\captionof{figure}{Evolution of Gap in similar problem instances with different values of maxHours parameter}
+\end{center} 
+
+\begin{center}
+\includegraphics[width=0.5\textwidth]{./img/instances_minhours_ilp_evol.png}
+\captionof{figure}{Evolution of Gap in similar problem instances with different values of minHours parameter}
+\end{center}
+
+
+Those small observations allow us to conclude that the number of nurses and the number of hours of a schedule are the parameteres of the problem that affect the most its solving time. Increasing the number of nurses or hours increases the size of the problem.\\
+The large set of problem instances will be generated using modifications of those parameters.
+
 
 \subsubsection{Medium Set}
 
