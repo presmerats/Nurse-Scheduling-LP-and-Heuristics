@@ -904,7 +904,7 @@ def metaGenerate4(path):
         maxHours=5, 
         numCentroides=3)
     write(instance,"ng",path)
-    """
+    
 
     
     # minHours increasing
@@ -941,10 +941,32 @@ def metaGenerate4(path):
         numCentroides=3)
     write(instance,"ng",path)
 
+    """
+
+    pct = 60
+    for n in [40, 100, 250, 500, 1000]:
+        for h in [24, 48, 72]:
+            for mp in [int(3*h/8), int(3*h/8*3/4) ]:
+                for mc in [int(mp/2), int(mp/3)]:
+                    for mx in [(mc -1), int(mc/2)]:
+                        for mh in [1, int(3*mx/4)]:
+
+                            instance = Generate4(
+                                hours=h, 
+                                nNurses=n, 
+                                pct_extra=pct, 
+                                maxPresence=mp, 
+                                maxConsec=mc, 
+                                minHours=mh, 
+                                maxHours=mx, 
+                                numCentroides=3)
+                            write(instance,"ng",path)
+
+
 
 if __name__ == '__main__':
 
-    results_folder = '../../../Instances/ILPEvolution/nurses/data'
+    results_folder = '../../../Instances/Final/LargeSet_20180105'
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--folder",help="folder where to read results from")
