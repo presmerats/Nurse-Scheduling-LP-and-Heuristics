@@ -319,7 +319,7 @@ def makeRunInstance(instance,
 
 
     resultsfolder = os.path.join(
-        '../../Results/Final/LargeSet_20180103',
+        '..' ,'..','Results','Final','LargeSet_20180103',
         selected_param)
 
     # parameteres
@@ -464,7 +464,7 @@ if __name__ == '__main__':
         exit()
 
 
-    progress_files_folder = '../../Results/Progress'
+    progress_files_folder = os.path.join('..' , '..', 'Results', 'Progress')
     if not os.path.exists(progress_files_folder):
         os.makedirs(progress_files_folder)
 

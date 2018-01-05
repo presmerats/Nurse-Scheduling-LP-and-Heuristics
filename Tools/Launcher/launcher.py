@@ -19,13 +19,13 @@ from subprocess import call,check_call, Popen, PIPE
 from pathlib import Path, PurePath
 import argparse
 
-parentPath = os.path.abspath("../../Metaheuristics/GRASP")
+parentPath = os.path.abspath(os.path.join("..","..","Metaheuristics","GRASP"))
 if parentPath not in sys.path:
     sys.path.insert(0, parentPath)
-parentPath = os.path.abspath("../../Metaheuristics/BRKGA")
+parentPath = os.path.abspath(os.path.join("..","..","Metaheuristics","BRKGA"))
 if parentPath not in sys.path:
     sys.path.insert(0, parentPath)
-parentPath = os.path.abspath("../../Metaheuristics")
+parentPath = os.path.abspath(os.path.join("..","..","Metaheuristics"))
 if parentPath not in sys.path:
     sys.path.insert(0, parentPath)
 
@@ -35,8 +35,8 @@ from BRKGA_main import *
 from Grasp import *
 import main as metaheuristics
 
-mod_header_template = os.path.abspath('../Instance_Generator/Complex Generator/Test-header2.template')
-mod_footer_template = os.path.abspath('../Instance_Generator/Complex Generator/Test-footer.template')
+mod_header_template = os.path.abspath(os.path.join('..','Instance_Generator','Complex Generator','Test-header2.template'))
+mod_footer_template = os.path.abspath(os.path.join('..','Instance_Generator','Complex Generator','Test-footer.template'))
 
 
 def shellexec(command, cwd="."):
@@ -207,9 +207,11 @@ def runInstances(instances_folder,
         print("check folder paths!")
         exit()
 
-    os.chdir(instances_folder)
-    for root, dirs, files in os.walk("."):
+    #os.chdir(instances_folder)
+    for root, dirs, files in os.walk(os.path.abspath(instances_folder)):
         all_ok = True
+        if root.find("maxPresence")== -1:
+            continue
         for instance in files:
             try:
 
@@ -294,11 +296,11 @@ if __name__ == '__main__':
     if args.type:
         instanceType = args.type
 
-    instances_folder = "../../Instances/Pending/"
+    instances_folder = os.path.join('..','..','Instances','Pending')
     if args.instances:
         instances_folder = args.instances
 
-    results_folder = "../../Results/Pending/"
+    results_folder = os.path.join('..','..','Results','Pending')
     if args.results:
         results_folder = args.results
 
