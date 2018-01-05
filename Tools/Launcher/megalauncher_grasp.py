@@ -497,8 +497,7 @@ if __name__ == '__main__':
 
 
 
-    os.chdir(instances_folder)
-    for root, dirs, files in os.walk("."):
+    for root, dirs, files in os.walk(instances_folder):
         all_ok = True
         for inst in files:
             try:

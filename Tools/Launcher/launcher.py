@@ -207,11 +207,12 @@ def runInstances(instances_folder,
         print("check folder paths!")
         exit()
 
+    baspath = os.path.abspath('.')
     #os.chdir(instances_folder)
     for root, dirs, files in os.walk(os.path.abspath(instances_folder)):
         all_ok = True
-        if root.find("maxPresence")== -1:
-            continue
+        print(os.getcwd())
+
         for instance in files:
             try:
 
@@ -307,6 +308,7 @@ if __name__ == '__main__':
     if not os.path.exists(instances_folder):
         print("check folder paths!")
         exit()
+
 
 
     runInstances(
