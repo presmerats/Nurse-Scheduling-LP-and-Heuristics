@@ -60,7 +60,7 @@ def shellexec(command, cwd="."):
     return (out, err)
 
 
-def prepareModFile(instancepath, tilim=4200.0, path=Path()):
+def prepareModFile(instancepath, resultspath, tilim=4200.0, path=Path(), gap=None):
     print("preparing mod file for :" + instancepath)
 
     filename = '../../Tools/Launcher/temp.mod'
@@ -71,6 +71,9 @@ def prepareModFile(instancepath, tilim=4200.0, path=Path()):
 
     logfile = os.path.splitext(os.path.basename(instancepath))[0] + '.json'
     logname = '../../Results/Pending/' + logfile
+    if os.path.exists(resultspath):
+        logname = os.path.join(resultspath, logfile)
+
 
     with open(filename, 'w') as f:
 
@@ -80,8 +83,14 @@ def prepareModFile(instancepath, tilim=4200.0, path=Path()):
                     line = line.replace("model01-hfree.mod", str(modelfile))
 
                 if line.startswith("var logname = \""):
-
                     line = "var logname = \"" + logname + "\";\n"
+
+                if gap is not None and line.startswith(" //cplex.epgap=0.01;"):
+                    line = " cplex.epgap=" + str(gap) + ";\n"
+                    print("")
+                    print(" writing gap!")
+                    print(line)
+                    print("")
 
                 f.write(line)
 
@@ -99,14 +108,22 @@ def prepareModFile(instancepath, tilim=4200.0, path=Path()):
     return str(filename)
 
 
-def solveInstanceWithILP(instancepath):
+def solveInstanceWithILP(instancepath, resultspath=None, tilim=4200.0,  gap=None):
 
-    modfile = prepareModFile(instancepath)
+    tilim2 = 4200.0
+    if tilim is not None:
+        tilim2 = tilim
+
+    modfile = prepareModFile(instancepath=instancepath, resultspath=resultspath, tilim=tilim2, gap=gap)
 
     print("solving instance " + modfile)
     output, error = shellexec("oplrun -v " + modfile)
     print("output = ")
     print(output)
+
+    # append output to results file
+    with open(os.path.join(resultspath, os.path.basename(instancepath) + ".log" ), 'w+' ) as flog:
+        flog.write(output.decode("utf-8"))
 
 
 def acceptInstance(instance):
@@ -145,7 +162,7 @@ def runInstance(instancepath,
         print("Processing instance: " + instancepath)
 
         if solverType == "ILP":
-            solveInstanceWithILP(instancepath)
+            solveInstanceWithILP(instancepath, results_folder, args.tilim, args.gap)
         elif solverType == "grasp":
             metaheuristics.run(instancepath=instancepath,
                 solverType=solverType,
@@ -208,7 +225,7 @@ def runInstances(instances_folder,
                 print("Processing instance: " + instance)
 
                 if solverType == "ILP":
-                    solveInstanceWithILP(instancepath)
+                    solveInstanceWithILP(instancepath, results_folder, args.tilim, args.gap)
                 elif solverType == "grasp":
                     metaheuristics.run(instancepath=instancepath,
                         solverType=solverType,
@@ -251,6 +268,9 @@ if __name__ == '__main__':
     parser.add_argument("--instances",help="instances folder where to read instances files from")
     parser.add_argument("--results",help="results folder where to save result files to")
     parser.add_argument("--type",help="instance type, selects instances by timelimit")
+
+    parser.add_argument("--gap",help="ILP solver gap", type=float)
+    parser.add_argument("--tilim",help="ILP solver gap", type=float)
 
     parser.add_argument("--alpha",help="grasp alpha param", type=float)
     parser.add_argument("--iterations",help="grasp num iterations param", type=int)
