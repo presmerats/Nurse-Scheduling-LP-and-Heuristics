@@ -44,9 +44,11 @@ def brkga_run(data,
     # must be derived from instance
     chrLength = decoder.getChrLength(data)
 
-    numIndividuals = int(config['a']) * int(data["nNurses"])
+    #numIndividuals = int(config['a']) * int(data["nNurses"])
+    numIndividuals = 100
     if population:
-        numIndividuals = population * int(data["nNurses"])
+        numIndividuals = population 
+    
 
     numElite = int(math.ceil(numIndividuals * config['eliteProp']))
     if eliteprop:

@@ -150,13 +150,18 @@ def assignNurses(solution, hini, data):
         for n in mustWork:
             # print("nurse :" + str(n) + "  h: " + str(h) + " pending: ")
             # print(pending)
+            update_checkers(solution, data, n, h, 1,checkers)
+            if n==0:
+                print("must-----------------------"*2)
+                print("")
             w[n][h] = 1
             sumW[n] += 1
             pending[h] -= 1
             if z[n] == 0:
                 z[n] = 1
                 solution["cost"] += 1
-            update_checkers(solution, data, n, h, 1,checkers)
+            
+
 
             #print("w[" + str(n) + "," + str(h) + "] = 1")
             # pp.pprint(solution["w"])
@@ -166,14 +171,18 @@ def assignNurses(solution, hini, data):
         for n in canWork:
             # print("nurse :" + str(n) + "  h: " + str(h) + " pending: ")
             # print(pending)
-            if pending[h] + hini[h] > 0:    
+            if pending[h] + hini[h] > 0:
+                update_checkers(solution, data, n, h, 1,checkers)
+                if n==0:
+                    print("can-----------------------"*2)
+                    print("")    
                 w[n][h] = 1
                 sumW[n] += 1
                 pending[h] -= 1
                 if z[n] == 0:
                     z[n] = 1
                     solution["cost"] += 1
-                update_checkers(solution, data, n, h, 1,checkers)
+                
                 #print("w[" + str(n) + "," + str(h) + "] = 1")
             # print("w[" + str(n) + "]")
             # pp.pprint(solution["w"])
@@ -185,6 +194,8 @@ def assignNurses(solution, hini, data):
         #     print(solution["pending"])
         #     pp.pprint(solution["w"])
         #     pp.pprint(checkers)
+
+
 
         
             
