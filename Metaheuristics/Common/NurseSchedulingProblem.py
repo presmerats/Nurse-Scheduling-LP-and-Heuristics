@@ -285,6 +285,18 @@ def incremental_schedule_validation_fast(candidate_sol, d, h, nurse, checkers, v
     end = checkers[nurse]["end"]
     consec = checkers[nurse]["consec"]
 
+    if nurse == -1:
+        print("         complete_schedule_validation_fast:")
+        print("         nurse " + str(nurse) + 
+              " hour " + str(h) +
+              " sumW " + str(sumW) +
+              " start " + str(start) +
+              " end " + str(end) +
+              " consec " + str(consec) +
+              " maxConsec " + str(d["maxConsec"]) )
+        print(candidate)
+        print("")
+
     # maxHours
     maxHours_check = sumW <= d["maxHours"]
 
@@ -458,15 +470,17 @@ def complete_schedule_validation_fast(candidate_sol, d, nurse, h, checkers, veri
     end = checkers[nurse]["end"]
     consec = checkers[nurse]["consec"]
 
-    # print("         complete_schedule_validation_fast:")
-    # print("         nurse " + str(nurse) + 
-    #       " hour " + str(h) +
-    #       " sumW " + str(sumW) +
-    #       " start " + str(start) +
-    #       " end " + str(end) +
-    #       " consec " + str(consec) +
-    #       " maxConsec " + str(d["maxConsec"]) )
-    # print("")
+    if nurse == -1:
+        print("         complete_schedule_validation_fast:")
+        print("         nurse " + str(nurse) + 
+              " hour " + str(h) +
+              " sumW " + str(sumW) +
+              " start " + str(start) +
+              " end " + str(end) +
+              " consec " + str(consec) +
+              " maxConsec " + str(d["maxConsec"]) )
+        print(candidate)
+        print("")
 
 
     # maxHours
@@ -638,7 +652,8 @@ def update_checkers(solution, data, n, h, newval, checkers):
     else:
 
         if solution["w"][n][h] == 0 and newval == 1:
-            #print("   update_checkers - increment!")
+            if n==-1:
+                print("   update_checkers - increment!")
             #increment
             solution["w"][n][h] = 1
             checker['sumW'] += 1
@@ -676,7 +691,8 @@ def update_checkers(solution, data, n, h, newval, checkers):
                 checker["consec"]=1
 
         elif solution["w"][n][h] == 0 and newval == 0:
-            #print("   update_checkers - initialize with 0")
+            if n==-1:
+                print("   update_checkers - initialize with 0")
             
             #print("          sumw=" + str(checker["sumW"]))
             if h>0 and solution["w"][n][h-1] == 0:
@@ -701,7 +717,7 @@ def update_checkers(solution, data, n, h, newval, checkers):
                 checker["oldend"] = h
                 checker["end"] = h -1 
 
-                # consec = 1
+                # consec 
                 checker["consec"] -= 1 
 
             elif h==0:
@@ -713,7 +729,8 @@ def update_checkers(solution, data, n, h, newval, checkers):
 
         elif solution["w"][n][h] == 1 and newval == 0:
             # decrement
-            #print("   update_checkers decrement")
+            if n==-1:
+                print("   update_checkers decrement")
             solution["w"][n][h] = 0
             checker['sumW'] -= 1
             if h>0 and solution["w"][n][h-1] == 0:
@@ -746,6 +763,15 @@ def update_checkers(solution, data, n, h, newval, checkers):
                 checker["end"]=-1
                 checker["oldend"]=0
                 checker["consec"]=0
+
+        else:
+            if n==-1:
+                print("Strange case!"  + str(solution["w"][n][h]) + str(newval))
+
+    if n==-1:
+        print(checkers[n])
+        print(solution["w"][n])
+
 
 
 
@@ -851,9 +877,11 @@ def checkIfMustWork_fast(solution, h, n, data, sumW, canWork_check, checkers,hin
 
     #print("checkIfCMustWOrk_fast h:"+str(h) + " n:" + str(n))
 
-    #w[n][h] = 0
-    # update checkers
-    update_checkers(solution, data, n, h, 0,checkers)
+    # should already be 0
+    if w[n][h] == 1:
+        print("srange case! checkIfMustWork_fast")
+    w[n][h] = 0
+
 
     # minHours validity
     verify_minHours = False
@@ -867,9 +895,9 @@ def checkIfMustWork_fast(solution, h, n, data, sumW, canWork_check, checkers,hin
     rest_check, maxPresence_check, maxConsec_check, maxHours_check, minHours_check = incremental_schedule_validation_fast(solution, data, h, n, checkers, verify_minHours=verify_minHours, whattoreturn='All', force_rest_check=False, set_end=h)
 
     # undo changes, just a verification
-    #w[n][h] = aux
-    # update checkers
-    update_checkers(solution, data, n, h, aux,checkers)
+    w[n][h] = aux
+
+
 
     # print("CanRest w[" + str(n) + "][" + str(h) + "] = " + str(w[n][h]) + " ?:")
     # # print(rest_check)

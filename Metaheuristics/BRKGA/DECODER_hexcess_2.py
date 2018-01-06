@@ -151,7 +151,7 @@ def assignNurses(solution, hini, data):
             # print("nurse :" + str(n) + "  h: " + str(h) + " pending: ")
             # print(pending)
             update_checkers(solution, data, n, h, 1,checkers)
-            if n==0:
+            if n==-1:
                 print("must-----------------------"*2)
                 print("")
             w[n][h] = 1
@@ -173,7 +173,7 @@ def assignNurses(solution, hini, data):
             # print(pending)
             if pending[h] + hini[h] > 0:
                 update_checkers(solution, data, n, h, 1,checkers)
-                if n==0:
+                if n==-1:
                     print("can-----------------------"*2)
                     print("")    
                 w[n][h] = 1
