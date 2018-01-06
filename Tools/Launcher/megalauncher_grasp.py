@@ -298,7 +298,7 @@ def done(instance, status_list, param, paramvalue=None):
 
 def makeRunInstance(instance,
         solver,
-        params,
+        params_original,
         selected_param,
         param_value):
 
@@ -319,10 +319,11 @@ def makeRunInstance(instance,
 
 
     resultsfolder = os.path.join(
-        '..' ,'..','Results','Final','LargeSet_20180103',
+        '..' ,'..','Results','Final','LargeSet_20180106',
         selected_param)
 
     # parameteres
+    params = deepcopy(params_original)
     params[selected_param] = param_value
     if solver == "grasp":
         args = Execution(
@@ -343,7 +344,7 @@ def makeRunInstance(instance,
             grasp_iterations=None,
             grasp_lstype=None,
             grasp_lsiterations=None,
-            brkga_generations=params["generations"],
+            brkga_generations=params["generation"],
             brkga_eliteprop=params["eliteprop"],
             brkga_mutantprop=params["mutantprop"],
             brkga_population=params["population"],
@@ -418,7 +419,7 @@ def parameter_executions_loop(
                 success = makeRunInstance(
                     instance=instance,
                     solver=parameter_solver,
-                    params=solver_basic_params,
+                    params_original=solver_basic_params,
                     selected_param=parameter_name,
                     param_value=param_value
                 )
@@ -481,10 +482,10 @@ if __name__ == '__main__':
     lsiterations = range(1,5)
 
     basic_params_brkga ={
-        'generations': 3,
+        'generation': 3,
         'eliteprop': 0.3,
         'mutantprop': 0.1,
-        'population': 3,
+        'population': 100,
         'inheritance': 0.7,
         'decoder': 'hexcess'
     }
@@ -492,7 +493,7 @@ if __name__ == '__main__':
     eliteprops = [0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.6, 0.7, 0.8, 0.9]
     mutantprops = [0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.6, 0.7, 0.8, 0.9]
     inheritances = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.75, 0.8, 0.85, 0.9]
-    populations = range(1,6)
+    populations = range(25, 300, 25)
     decoder = "hexcess"
 
 
