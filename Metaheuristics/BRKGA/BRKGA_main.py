@@ -35,7 +35,7 @@ def brkga_run(data,
     elif decoder == "hini":
         import DECODER_hini as decoder
     else:
-        import DECODER_hexcess as decoder
+        import DECODER_hexcess_2 as decoder
         # import DECODER_horder as decoder
     
 

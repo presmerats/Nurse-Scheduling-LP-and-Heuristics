@@ -74,6 +74,9 @@ def computeAssignments(solution, h, data, sumW, checkers, hini=None):
     # for each nurse
     for n in sorted_nurses:
 
+        # print()
+        # print("computeAssignments " + str(n))
+
         # canWork Check-------------------------------
         canWork_check = checkIfCanWork_fast(solution, h, n, data, sumW, checkers=checkers, hini=hini)
         if canWork_check:
@@ -86,9 +89,22 @@ def computeAssignments(solution, h, data, sumW, checkers, hini=None):
             else:
                 canWork.append(n)
 
-
     return mustWork, canWork
 
+
+def initCheckers(data):
+
+    checkers = []
+
+    for n in range(data["nNurses"]):
+        checkers.append({
+            'sumW': 0,
+            'consec': 0,
+            'start': -1,
+            'end': -1
+        } )
+    
+    return checkers
 
 
 def assignNurses(solution, hini, data):
@@ -103,36 +119,31 @@ def assignNurses(solution, hini, data):
     pending = solution["pending"]
     hours = data["hours"]
     sumW = [0] * data["nNurses"]
-    checkers = [
-         {
-            'sumW': 0,
-            'consec': 0,
-            'start': -1,
-            'end': -1
-        } 
-    ] * data["nNurses"]
 
 
+    checkers = initCheckers(data)
 
     z = solution["z"]
     w = solution["w"]
 
     for h in range(hours):
 
+        #print(" for loop h="+str(h))
         
         mustWork, canWork = computeAssignments(solution, h, data, checkers=checkers, sumW=sumW )
 
-        print("h=" + str(h))
-        print("mustWork")
-        print(mustWork)
-        print("canWork")
-        print(canWork)
-        print("hini:")
-        print(hini)
-        print("demand")
-        print(data["demand"])
-        print("pending")
-        print(solution["pending"])
+        # print("h=" + str(h))
+        # print("mustWork")
+        # print(mustWork)
+        # print("canWork")
+        # print(canWork)
+        # print("hini:")
+        # print(hini)
+        # print("demand")
+        # print(data["demand"])
+        # print("pending")
+        # print(solution["pending"])
+
 
   
         #   try to assign if pending[h] > 0 and h >= hini[n]
@@ -167,16 +178,16 @@ def assignNurses(solution, hini, data):
             # print("w[" + str(n) + "]")
             # pp.pprint(solution["w"])
 
-        if h > 4 and h < 7:
-            print("demand")
-            print(data["demand"])
-            print("pending")
-            print(solution["pending"])
-            pp.pprint(solution["w"])
-            pp.pprint(checkers)
+        # if h == 1 or h == 23:
+        #     print("demand")
+        #     print(data["demand"])
+        #     print("pending")
+        #     print(solution["pending"])
+        #     pp.pprint(solution["w"])
+        #     pp.pprint(checkers)
 
         
-            exit()
+            
 
     # pp.pprint(data)
     # pp.pprint(solution["cost"])
