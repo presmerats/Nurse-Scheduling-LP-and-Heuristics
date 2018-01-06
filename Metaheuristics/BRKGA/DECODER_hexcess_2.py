@@ -25,7 +25,9 @@ from Greedy import isFeasible
             'sumW': 0,
             'consec': 0,
             'start': -1,
-            'end': -1
+            'end': -1,
+            'oldend': -1
+
         }
 
 
@@ -47,7 +49,7 @@ from Greedy import isFeasible
 
 """
 
-def computeAssignments(solution, h, data, sumW, hini=None):
+def computeAssignments(solution, h, data, sumW, checkers, hini=None):
     """
         for each nurse,
             if hini != None and h>hini[n] and z[n]==0 -> that nurse cannot work
@@ -73,12 +75,12 @@ def computeAssignments(solution, h, data, sumW, hini=None):
     for n in sorted_nurses:
 
         # canWork Check-------------------------------
-        canWork_check = checkIfCanWork(solution, h, n, data, sumW, hini)
+        canWork_check = checkIfCanWork_fast(solution, h, n, data, sumW, checkers=checkers, hini=hini)
         if canWork_check:
            
             # mustWork Check-------------------------------
             # avoid repeating canWork_check
-            mustWork_check = checkIfMustWork(solution, h, n, data, sumW, canWork_check, hini)
+            mustWork_check = checkIfMustWork_fast(solution, h, n, data, sumW, canWork_check, checkers,  hini)
             if mustWork_check:
                 mustWork.append(n)
             else:
@@ -101,31 +103,36 @@ def assignNurses(solution, hini, data):
     pending = solution["pending"]
     hours = data["hours"]
     sumW = [0] * data["nNurses"]
+    checkers = [
+         {
+            'sumW': 0,
+            'consec': 0,
+            'start': -1,
+            'end': -1
+        } 
+    ] * data["nNurses"]
+
+
 
     z = solution["z"]
     w = solution["w"]
 
     for h in range(hours):
 
-        # for each hour
+        
+        mustWork, canWork = computeAssignments(solution, h, data, checkers=checkers, sumW=sumW )
 
-        # compute valid candidates
-        #  those who must be assigned (rest constraint)
-        #  those who can be assigned to work
-        #  if h>hini and z[n]== 0 , that nurse cannot work
-        mustWork, canWork = computeAssignments(solution, h, data, sumW)
-
-        # print("h=" + str(h))
-        # print("mustWork")
-        # print(mustWork)
-        # print("canWork")
-        # print(canWork)
-        # print("hini:")
-        # print(hini)
-        # print("demand")
-        # print(data["demand"])
-        # print("pending")
-        # print(solution["pending"])
+        print("h=" + str(h))
+        print("mustWork")
+        print(mustWork)
+        print("canWork")
+        print(canWork)
+        print("hini:")
+        print(hini)
+        print("demand")
+        print(data["demand"])
+        print("pending")
+        print(solution["pending"])
 
   
         #   try to assign if pending[h] > 0 and h >= hini[n]
@@ -138,6 +145,8 @@ def assignNurses(solution, hini, data):
             if z[n] == 0:
                 z[n] = 1
                 solution["cost"] += 1
+            update_checkers(solution, data, n, h, 1,checkers)
+
             #print("w[" + str(n) + "," + str(h) + "] = 1")
             # pp.pprint(solution["w"])
 
@@ -153,9 +162,21 @@ def assignNurses(solution, hini, data):
                 if z[n] == 0:
                     z[n] = 1
                     solution["cost"] += 1
+                update_checkers(solution, data, n, h, 1,checkers)
                 #print("w[" + str(n) + "," + str(h) + "] = 1")
             # print("w[" + str(n) + "]")
             # pp.pprint(solution["w"])
+
+        if h > 4 and h < 7:
+            print("demand")
+            print(data["demand"])
+            print("pending")
+            print(solution["pending"])
+            pp.pprint(solution["w"])
+            pp.pprint(checkers)
+
+        
+            exit()
 
     # pp.pprint(data)
     # pp.pprint(solution["cost"])
