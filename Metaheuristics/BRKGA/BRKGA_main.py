@@ -31,11 +31,12 @@ def brkga_run(data,
 
 
     if decoder == "hexcess":
-        import DECODER_hexcess as decoder
+        import DECODER_hexcess_2 as decoder
     elif decoder == "hini":
         import DECODER_hini as decoder
     else:
-        import DECODER_horder as decoder
+        import DECODER_hexcess_2 as decoder
+        # import DECODER_horder as decoder
     
 
     # initializations
@@ -43,9 +44,11 @@ def brkga_run(data,
     # must be derived from instance
     chrLength = decoder.getChrLength(data)
 
-    numIndividuals = int(config['a']) * int(data["nNurses"])
+    #numIndividuals = int(config['a']) * int(data["nNurses"])
+    numIndividuals = 100
     if population:
-        numIndividuals = population * int(data["nNurses"])
+        numIndividuals = population 
+    
 
     numElite = int(math.ceil(numIndividuals * config['eliteProp']))
     if eliteprop:

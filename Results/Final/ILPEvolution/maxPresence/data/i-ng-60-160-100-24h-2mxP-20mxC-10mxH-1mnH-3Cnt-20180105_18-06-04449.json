@@ -1,0 +1,6 @@
+[
+{ "./maxPresence/data/i-ng-60-160-100-24h-2mxP-20mxC-10mxH-1mnH-3Cnt-20180105_18-06-04449.dat" : {"expected_output" : "SUCCESS",
+"computed_output" : "false",
+"desired_objfunc" : "1",
+"Data" : "maxConsec = 20;\nmaxPresence = 2;\nmaxHours = 10;\nminHours = 1;\nhours = 24;\ndemand = [77 100 100 71 41 23 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0];\nnNurses = 160;\n"
+}},{"end":"end"}]

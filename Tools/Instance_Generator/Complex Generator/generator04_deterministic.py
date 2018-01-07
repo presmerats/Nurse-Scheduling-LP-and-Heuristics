@@ -684,7 +684,7 @@ def metaGenerate4(path):
       
 
     #--20180104-----------------------------------------------------
-
+    """
     # nurses doubling
     instance = Generate4(
         hours=24, 
@@ -765,9 +765,20 @@ def metaGenerate4(path):
 
     
 
-    # hours doubling
+    """
+    # hours increasing
     instance = Generate4(
         hours=24, 
+        nNurses=40, 
+        pct_extra=60, 
+        maxPresence=16, 
+        maxConsec=4, 
+        minHours=1, 
+        maxHours=10, 
+        numCentroides=3)
+    write(instance,"ng",path)
+    instance = Generate4(
+        hours=34, 
         nNurses=40, 
         pct_extra=60, 
         maxPresence=16, 
@@ -787,7 +798,7 @@ def metaGenerate4(path):
         numCentroides=3)
     write(instance,"ng",path)
     instance = Generate4(
-        hours=96, 
+        hours=60, 
         nNurses=40, 
         pct_extra=60, 
         maxPresence=16, 
@@ -797,7 +808,7 @@ def metaGenerate4(path):
         numCentroides=3)
     write(instance,"ng",path)
     instance = Generate4(
-        hours=192, 
+        hours=80, 
         nNurses=40, 
         pct_extra=60, 
         maxPresence=16, 
@@ -806,40 +817,123 @@ def metaGenerate4(path):
         maxHours=10, 
         numCentroides=3)
     write(instance,"ng",path)
-  
+    instance = Generate4(
+        hours=100, 
+        nNurses=40, 
+        pct_extra=60, 
+        maxPresence=16, 
+        maxConsec=4, 
+        minHours=1, 
+        maxHours=10, 
+        numCentroides=3)
+    write(instance,"ng",path)
+    instance = Generate4(
+        hours=120, 
+        nNurses=40, 
+        pct_extra=60, 
+        maxPresence=16, 
+        maxConsec=4, 
+        minHours=1, 
+        maxHours=10, 
+        numCentroides=3)
+    write(instance,"ng",path)
+    instance = Generate4(
+        hours=160, 
+        nNurses=40, 
+        pct_extra=60, 
+        maxPresence=16, 
+        maxConsec=4, 
+        minHours=1, 
+        maxHours=10, 
+        numCentroides=3)
+    write(instance,"ng",path)
 
+    
     # maxPresence decreasing
     instance = Generate4(
         hours=24, 
-        nNurses=40, 
+        nNurses=100, 
+        pct_extra=60, 
+        maxPresence=20, 
+        maxConsec=20, 
+        minHours=1, 
+        maxHours=10, 
+        numCentroides=3)
+    write(instance,"ng",path)
+    instance = Generate4(
+        hours=24, 
+        nNurses=100, 
+        pct_extra=60, 
+        maxPresence=18, 
+        maxConsec=20, 
+        minHours=1, 
+        maxHours=10, 
+        numCentroides=3)
+    write(instance,"ng",path)
+    instance = Generate4(
+        hours=24, 
+        nNurses=100, 
         pct_extra=60, 
         maxPresence=16, 
-        maxConsec=4, 
+        maxConsec=20, 
         minHours=1, 
         maxHours=10, 
         numCentroides=3)
     write(instance,"ng",path)
     instance = Generate4(
         hours=24, 
-        nNurses=40, 
+        nNurses=100, 
+        pct_extra=60, 
+        maxPresence=12, 
+        maxConsec=20, 
+        minHours=1, 
+        maxHours=10, 
+        numCentroides=3)
+    write(instance,"ng",path)
+    instance = Generate4(
+        hours=24, 
+        nNurses=100, 
         pct_extra=60, 
         maxPresence=8, 
-        maxConsec=4, 
+        maxConsec=20, 
         minHours=1, 
         maxHours=10, 
         numCentroides=3)
     write(instance,"ng",path)
     instance = Generate4(
         hours=24, 
-        nNurses=40, 
+        nNurses=100, 
         pct_extra=60, 
-        maxPresence=4, 
-        maxConsec=4, 
+        maxPresence=6, 
+        maxConsec=20, 
         minHours=1, 
         maxHours=10, 
         numCentroides=3)
     write(instance,"ng",path)
-  
+    instance = Generate4(
+        hours=24, 
+        nNurses=100, 
+        pct_extra=60, 
+        maxPresence=4, 
+        maxConsec=20, 
+        minHours=1, 
+        maxHours=10, 
+        numCentroides=3)
+    write(instance,"ng",path)
+    instance = Generate4(
+        hours=24, 
+        nNurses=100, 
+        pct_extra=60, 
+        maxPresence=2, 
+        maxConsec=20, 
+        minHours=1, 
+        maxHours=10, 
+        numCentroides=3)
+    write(instance,"ng",path)
+
+
+
+    
     # maxConsec decreasing
     instance = Generate4(
         hours=24, 
@@ -943,6 +1037,9 @@ def metaGenerate4(path):
 
     """
 
+    """
+    # Largeset 20180105------------------------------------------------------------------------------------
+
     pct = 60
     for n in [40, 100, 250, 500, 1000]:
         for h in [24, 48, 72]:
@@ -962,6 +1059,8 @@ def metaGenerate4(path):
                                 numCentroides=3)
                             write(instance,"ng",path)
 
+
+    """
 
 
 if __name__ == '__main__':

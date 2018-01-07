@@ -13,92 +13,39 @@ from Common.NurseSchedulingProblem import *
 from Greedy import isFeasible
 
 
-# def checkIfCanWork(solution, h, n, data, sumW, hini=None):
-#     minHours = data["minHours"]
-#     hours = data["hours"]
-#     z = solution["z"]
-#     w = solution["w"]
+"""
+    vars to save
+        sumW
+        consec
+        start
+        end
 
-#     #print(z[n])
-#     #if z[n]==0:
-#     #    print("nurse " + str(n) + " check can work at " + str(h) + " cause hini =" + str(hini[n]) + " z[n]" + str(z[n]) + " can work?:"+ str(hini[n] < h and z[n]==0))
-        
-#     if hini:
-#         if hini[n] < h and z[n]==0:
-#             #print("nurse " + str(n) + "cannot work at " + str(h) + " cause hini =" + str(hini[n]))
-#             return False
-
-#     aux = w[n][h]
-#     w[n][h] = 1
-
-#     # minHours validity
-#     verify_minHours = False
-#     if z[n] == 1 and hours - h + 1 < minHours - sumW[n]:
-#         verify_minHours=True
-
-#     # verify max rest constraint if not working
-#     rest_check, maxPresence_check, maxConsec_check, maxHours_check, minHours_check = complete_schedule_validation(solution, data, n, verify_minHours=verify_minHours, whattoreturn='All')
-
-#     # undo changes, just a verification
-#     w[n][h] = aux
-
-#     if rest_check and \
-#         maxPresence_check and \
-#         maxConsec_check and  \
-#         maxHours_check and \
-#         minHours_check:
+        checkers = []
+        checker = {
+            'sumW': 0,
+            'consec': 0,
+            'start': -1,
+            'end': -1
+        }
 
 
-#         return True
+    checkIfCanWork
 
-#     return False
-
-
-# def checkIfMustWork(solution, h, n, data, sumW, canWork_check, hini=None):
-#     minHours = data["minHours"]
-#     hours = data["hours"]
-#     z = solution["z"]
-#     w = solution["w"]
-#     aux = w[n][h]
-
-#     w[n][h] = 0
-
-#     # minHours validity
-#     verify_minHours = False
-#     if z[n] == 1 and hours - h + 1 < minHours - sumW[n]:
-#         verify_minHours = True
-
-#     # verify max rest constraint if not working
-#     rest_check, maxPresence_check, maxConsec_check, maxHours_check, minHours_check = incremental_schedule_validation(solution, data, n, verify_minHours=verify_minHours, whattoreturn='All', force_rest_check=False, set_end=h)
-
-#     # undo changes, just a verification
-#     w[n][h] = aux
-
-#     # print("CanRest w[" + str(n) + "][" + str(h) + "] = " + str(w[n][h]) + " ?:")
-#     # # print(rest_check)
-#     # print("rest_checkt " + str(rest_check))
-#     # print("minHours_checkt " + str(minHours_check))
-#     # print("maxHours_checkt " + str(maxHours_check))
-#     # print("maxConsec_checkt " + str(maxConsec_check))
-#     # print("maxPresence_checkt " + str(maxPresence_check))
-
-#     if ((not rest_check and minHours_check) or \
-#         (not rest_check and not minHours_check) or \
-#         (rest_check and not minHours_check)) and \
-#        maxPresence_check and \
-#        maxConsec_check and  \
-#        maxHours_check :
-
-#         # cannot rest!, verify if can work:
-#         # should always be true at the same time!
-#         if not canWork_check:
-#             print(" INCOHERENCE DETECTED cannot rest but cannot work!")
-
-#         return canWork_check
-
-#     return False
+    checkIfMustWork
 
 
+    complete_schedule_validation
+
+    incremental_schedule_validation
+
+    --change-to--
+
+    complete_schedule_validation_fast
+    incremental_schedule_validation_fast
+
+
+
+"""
 
 def computeAssignments(solution, h, data, sumW, hini=None):
     """
@@ -124,7 +71,6 @@ def computeAssignments(solution, h, data, sumW, hini=None):
 
     # for each nurse
     for n in sorted_nurses:
-
 
         # canWork Check-------------------------------
         canWork_check = checkIfCanWork(solution, h, n, data, sumW, hini)

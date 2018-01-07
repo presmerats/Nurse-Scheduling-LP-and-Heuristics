@@ -1908,8 +1908,8 @@ def metaGenerate4(path):
         numCentroides=1)
     write(instance,"ng",path)
 
-    """
 
+    #--20171231----------------------------------------------------
     instance = Generate4(
         hours=24, 
         nNurses=420, 
@@ -1951,11 +1951,24 @@ def metaGenerate4(path):
         numCentroides=3)
     write(instance,"ng",path)
 
+    #--20180104-----------------------------------------------------
+    """
+
+    instance = Generate4(
+        hours=24, 
+        nNurses=320, 
+        pct_extra=40, 
+        maxPresence=14, 
+        maxConsec=5, 
+        minHours=1, 
+        maxHours=10, 
+        numCentroides=3)
+    write(instance,"ng",path)
 
 if __name__ == '__main__':
 
 
-    p = Path(PurePath('../../../Instances/Pending/'))
+    p = Path(PurePath('../../../Instances/Pending7/'))
     metaGenerate4(path=p)
 
 

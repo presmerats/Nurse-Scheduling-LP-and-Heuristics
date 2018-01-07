@@ -12,5 +12,4 @@ minHours = 6;
 maxHours = 18;
 maxConsec = 7;
 maxPresence = 24;
-centroides=1;
 
