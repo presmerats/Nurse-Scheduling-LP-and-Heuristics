@@ -8,6 +8,8 @@ import pprint
 import logging
 
 printlog = False
+printlog2 = False
+printlog3 = False
 
 def isValid_ng(data, candidate):
     d = data
@@ -285,7 +287,7 @@ def incremental_schedule_validation_fast(candidate_sol, d, h, nurse, checkers, v
     end = checkers[nurse]["end"]
     consec = checkers[nurse]["consec"]
 
-    if nurse == -1:
+    if printlog2 and nurse == 0:
         print("         complete_schedule_validation_fast:")
         print("         nurse " + str(nurse) + 
               " hour " + str(h) +
@@ -293,7 +295,8 @@ def incremental_schedule_validation_fast(candidate_sol, d, h, nurse, checkers, v
               " start " + str(start) +
               " end " + str(end) +
               " consec " + str(consec) +
-              " maxConsec " + str(d["maxConsec"]) )
+              " maxConsec " + str(d["maxConsec"]) +
+              " minHours " + str(d["minHours"]))
         print(candidate)
         print("")
 
@@ -470,7 +473,7 @@ def complete_schedule_validation_fast(candidate_sol, d, nurse, h, checkers, veri
     end = checkers[nurse]["end"]
     consec = checkers[nurse]["consec"]
 
-    if nurse == -1:
+    if printlog2 and  nurse == 0:
         print("         complete_schedule_validation_fast:")
         print("         nurse " + str(nurse) + 
               " hour " + str(h) +
@@ -652,7 +655,7 @@ def update_checkers(solution, data, n, h, newval, checkers):
     else:
 
         if solution["w"][n][h] == 0 and newval == 1:
-            if n==-1:
+            if printlog2 and n==0:
                 print("   update_checkers - increment!")
             #increment
             solution["w"][n][h] = 1
@@ -691,7 +694,7 @@ def update_checkers(solution, data, n, h, newval, checkers):
                 checker["consec"]=1
 
         elif solution["w"][n][h] == 0 and newval == 0:
-            if n==-1:
+            if rintlog2 and pn==0:
                 print("   update_checkers - initialize with 0")
             
             #print("          sumw=" + str(checker["sumW"]))
@@ -729,7 +732,7 @@ def update_checkers(solution, data, n, h, newval, checkers):
 
         elif solution["w"][n][h] == 1 and newval == 0:
             # decrement
-            if n==-1:
+            if printlog2 and n==0:
                 print("   update_checkers decrement")
             solution["w"][n][h] = 0
             checker['sumW'] -= 1
@@ -765,10 +768,10 @@ def update_checkers(solution, data, n, h, newval, checkers):
                 checker["consec"]=0
 
         else:
-            if n==-1:
+            if printlog2 and n==0:
                 print("Strange case!"  + str(solution["w"][n][h]) + str(newval))
 
-    if n==-1:
+    if printlog2 and n==0:
         print(checkers[n])
         print(solution["w"][n])
 
@@ -827,6 +830,7 @@ def checkIfCanWork_fast(solution, h, n, data, sumW, checkers, hini=None):
     z = solution["z"]
     w = solution["w"]
 
+
     #print("checkIfCanWOrk_fast h:"+str(h) + " n:" + str(n))
         
     if hini:
@@ -842,7 +846,7 @@ def checkIfCanWork_fast(solution, h, n, data, sumW, checkers, hini=None):
 
     # minHours validity
     verify_minHours = False
-    if z[n] == 1 and hours - h + 1 < minHours - sumW[n]:
+    if z[n] == 1 and hours - h + 1 < minHours:
         verify_minHours=True
 
 
@@ -854,7 +858,18 @@ def checkIfCanWork_fast(solution, h, n, data, sumW, checkers, hini=None):
     #w[n][h] = aux
     update_checkers(solution, data, n, h, aux, checkers)
     #print(solution["w"][n][h])
-    
+
+    if printlog3:
+        summin = 0
+        for hmin in range(data["hours"]):
+            summin += solution["w"][n][hmin]
+        if summin != checkers[n]["sumW"]:
+            print("found erroneous checkers[n][sumW]:" + str(checkers[n]["sumW"]) + " real sum:" + str(summin))
+        if printlog3 and h==23 and summin > 0 and summin < data["minHours"] and minHours_check == True: # and checkers[n]["sumW"]>0: # and checkers[n]["sumW"]< data["minHours"]:
+            print("h:" + str(h) + " verify_minhours: " + str(verify_minHours) + " minHours_check:" + str(minHours_check) + " minHours" + str(data["minHours"]) + " sumW:" + str(checkers[n]["sumW"]))
+            print(w[n])
+            print("")
+        
 
     if rest_check and \
         maxPresence_check and \
@@ -875,6 +890,8 @@ def checkIfMustWork_fast(solution, h, n, data, sumW, canWork_check, checkers,hin
     w = solution["w"]
     aux = w[n][h]
 
+
+    solution["mustWork_count"] += 1
     #print("checkIfCMustWOrk_fast h:"+str(h) + " n:" + str(n))
 
     # should already be 0
@@ -885,19 +902,35 @@ def checkIfMustWork_fast(solution, h, n, data, sumW, canWork_check, checkers,hin
 
     # minHours validity
     verify_minHours = False
-    if z[n] == 1 and hours - h + 1 < minHours - sumW[n]:
+    if z[n] == 1 and h >= hours - minHours + checkers[n]["sumW"]:
+        verify_minHours = True
+    
+    if z[n] == 1 and h > 0 and w[n][h - 1] == 0 and w[n][h] == 0:
         verify_minHours = True
 
-
+    # if z[n] == 1 and h > 0 and w[n][h - 1] == 0 and w[n][h] == 0:
+    #     if data["minHours"] > checkers[n]["sumW"]:
+    #         return True
 
 
     # verify max rest constraint if not working
     rest_check, maxPresence_check, maxConsec_check, maxHours_check, minHours_check = incremental_schedule_validation_fast(solution, data, h, n, checkers, verify_minHours=verify_minHours, whattoreturn='All', force_rest_check=False, set_end=h)
 
+
+
     # undo changes, just a verification
     w[n][h] = aux
 
-
+    if printlog3:
+        summin = 0
+        for hmin in range(data["hours"]):
+            summin += solution["w"][n][hmin]
+        if summin != checkers[n]["sumW"]:
+            print("found erroneous checkers[n][sumW]:" + str(checkers[n]["sumW"]) + " real sum:" + str(summin))
+        if printlog3 and h==23 and summin > 0 and summin < data["minHours"]: # and checkers[n]["sumW"]>0: # and checkers[n]["sumW"]< data["minHours"]:
+            print("h:" + str(h) + " verify_minhours: " + str(verify_minHours) + " minHours_check:" + str(minHours_check) + " minHours" + str(data["minHours"]) + " sumW:" + str(checkers[n]["sumW"]))
+            print(w[n])
+            print("")
 
     # print("CanRest w[" + str(n) + "][" + str(h) + "] = " + str(w[n][h]) + " ?:")
     # # print(rest_check)
@@ -906,6 +939,24 @@ def checkIfMustWork_fast(solution, h, n, data, sumW, canWork_check, checkers,hin
     # print("maxHours_checkt " + str(maxHours_check))
     # print("maxConsec_checkt " + str(maxConsec_check))
     # print("maxPresence_checkt " + str(maxPresence_check))
+
+
+    if z[n] == 1 and h > 0 and w[n][h - 1] == 0 and w[n][h] == 0 and data["minHours"] > checkers[n]["sumW"]:
+        if minHours_check:
+            print(" incohoerence in minHours check!")
+        if not canWork_check:
+            print(" incoherence in minHours check!")
+
+
+    # if z[n] == 1 and h > 0 and w[n][h - 1] == 0 and w[n][h] == 0:
+    #     if data["minHours"] > checkers[n]["sumW"]:         
+    #         # print("minHours_check " + str(((not rest_check and minHours_check) or \
+    #         #     (not rest_check and not minHours_check) or \
+    #         #     (rest_check and not minHours_check)) and \
+    #         #     maxPresence_check and \
+    #         #     maxConsec_check and  \
+    #         #     maxHours_check))
+    #         print("minHours_check " + str(canWork_check))
 
     if ((not rest_check and minHours_check) or \
         (not rest_check and not minHours_check) or \

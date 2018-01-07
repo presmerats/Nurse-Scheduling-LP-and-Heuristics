@@ -12,6 +12,8 @@ if parentPath not in sys.path:
 from Common.NurseSchedulingProblem import *
 from Greedy import isFeasible
 
+printlog = False
+
 
 """
     vars to save
@@ -76,19 +78,22 @@ def computeAssignments(solution, h, data, sumW, checkers, hini=None):
 
         # print()
         # print("computeAssignments " + str(n))
-
-        # canWork Check-------------------------------
-        canWork_check = checkIfCanWork_fast(solution, h, n, data, sumW, checkers=checkers, hini=hini)
-        if canWork_check:
-           
-            # mustWork Check-------------------------------
-            # avoid repeating canWork_check
-            mustWork_check = checkIfMustWork_fast(solution, h, n, data, sumW, canWork_check, checkers,  hini)
-            if mustWork_check:
-                mustWork.append(n)
-            else:
+        mustWork_check = checkIfMustWork_fast(solution, h, n, data, sumW, True, checkers,  hini)
+        if mustWork_check:
+            mustWork.append(n)
+        else:    
+            # canWork Check-------------------------------
+            canWork_check = checkIfCanWork_fast(solution, h, n, data, sumW, checkers=checkers, hini=hini)
+            if canWork_check:
                 canWork.append(n)
 
+            # # mustWork Check-------------------------------
+            # # avoid repeating canWork_check
+            # mustWork_check = checkIfMustWork_fast(solution, h, n, data, sumW, canWork_check, checkers,  hini)
+            # if mustWork_check:
+            #     mustWork.append(n)
+            # else:
+           
     return mustWork, canWork
 
 
@@ -126,9 +131,12 @@ def assignNurses(solution, hini, data):
     z = solution["z"]
     w = solution["w"]
 
+
     for h in range(hours):
 
         #print(" for loop h="+str(h))
+
+        solution["mustWork_count"] = 0
         
         mustWork, canWork = computeAssignments(solution, h, data, checkers=checkers, sumW=sumW )
 
@@ -151,7 +159,7 @@ def assignNurses(solution, hini, data):
             # print("nurse :" + str(n) + "  h: " + str(h) + " pending: ")
             # print(pending)
             update_checkers(solution, data, n, h, 1,checkers)
-            if n==-1:
+            if printlog and n==0:
                 print("must-----------------------"*2)
                 print("")
             w[n][h] = 1
@@ -161,11 +169,12 @@ def assignNurses(solution, hini, data):
                 z[n] = 1
                 solution["cost"] += 1
             
-
-
             #print("w[" + str(n) + "," + str(h) + "] = 1")
             # pp.pprint(solution["w"])
 
+        for n in mustWork:
+            if w[n][h] == 0:
+                print("Alaaarm!!")
 
 
         for n in canWork:
@@ -173,7 +182,7 @@ def assignNurses(solution, hini, data):
             # print(pending)
             if pending[h] + hini[h] > 0:
                 update_checkers(solution, data, n, h, 1,checkers)
-                if n==-1:
+                if printlog and n==0:
                     print("can-----------------------"*2)
                     print("")    
                 w[n][h] = 1
@@ -187,13 +196,49 @@ def assignNurses(solution, hini, data):
             # print("w[" + str(n) + "]")
             # pp.pprint(solution["w"])
 
-        # if h == 1 or h == 23:
-        #     print("demand")
-        #     print(data["demand"])
-        #     print("pending")
-        #     print(solution["pending"])
-        #     pp.pprint(solution["w"])
-        #     pp.pprint(checkers)
+        incoherence_count = 0
+        for n in range(data["nNurses"]):
+            if solution["z"][n] == 1 and h > 0 and solution["w"][n][h - 1] == 0 and solution["w"][n][h] == 0 and data["minHours"] > checkers[n]["sumW"]:
+                # print("found invalid!! minHours:" + str(data["minHours"]) + " n " + str(n)  + " solution[z][n] =="+ str(solution["z"][n]))
+                # canwork = [ c for c in canWork if c == n]
+                # mustwork = [m for m in mustWork if m == n]
+                # print( " canWork: " + str(len(canwork)>0) + " mustwork:" + str(len(mustwork)) )
+                incoherence_count +=1
+
+                
+            # if n not in mustWork:
+            #     if solution["z"][n] == 1 and h > 0 and solution["w"][n][h - 1] == 0 and solution["w"][n][h] == 0 and data["minHours"] > checkers[n]["sumW"]:
+            #         print("it is not in mustWork")
+                    
+            #         exit()
+            #     
+
+        if incoherence_count > 0:
+            print(len(mustWork))
+            print(len(canWork))
+            print(solution["mustWork_count"])
+            print(incoherence_count)
+            print("---")
+            
+        #     # summin = 0
+        #     # for hz in range(data["hours"]):
+        #     #     summin += solution["w"][n][hz]
+
+        #     # if summin > 0 and summin < data["minHours"]:
+        #     #     print("found invalid!! minHours:" + str(data["minHours"]) + " n " + str(n) + " sumW:" + str(summin) + " solution[z][n] =="+ str(solution["z"][n]))
+        #     #     #print(solution["w"][n])
+            
+
+
+        if  h == -1:
+            print("demand")
+            print(data["demand"])
+            print("pending")
+            print(solution["pending"])
+            pp.pprint(solution["w"])
+            #pp.pprint(checkers)
+
+            exit()
 
 
 
@@ -202,13 +247,27 @@ def assignNurses(solution, hini, data):
 
     # pp.pprint(data)
     # pp.pprint(solution["cost"])
-    # exit()
+    # print("")
 
 
     # compute feasibility: if unfeasible -> fitness should be inf
     if not isFeasible(solution, data):
         # assign the max cost
         solution["cost"] = 200000 * data["nNurses"]
+
+    errors = 0
+    for n in range(data["nNurses"]):
+        summin = 0
+        for h in range(data["hours"]):
+            summin += solution["w"][n][h]
+
+        if summin > 0 and summin < data["minHours"]:
+            #print("found invalid!! minHours:" + str(data["minHours"]) + " n " + str(n) + " sumW:" + str(summin) + " solution[z][n] =="+ str(solution["z"][n]))
+            #print(solution["w"][n])
+            errors += 1
+
+    print("         --> Incoherences: " + str(errors))
+            
 
 
 
