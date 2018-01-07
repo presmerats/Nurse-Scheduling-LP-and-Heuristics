@@ -37,6 +37,8 @@ def GraspConstructive(data, alpha_param=None):
         except:
             print(" gcmax " + str(gcmax) + " gcmin " + str(gcmin) + " threshold: " + str(threshold))
 
+        #print("gcmin "  + str(gcmin) + " threshold "+ str(threshold) )
+
         i = 0
         for e in elements:
             if e.gc > threshold:
@@ -45,7 +47,10 @@ def GraspConstructive(data, alpha_param=None):
 
         # improv 20180103
         #e = elements.pop(randrange(i))
-        e = elements[0]
+        if i>0:
+            e = elements[randrange(i)]
+        else:
+            e = elements[0]
 
         # print("GRASP: selected element with cost " + str(e.gc) + " len: " + ",".join([ str(h) for h in  e.schedule]))
         solution = addElement(solution, e, data)
@@ -112,10 +117,11 @@ def grasp(data, alpha=None, iterations=None, lstype=None, lsiterations=None):
     print("     -->lstime: " + str(lstime) )
 
 
-
     if solution["cost"] < incumbent["cost"]:
+        print("Quick LS -> Improvement: " + str(solution["cost"]))
         incumbent = solution
-    
+
+
     while numiterations > 0:
 
         t1 = time.time()

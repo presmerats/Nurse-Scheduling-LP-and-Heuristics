@@ -58,6 +58,7 @@ def exceedingCapacityRemoval(candidate, n, data):
                     pp.pprint(candidate)
                     print()
 
+                #print("-->valid elimination!  n" + str(n) + " h:" + str(h))
                 candidate["exceeding"][h] -= 1
             else:
                 candidate["w"][n][h] = 1
@@ -334,6 +335,26 @@ def find_reschedules(s, data):
     return restschedules
 
 
+def updateCost(s, data):
+
+    for nz in range(data["nNurses"]):
+        for hz in range(data["hours"]):
+            if s["w"][nz][hz]==1:
+                s["z"][nz]=1
+                break
+            if hz == 23:
+                #print("empty nurse schedule " + str(nz))
+                if s["w"][nz][hz]==1:
+                    s["z"][nz]=1
+                else: 
+                    s["z"][nz]=0
+        
+    cost = 0
+    for z in range(data["nNurses"]):
+        cost += s["z"][z]
+
+    s["cost"] = cost
+
 
 
 def firstImprovementLocalSearch(solution, data):
@@ -344,21 +365,28 @@ def firstImprovementLocalSearch(solution, data):
 
     s = copySol(solution, data)
 
-    print("feasibility: " + str(isFeasible(s,data)))
-    print(data["demand"])
-    print(s["pending"])
-    print()
+    # print("feasibility: " + str(isFeasible(s,data)))
+    # print(data["demand"])
+    # print(s["pending"])
+    # print(s["cost"])
+    # print()
+
+
+    # remov all exceeding capacity [nh]
+    for n in range(data["nNurses"]):
+        exceedingCapacityRemoval(s, n, data)
+
+    # updateCost(s, data)
+    # print(s["z"])
+    # print(s["cost"])
+    # print()
+
 
     improved = True
 
     while improved:
 
         improved = False
-
-        # remov all exceeding capacity [nh]
-        for n in range(data["nNurses"]):
-            exceedingCapacityRemoval(s, n, data)
-
 
         restschedules = find_reschedules(solution, data)
         # for sched in restschedules:
@@ -387,52 +415,17 @@ def firstImprovementLocalSearch(solution, data):
             if s["z"][n] == 0:
                 continue
 
-            #print("selected nurse before " + str(n))
-            # print(s["w"][n])
-            # print(" w before")
-            # for nz in range(data["nNurses"]):
-            #     print(s["w"][nz])
-            # print()
-
             # exchange its working hours
-
             aux_schedule = list(s["w"][n])
-
             improving = False
             for h in range(data["hours"]):
-                #print(" h " + str(h) + " wnh " + str(s["w"][n][h]) + " restschedule[h] " + str(restschedule[h]) )
-                if s["w"][n][h] ==1 and restschedule[h] == -1:
-                    
+                if s["w"][n][h] ==1 and restschedule[h] == -1:                    
                     improving = False
-                    # print(" nurse " + str(n) + " not reschedulable")
-                    # print(s["w"][n])
-                    # print()
                     break
                 elif s["w"][n][h]==1 and restschedule[h]>-1:
                     improving = True
-                    # print(" nurse " + str(n) + " rescheduling")
-                    # print(s["w"][n])
-                    
-                    # print(" h " + str(h))
-                    # print(restschedule)
-                    # print( s["w"][restschedule[h]][h])
                     s["w"][n][h] = 0
                     s["w"][restschedule[h]][h] = 1
-
-
-
-            # if n == 40:
-            #     valid = True
-            #     for nv in restschedule:
-            #         if nv > -1 :
-            #             valid = valid and complete_schedule_validation(s, data, nv, verify_minHours=True, whattoreturn='validity')
-            #             if not valid:
-            #                 print(" restschedule change verification:  " + str(nv) + " not valid final schedule")
-            #                 break
-            #             else:
-            #                 print(" restschedule change verification:  " + str(nv) + " valid")
-                            
-
 
             # final validation
             valid = True
@@ -444,41 +437,34 @@ def firstImprovementLocalSearch(solution, data):
                             #print(" restschedule change verification:  " + str(nv) + " not valid final schedule")
                             break
 
-
-
-
-            # verify if valid -> no!
-            # verfy if all -> no need!
-            # recompute z[n]
             if improving and valid:
 
-                print(" --------------> nurse " + str(n) + " rescheduled!!!")
-                print("from :")
-                print(aux_schedule)
-                print("to :")
-                print(s["w"][n])
+                # print(" --------------> nurse " + str(n) + " rescheduled!!!")
+                # print("from :")
+                # print(aux_schedule)
+                # print("to :")
+                # print(s["w"][n])
+
                 # should be this without verification
                 #s["z"] -= 1
 
                 # print("extracted schedule")
                 # print(restschedule)
 
+                # cost = 0
+                # for z in range(data["nNurses"]):
+                #     cost += s["z"][z]
 
                 # print("before computing new z")
                 # print(s["z"])
+                # print(" old cost: " + str(cost))
                 # then compute and print again
 
-                for nz in range(data["nNurses"]):
-                    for hz in range(data["hours"]):
-                        if s["w"][nz][hz]==1:
-                            s["z"][nz]=1
-                            break
-                        if hz == 23:
-                            #print("empty nurse schedule " + str(nz))
-                            s["z"][nz]=0
-                    
+                updateCost(s, data)
+
                 # print("after computing new z")
                 # print(s["z"])
+                # print(" new cost: " + str(s["cost"]))
 
                 # any non used hour of restschedule should be put back! to restschedules!
                 # remove all assigned hours from restschedule
@@ -493,35 +479,22 @@ def firstImprovementLocalSearch(solution, data):
                 # clean the whiped nurse from restschedules
                 clean_restschedules(restschedules, n)
 
-                # print()
-                # print()
-                # for sched in restschedules:
-                #     print(sched)
-
+                
                 # extract new restschedule
-
                 restschedule = extract_restschedule(restschedules)
                 # print("extracted schedule")
                 # print(restschedule)
 
-                # print("selected nurse after " + str(n))
-                # print(s["w"][n])
-                # # print(" w after")
-                # # for n in range(data["nNurses"]):
-                # #     print(s["w"][n])
-                # print()
-                # print()       
-
-                
-
             else:
 
                 # if n == 0:
-                #     print(" couldn't restchedule nurse  " + str(n))
+
 
                 # restore original schedule
                 s["w"][n] = aux_schedule
 
+                # print(" couldn't restchedule nurse  " + str(n))
+                # print(s["w"][n])
                 
                 # found = False
                 # for h in range(data["hours"]):
@@ -551,28 +524,19 @@ def firstImprovementLocalSearch(solution, data):
                 #     print()
                 #     print()
 
-
-
-
-
         cost = 0
         for z in range(data["nNurses"]):
             cost += s["z"][z]
 
         s["cost"] = cost
 
-        if s["cost"] < solution["cost"]: 
-            print("     Local search improvement - cost " + str(cost))
-        
-       
-    
         # verify that solution is feasible (shoulld not be necessary)
         if isFeasible(s,data):
             solution = s
-        else:
-            print("feasibility: " + str(isFeasible(s,data)))
-            print(data["demand"])
-            print(s["pending"])
+        # else:
+        #     print("feasibility: " + str(isFeasible(s,data)))
+        #     print(data["demand"])
+        #     print(s["pending"])
 
     return solution
 
