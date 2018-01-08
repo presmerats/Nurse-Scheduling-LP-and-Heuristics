@@ -76,20 +76,39 @@ For the parameters of the BRKGA algorithm, we have tested the number of generato
 Choosing the best performing parameter setup of the two models, we performed a comparison of how objective function evolves in relation to time.
 
 The output of the parameter selection experiments is the following: 
-\begin{itemize}
-	\item best $generations$ = 20
-	\item best $population$ = 200
-	\item best $inheritance$ = 0.8
-	\item best $eliteprop$ = 0.1
-	\item best $mutantprop$ = 0.15
-\end{itemize}
 
-The output of our experiments is the following: 
-\begin{itemize}
-	\item best $\alpha$ = 0.5
-	\item best $maxIterations$ = 6
-	\item best $failedIterations$ = 4
-\end{itemize}
+
+\begin{tabular}{ll}
+GRASP &  BRKGA \\
+ $\alpha$ = 0.5  &  $generations$ = 20 \\
+ $maxIterations$ = 6 &  $population$ = 200 \\
+ $failedIterations$ = 4 & $inheritance$ = 0.8 \\
+ 						&  $inheritance$ = 0.8 \\
+ 						& $mutantprop$ = 0.15 \\
+
+
+\end{tabular}
+
+
+
+% \begin{tabularx}{\textwidth}{|p{2cm}|X|}
+% GRASP &  BRKGA \\
+% \begin{itemize}
+% 	\item best $\alpha$ = 0.5
+% 	\item best $maxIterations$ = 6
+% 	\item best $failedIterations$ = 4
+% \end{itemize}
+% &
+% \begin{itemize}
+% 	\item best $generations$ = 20
+% 	\item best $population$ = 200
+% 	\item best $inheritance$ = 0.8
+% 	\item best $eliteprop$ = 0.1
+% 	\item best $mutantprop$ = 0.15
+% \end{itemize}
+
+% \\
+% \end{tabularx}
 
 
 Based on the results, we draw conclusions about, why one is better than the other, why one stops sooner than the other. We think in terms of diversification and intensification and solution space exploration.\\
