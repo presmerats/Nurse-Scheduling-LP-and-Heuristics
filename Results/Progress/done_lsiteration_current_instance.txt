@@ -10,4 +10,3 @@
 ../../Instances/Final/LargeSet_20180106/i-ng-60-1600-1000-72h-20mxP-10mxC-5mxH-1mnH-3Cnt-20180105_12-31-42183.dat,10
 ../../Instances/Final/LargeSet_20180106/i-ng-60-1600-1000-72h-20mxP-10mxC-5mxH-1mnH-3Cnt-20180105_12-31-42183.dat,11
 ../../Instances/Final/LargeSet_20180106/i-ng-60-1600-1000-72h-20mxP-10mxC-5mxH-1mnH-3Cnt-20180105_12-31-42183.dat,12
-
