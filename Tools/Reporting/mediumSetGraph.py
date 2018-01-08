@@ -233,15 +233,6 @@ if __name__ == '__main__':
         NAMES_instances.append(i)
 
 
-
-
-
-    # print(ILP_instances)
-    # print("")
-    # print(BRKGA_instances)
-    # print("")
-    # print(GRASP_instances)
-
     # plot the times,
 
     fig, ax = plt.subplots() 
@@ -254,6 +245,8 @@ if __name__ == '__main__':
     #plt.bar(range(len(y)),y, align='center')
     plt.xticks(range(len(NAMES_instances)),NAMES_instances)
 
+    #plt.rc('xtick', labelsize=12)
+
     #plt.xticks(rotation='vertical')
     #plt.xticks(rotation=45, ha='right')
 
@@ -263,9 +256,42 @@ if __name__ == '__main__':
     #fig.subplots_adjust(bottom=0.9)
     fig.tight_layout()
 
+    fig1 = plt.gcf()
+    fig1.savefig('../../../Documentation/img/ILPvsMetah_times.png')
     plt.show()
-    plt.savefig('../../../Documentation/img/ILPvsMetah_times.png')
     plt.close()
+
+
+
+     # plot the times for the first 10 results
+
+
+    fig, ax = plt.subplots() 
+    ilp_line = plt.plot(range(len(ILP_instances[:10])),ILP_times[:10], marker='o', color='xkcd:goldenrod', ls='-', label='ILP')
+    grasp_line = plt.plot(range(len(GRASP_instances[:10])),GRASP_times[:10], marker='+', color='xkcd:azure', ls='-', label='GRASP')
+    brkga_line = plt.plot(range(len(BRKGA_instances[:10])),BRKGA_times[:10], marker='*', color='xkcd:grass green', ls='-', label='BRKGA')
+
+    ax.legend(loc='upper left', fontsize='small')
+
+    #plt.bar(range(len(y)),y, align='center')
+    plt.xticks(range(len(NAMES_instances[:10])),NAMES_instances[:10])
+
+    #plt.xticks(rotation='vertical')
+    #plt.xticks(rotation=45, ha='right')
+
+    plt.xlabel('instance name')
+    plt.ylabel('Solve time(s)')
+
+    #fig.subplots_adjust(bottom=0.9)
+    fig.tight_layout()
+
+    fig1 = plt.gcf()
+    fig1.savefig('../../../Documentation/img/ILPvsMetah_times_first10.png')
+    plt.show()
+    plt.close()
+
+
+
 
 
     # plot the obj function values as lines
@@ -289,10 +315,11 @@ if __name__ == '__main__':
     #fig.subplots_adjust(bottom=0.9)
     fig.tight_layout()
 
-    plt.show()
-    plt.savefig('../../../Documentation/img/ILPvsMetah_objf.png')
+    fig2 = plt.gcf()
+    fig2.savefig('../../../Documentation/img/ILPvsMetah_objf.png')
     plt.close()
-
+    plt.show()
+    
 
 
     # plot the obj function values as histogram
@@ -304,7 +331,7 @@ if __name__ == '__main__':
     ax.bar([float(x) + 0.2 for x in range(len(ILP_objf))], BRKGA_objf, width=0.2, color='xkcd:grass green', align='center', label='BRKGA')
 
 
-    # ax.legend( loc='upper left', fontsize='small')
+    ax.legend( loc='upper left', fontsize='small')
 
 
     plt.xticks(range(len(NAMES_instances)),NAMES_instances)
@@ -318,6 +345,36 @@ if __name__ == '__main__':
     #fig.subplots_adjust(bottom=0.9)
     fig.tight_layout()
 
+    fig1 = plt.gcf()
+    fig1.savefig('../../../Documentation/img/ILPvsMetah_objf_hist.png')
     plt.show()
-    plt.savefig('../../../Documentation/img/ILPvsMetah_objf_hist.png')
+    plt.close()
+
+
+    # plot the obj function values as histogram
+
+    fig, ax = plt.subplots() 
+
+    ax.bar([float(x) - 0.2 for x in range(len(ILP_objf[-10:]))] , ILP_objf[-10:], width=0.2, color='xkcd:goldenrod', align='center', label='ILP' )
+    ax.bar([float(x) for x in range(len(ILP_objf[-10:]))], GRASP_objf[-10:], width=0.2, color='xkcd:azure', align='center', label='GRASP')
+    ax.bar([float(x) + 0.2 for x in range(len(ILP_objf[-10:]))], BRKGA_objf[-10:], width=0.2, color='xkcd:grass green', align='center', label='BRKGA')
+
+
+    ax.legend( loc='upper left', fontsize='small')
+
+
+    plt.xticks(range(len(NAMES_instances[-10:])),NAMES_instances[-10:])
+
+    #plt.xticks(rotation='vertical')
+    #plt.xticks(rotation=45, ha='right')
+
+    plt.xlabel('instance name')
+    plt.ylabel('Objective Function')
+
+    #fig.subplots_adjust(bottom=0.9)
+    fig.tight_layout()
+
+    fig1 = plt.gcf()
+    fig1.savefig('../../../Documentation/img/ILPvsMetah_objf_hist_last10.png')
+    plt.show()
     plt.close()
