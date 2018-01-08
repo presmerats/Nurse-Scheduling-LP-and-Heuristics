@@ -1,11 +1,32 @@
+   Optimization problems can appear in almost all situations on life, but there are special important cases where those problems appears, specially on the industry, since if we can achieve an optimal solution, we will improve the efficiency of the industrial process and then get lower production cost with the same (or better) efficiency. This improvement of the costs have an effect on the competitiveness of the companies and on the final quality of their products, including that this is an important money-saving factor. 
+   
+   The challenging part is when this kind of problems become really big, since then they have a attached really high computational complexity and cost, therefore we need some methods to face them. 
+   
+   To do so, we have two approaches, the always-optimal methods that obtain the optimal solution but taking into account every possible combination of the problems' solutions, as for instance Integer Linear Programming does. By the other hand we have those methods that concerns about fair execution times and are looking for a trade-off between acceptable execution times and the quality of the solution.
+   
+   In this work we propose two approaches in order to solve the scheduling of nurses in a hospital taking into account several constraints. The first one is using Integer Linear Programming and the second one by using metaheuristics. In the metaheuristics part we are focusing specifically in the Greedy Randomized Adaptative Procedure (GRASP) and the Biased-Random Key Genetic Algorithm (BRKGA).
+   
+   Firstly we compare the efficiency in terms of solving time and wellness of ILP and metaheuristics over medium-sized problems. 
+   
+   Lastly, since large problems are intractable for ILP due to combinatorial explosion reasons, we compare the metaheuristics among them to compare such kind of problems.
+   
+   \subsection{Problem Statement}
+   
+   A public hospital needs to design the working schedule of their nurses. As a first approximation, we are asked to help in designing the schedule of a single day. We know, for each hour h, that at least demandh nurses should be working at the hospital. We have available a set of nNurses nurses and we need to determine at which hours each nurse should be working. However, there are some limitations that should be taken into account:
+   
+   \begin{itemize}
+   \item Each nurse should work at least minHours hours.
+   \item Each nurse should work at most maxHours hours.
+   \item Each nurse should work at most maxConsec consecutive hours.
+   \item No nurse can stay at the hospital for more than maxPresence hours (e.g. if maxPresence is 7, it is OK that a nurse works at 2am and also at 8am, but it not possible that he/she works at 2am and also at 9am).
+   \item No nurse can rest for more than one consecutive hour (e.g. working at 8am, resting at 9am and 10am, and working again at 11am is not allowed, since there are two consecutive resting hours).
+   \end{itemize}
 
-Write the context of the Project:  mixed integer linear programming (SIMPLEX and branch and cut) and metaheuristics algorithms to model and solve mathematical problems.\\
+The goal of this project is to determine at which hours each nurse should be working in order to minimize the number of nurses required and satisfy all the aforementioned constraints.
 
-The motivation: to model, implement and test each of the models applied to a problem.\\
+\subsection{Document Structure}
 
-Introduce the problem (copy from assignment).\\
-
-Explain the outcomes of the project: 3 models of the problem, time comparison of MILP versus Metaheuristics, Comparison of the 2 Metaheuristics.\\
+The structure of this document is the following: The problem definition is done in chapter 2. Here it is explained the problem that is faced, which constraints is needed to take into account and what we want to optimize. At chapter 3 is explained the ILP model that has been developed, i.e. the decision variables and also the constraints with a mathematical nomenclature. After this chapter, at chapter 4 is explained how it has been used the heuristics approach in order to face with the problem, two meta-heuristics has been used: GRASP3 and BRKGA4 . After perform several executions for those approaches, a comparison in terms of time and quality of the result is done at chapter 5. Finally conclusions of the project are explained at chapter 6.
 
  
 
