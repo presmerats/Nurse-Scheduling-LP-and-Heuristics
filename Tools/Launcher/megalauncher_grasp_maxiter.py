@@ -513,23 +513,23 @@ if __name__ == '__main__':
                 instance = os.path.join(root,inst)
                 status_list = update_instance_list(progress_files_folder)
 
-                parameter_executions_loop(
-                    instance,
-                    status_list,
-                    parameter_name="alpha",
-                    parameter_values_list=alphas,
-                    parameter_solver="grasp",
-                    solver_basic_params=basic_params_grasp,
-                    progress_files_folder=progress_files_folder)
-
                 # parameter_executions_loop(
                 #     instance,
                 #     status_list,
-                #     parameter_name="maxiter",
-                #     parameter_values_list=maxiters,
+                #     parameter_name="alpha",
+                #     parameter_values_list=alphas,
                 #     parameter_solver="grasp",
                 #     solver_basic_params=basic_params_grasp,
                 #     progress_files_folder=progress_files_folder)
+
+                parameter_executions_loop(
+                    instance,
+                    status_list,
+                    parameter_name="maxiter",
+                    parameter_values_list=maxiters,
+                    parameter_solver="grasp",
+                    solver_basic_params=basic_params_grasp,
+                    progress_files_folder=progress_files_folder)
 
                 # parameter_executions_loop(
                 #     instance,
