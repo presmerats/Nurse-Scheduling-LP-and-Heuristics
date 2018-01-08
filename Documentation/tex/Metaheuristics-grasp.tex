@@ -10,30 +10,109 @@ see how the candidates set is generated at pseudocode Y.
 
 The essential idea is ... very brief here pls!.
 
-[] Pseudocode + brief comment per line
+\makeatletter 
+\g@addto@macro{\@algocf@init}{\SetKwInOut{Parameter}{Parameters}} 
+\makeatother
 
+\begin{algorithm}[H]
+\KwIn{nNurses, hours, demand}
+%\Parameter{Some parameter}
+\KwOut{<solution, cost>}    
+
+\SetKwData{Left}{left}
+\SetKwData{This}{this}
+\SetKwData{Up}{up}
+\SetKwFunction{Union}{Union}
+\SetKwFunction{FindCompress}{FindCompress}
+
+solution $\leftarrow$ $\emptyset$ \\
+E $\leftarrow$ $computeCandidateElements(nNurses, hours, demand)$ \\
+\While{$E$ $\neq$ $\emptyset$}{
+computeGreedyCost(solution, E, nNurses, hours, demand) \\
+min\_gc $\leftarrow$ min(e.gc | e $\in$ E) \\
+max\_gc $\leftarrow$ max(e.gc | e $\in$ E) \\
+RCL $\leftarrow$ \{ e $\in$ E | e.gc < min\_gc + (max\_gc - min\_gc) $\times$ $\alpha$ \} \\
+e $\leftarrow$ randomSelection(RCL) \\
+solution $\leftarrow$ solution $\cup$ {e} \\
+\If{isFeasible(solution, nNurses, hours, demand)}{\label{lt}
+$\textbf{break}$
+}
+}
+cost $\leftarrow$ computeObjectiveFunctionCost(solution)\\
+$\textbf{return}$ <solution,cost>
+\caption{GRASP constructive phase}\label{alg.mainLoop}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\KwIn{nNurses, hours, demand}
+%\Parameter{Some parameter}
+\KwOut{<solution, cost>}    
+
+\SetKwData{Left}{left}
+\SetKwData{This}{this}
+\SetKwData{Up}{up}
+\SetKwFunction{Union}{Union}
+\SetKwFunction{FindCompress}{FindCompress}
+
+solution $\leftarrow$ $\emptyset$ \\
+E $\leftarrow$ $computeCandidateElements(nNurses, hours, demand)$ \\
+\While{$E$ $\neq$ $\emptyset$}{
+computeGreedyCost(solution, E, nNurses, hours, demand) \\
+min\_gc $\leftarrow$ min(e.gc | e $\in$ E) \\
+max\_gc $\leftarrow$ max(e.gc | e $\in$ E) \\
+RCL $\leftarrow$ \{ e $\in$ E | e.gc < min\_gc + (max\_gc - min\_gc) $\times$ $\alpha$ \} \\
+e $\leftarrow$ randomSelection(RCL) \\
+solution $\leftarrow$ solution $\cup$ {e} \\
+\If{isFeasible(solution, nNurses, hours, demand)}{\label{lt}
+$\textbf{break}$
+}
+}
+cost $\leftarrow$ computeObjectiveFunctionCost(solution)\\
+$\textbf{return}$ <solution,cost>
+\caption{computeCandidateElements}\label{alg.mainLoop}
+\end{algorithm}
 
 
 \subsubsection{Local Search}
 
 The other part that will be shown is about the local search. Once the constructive phase ends up with a solution, eventually it is the optimal, but usually it is not. In order to improve the solution a neighbourhoods of the constructive phase solution, i.e. near solutions will be searched. This phase is called local search. You can see the pseudocode 4.1.3 for the implemented local search procedure.
 
+\begin{algorithm}[H]
+\KwIn{nNurses, hours, demand}
+%\Parameter{Some parameter}
+\KwOut{<solution, cost>}    
+
+\SetKwData{Left}{left}
+\SetKwData{This}{this}
+\SetKwData{Up}{up}
+\SetKwFunction{Union}{Union}
+\SetKwFunction{FindCompress}{FindCompress}
+
+solution $\leftarrow$ $\emptyset$ \\
+E $\leftarrow$ $computeCandidateElements(nNurses, hours, demand)$ \\
+\While{$E$ $\neq$ $\emptyset$}{
+computeGreedyCost(solution, E, nNurses, hours, demand) \\
+min\_gc $\leftarrow$ min(e.gc | e $\in$ E) \\
+max\_gc $\leftarrow$ max(e.gc | e $\in$ E) \\
+RCL $\leftarrow$ \{ e $\in$ E | e.gc < min\_gc + (max\_gc - min\_gc) $\times$ $\alpha$ \} \\
+e $\leftarrow$ randomSelection(RCL) \\
+solution $\leftarrow$ solution $\cup$ {e} \\
+\If{isFeasible(solution, nNurses, hours, demand)}{\label{lt}
+$\textbf{break}$
+}
+}
+cost $\leftarrow$ computeObjectiveFunctionCost(solution)\\
+$\textbf{return}$ <solution,cost>
+\caption{Local Search}\label{alg.mainLoop}
+\end{algorithm}
+
 \subsubsection{Greedy cost function}
 
 Finally, an important function for this meta-heuristic is the greedy function. This greedy function is giving us information about the quality of a candidate in order to decide if this candidate should
 be part of the solution or not. In this case, the greedy value depends on ... BRIEF
 
-Greedy.py line 351:
-
-for e in range(len(elements)):
-        element = elements[e]
-        partial\_sum = 0
-
-        element.gc = data["nNurses"]
-        
-        for h in range(data["hours"]):
-            pendingh = solution["pending"][h]
-            element.gc -= element.schedule[h] * pendingh
-
+\begin{center}
+q = $(\sum_{h=1}^{nHours} demand_h \times w_{n,h})^{-1}$
+\end{center}
 
 \pagebreak
