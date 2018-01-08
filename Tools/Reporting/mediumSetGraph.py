@@ -8,6 +8,8 @@ from matplotlib.backends.backend_pdf import PdfPages
 from random import randrange
 import argparse
 import traceback
+from matplotlib.dates import date2num
+import datetime
 
 
 
@@ -180,7 +182,7 @@ if __name__ == '__main__':
                 print("error in file : "+filename)
                 print("")   
             
-    print(ILP_list)
+    # print(ILP_list)
     # print(GRASP_list)
     # print(BRKGA_list)
             
@@ -192,16 +194,18 @@ if __name__ == '__main__':
 
 
     for elem in BRKGA_list:
+        if not elem["name"] in [ name['name'] for name in ILP_list]:
+            print("not found BRKGA result instance " + elem["name"])
+            continue
+
         BRKGA_instances.append(elem["name"])
         BRKGA_times.append(elem["time"])
         BRKGA_objf.append(elem["objf"])
 
-    print(len(BRKGA_instances))
-    print(len(ILP_instances))
 
     for elem in ILP_list:
         #this is temporary!!
-        if elem["name"] not in BRKGA_instances:
+        if elem["name"] not in [ elem['name'] for elem in BRKGA_list]:
             print("not found ILP result instance " + elem["name"])
             continue
 
@@ -210,17 +214,26 @@ if __name__ == '__main__':
         ILP_objf.append(elem["objf"])
 
 
-    print(len(ILP_instances))
 
     for elem in GRASP_list:
         #this is temporary!!
-        if elem["name"] not in BRKGA_instances:
+        if elem["name"] not in [ elem['name'] for elem in ILP_list]:
             continue    
         GRASP_instances.append(elem["name"])
         GRASP_times.append(elem["time"])
         GRASP_objf.append(elem["objf"])
 
-    print(len(GRASP_instances))
+
+    # reduce to first 10
+
+
+    # transform labels to 1 - 20
+    NAMES_instances = []
+    for i in range(len(BRKGA_instances)):
+        NAMES_instances.append(i)
+
+
+
 
 
     # print(ILP_instances)
@@ -234,15 +247,15 @@ if __name__ == '__main__':
     fig, ax = plt.subplots() 
     ilp_line = plt.plot(range(len(ILP_instances)),ILP_times, marker='o', color='xkcd:goldenrod', ls='-', label='ILP')
     grasp_line = plt.plot(range(len(GRASP_instances)),GRASP_times, marker='+', color='xkcd:azure', ls='-', label='GRASP')
-    brkga_line = plt.plot(range(len(BRKGA_instances)),BRKGA_times, marker='*', color='xkcd:reddish orange', ls='-', label='BRKGA')
+    brkga_line = plt.plot(range(len(BRKGA_instances)),BRKGA_times, marker='*', color='xkcd:grass green', ls='-', label='BRKGA')
 
     ax.legend(loc='upper left', fontsize='small')
 
     #plt.bar(range(len(y)),y, align='center')
-    plt.xticks(range(len(BRKGA_instances)),BRKGA_instances)
+    plt.xticks(range(len(NAMES_instances)),NAMES_instances)
 
     #plt.xticks(rotation='vertical')
-    plt.xticks(rotation=45, ha='right')
+    #plt.xticks(rotation=45, ha='right')
 
     plt.xlabel('instance name')
     plt.ylabel('Solve time(s)')
@@ -256,24 +269,22 @@ if __name__ == '__main__':
 
 
     # plot the obj function values as lines
-
-
     fig, ax = plt.subplots() 
     ilp_line = plt.plot(range(len(ILP_instances)),ILP_objf, marker='o', color='xkcd:goldenrod', ls='-', label='ILP')
     grasp_line = plt.plot(range(len(GRASP_instances)),GRASP_objf, marker='+', color='xkcd:azure', ls='-', label='GRASP')
-    brkga_line = plt.plot(range(len(BRKGA_instances)),BRKGA_objf, marker='*', color='xkcd:reddish orange', ls='-', label='BRKGA')
+    brkga_line = plt.plot(range(len(BRKGA_instances)),BRKGA_objf, marker='*', color='xkcd:grass green', ls='-', label='BRKGA')
 
     ax.legend(loc='upper left', fontsize='small')
 
 
     #plt.bar(range(len(y)),y, align='center')
-    plt.xticks(range(len(BRKGA_instances)),BRKGA_instances)
+    plt.xticks(range(len(NAMES_instances)),NAMES_instances)
 
     #plt.xticks(rotation='vertical')
-    plt.xticks(rotation=45, ha='right')
+    #plt.xticks(rotation=45, ha='right')
 
     plt.xlabel('instance name')
-    plt.ylabel('Objectie Function')
+    plt.ylabel('Objective Function')
 
     #fig.subplots_adjust(bottom=0.9)
     fig.tight_layout()
@@ -286,32 +297,27 @@ if __name__ == '__main__':
 
     # plot the obj function values as histogram
 
+    fig, ax = plt.subplots() 
 
-    # fig, ax = plt.subplots() 
+    ax.bar([float(x) - 0.2 for x in range(len(ILP_objf))] , ILP_objf, width=0.2, color='xkcd:goldenrod', align='center', label='ILP' )
+    ax.bar([float(x) for x in range(len(ILP_objf))], GRASP_objf, width=0.2, color='xkcd:azure', align='center', label='GRASP')
+    ax.bar([float(x) + 0.2 for x in range(len(ILP_objf))], BRKGA_objf, width=0.2, color='xkcd:grass green', align='center', label='BRKGA')
 
-    # bin_list = range(len(ILP_instances))
-    # ax.bar([float(x) - 0.2 for x in range(len(ILP_objf))] , ILP_objf, width=0.2, color='xkcd:goldenrod', align='center', label='ILP' )
-    # barchart2 = ax.bar([float(x) for x in range(len(ILP_objf))], GRASP_objf, width=0.2, color='xkcd:azure', align='center', label='GRASP')
-    # barchart3 = ax.bar([float(x) + 0.2 for x in range(len(ILP_objf))], BRKGA_objf, width=0.2, color='xkcd:pistachio', align='center', label='BRKGA')
-
-
-    # #ax.legend(handles=[ilp_line, grasp_line,brkga_line ], labels=['ILP', 'GRASP', 'BRKGA'], loc='upper left')
 
     # ax.legend( loc='upper left', fontsize='small')
 
 
-    # #plt.bar(range(len(y)),y, align='center')
-    # plt.xticks(range(len(BRKGA_instances)),BRKGA_instances)
+    plt.xticks(range(len(NAMES_instances)),NAMES_instances)
 
-    # #plt.xticks(rotation='vertical')
-    # plt.xticks(rotation=45, ha='right')
+    #plt.xticks(rotation='vertical')
+    #plt.xticks(rotation=45, ha='right')
 
-    # plt.xlabel('instance name')
-    # plt.ylabel('Objective Function')
+    plt.xlabel('instance name')
+    plt.ylabel('Objective Function')
 
-    # #fig.subplots_adjust(bottom=0.9)
-    # fig.tight_layout()
+    #fig.subplots_adjust(bottom=0.9)
+    fig.tight_layout()
 
-    # plt.show()
-    # plt.savefig('../../../Documentation/img/ILPvsMetah_objf.png')
-    # plt.close()
+    plt.show()
+    plt.savefig('../../../Documentation/img/ILPvsMetah_objf_hist.png')
+    plt.close()
