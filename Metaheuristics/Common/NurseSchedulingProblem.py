@@ -8,6 +8,8 @@ import pprint
 import logging
 
 printlog = False
+printlog2 = False
+printlog3 = False
 
 def isValid_ng(data, candidate):
     d = data
@@ -268,7 +270,7 @@ def incremental_schedule_validation(candidate_sol, d, nurse, verify_minHours = T
     return validity
 
 
-def incremental_schedule_validation_fast(candidate_sol, d, h, nurse, checkers, verify_minHours = True, whattoreturn = 'summary', force_rest_check = False, set_end=-1):
+def incremental_schedule_validation_fast(candidate_sol, d, h, nurse, checkers, verify_minHours = True, whattoreturn = 'summary', force_rest_check = False):
 
     #print("incremental_sched_val_fast h=" + str(h), " n=" + str(nurse))
 
@@ -285,7 +287,7 @@ def incremental_schedule_validation_fast(candidate_sol, d, h, nurse, checkers, v
     end = checkers[nurse]["end"]
     consec = checkers[nurse]["consec"]
 
-    if nurse == -1:
+    if printlog2 and nurse == 0:
         print("         complete_schedule_validation_fast:")
         print("         nurse " + str(nurse) + 
               " hour " + str(h) +
@@ -293,7 +295,8 @@ def incremental_schedule_validation_fast(candidate_sol, d, h, nurse, checkers, v
               " start " + str(start) +
               " end " + str(end) +
               " consec " + str(consec) +
-              " maxConsec " + str(d["maxConsec"]) )
+              " maxConsec " + str(d["maxConsec"]) +
+              " minHours " + str(d["minHours"]))
         print(candidate)
         print("")
 
@@ -470,7 +473,7 @@ def complete_schedule_validation_fast(candidate_sol, d, nurse, h, checkers, veri
     end = checkers[nurse]["end"]
     consec = checkers[nurse]["consec"]
 
-    if nurse == -1:
+    if printlog2 and  nurse == 0:
         print("         complete_schedule_validation_fast:")
         print("         nurse " + str(nurse) + 
               " hour " + str(h) +
@@ -639,140 +642,6 @@ def checkIfCanWork(solution, h, n, data, sumW, hini=None):
     return False
 
 
-def update_checkers(solution, data, n, h, newval, checkers):
-
-    checker = checkers[n]
-
-    #print("  update checkers, w(" + str(n) + "," + str(h) + ")=" + str(solution["w"][n][h]))
-
-    if False  and solution["w"][n][h] == newval:
-        #print(" update_checkers skpping!")
-        return
-
-    else:
-
-        if solution["w"][n][h] == 0 and newval == 1:
-            if n==-1:
-                print("   update_checkers - increment!")
-            #increment
-            solution["w"][n][h] = 1
-            checker['sumW'] += 1
-            #print("    updating sumw " + str(checker["sumW"]))
-            if h>0 and solution["w"][n][h-1] == 0:
-                #if start is -1 then start
-                if checker["start"] == -1:
-                    checker["start"] = h
-
-                # new end
-                checker["oldend"] = checker["end"]
-                checker["end"] = h
-
-                # consec = 1
-                checker["consec"] = 1
-
-                # rest is ok
-
-            elif h>0 and solution["w"][n][h-1] == 1:
-                if checker["start"] == -1:
-                    # should never happend!
-                    checker["start"] = h - 1
-
-                # new end
-                checker["oldend"] = h-1
-                checker["end"] = h
-
-                # consec = 1
-                checker["consec"] += 1 
-
-            elif h==0:
-                checker["start"]=h
-                checker["end"]=h
-                checker["oldend"]=-1
-                checker["consec"]=1
-
-        elif solution["w"][n][h] == 0 and newval == 0:
-            if n==-1:
-                print("   update_checkers - initialize with 0")
-            
-            #print("          sumw=" + str(checker["sumW"]))
-            if h>0 and solution["w"][n][h-1] == 0:
-                #if start is -1 then start
-                if checker["start"] == h:
-                    checker["start"] = -1
-
-                if checker["end"] == h:
-                    checker["oldend"] = h
-                    checker["end"] = checker["oldend"]
-
-                # consec = 1
-                checker["consec"] = 0
-
-
-            elif h>0 and solution["w"][n][h-1] == 1:
-                if checker["start"] == -1:
-                    # should never happend!
-                    checker["start"] = h - 1
-
-                # new end
-                checker["oldend"] = h
-                checker["end"] = h -1 
-
-                # consec 
-                checker["consec"] -= 1 
-
-            elif h==0:
-                checker["start"]=-1
-                checker["end"]=-1
-                checker["oldend"]=0
-                checker["consec"]=0
-
-
-        elif solution["w"][n][h] == 1 and newval == 0:
-            # decrement
-            if n==-1:
-                print("   update_checkers decrement")
-            solution["w"][n][h] = 0
-            checker['sumW'] -= 1
-            if h>0 and solution["w"][n][h-1] == 0:
-                #if start is -1 then start
-                if checker["start"] == h:
-                    checker["start"] = -1
-
-                if checker["end"] == h:
-                    checker["oldend"] = h
-                    checker["end"] = checker["oldend"]
-
-                # consec = 1
-                checker["consec"] = 0
-
-
-            elif h>0 and solution["w"][n][h-1] == 1:
-                if checker["start"] == -1:
-                    # should never happend!
-                    checker["start"] = h - 1
-
-                # new end
-                checker["oldend"] = h
-                checker["end"] = h -1 
-
-                # consec = 1
-                checker["consec"] -= 1 
-
-            elif h==0:
-                checker["start"]=-1
-                checker["end"]=-1
-                checker["oldend"]=0
-                checker["consec"]=0
-
-        else:
-            if n==-1:
-                print("Strange case!"  + str(solution["w"][n][h]) + str(newval))
-
-    if n==-1:
-        print(checkers[n])
-        print(solution["w"][n])
-
-
 
 
 def checkIfMustWork(solution, h, n, data, sumW, canWork_check, hini=None):
@@ -821,11 +690,149 @@ def checkIfMustWork(solution, h, n, data, sumW, canWork_check, hini=None):
 
 
 
+def update_checkers(solution, data, n, h, newval, checkers):
+
+    checker = checkers[n]
+
+    #print("  update checkers, w(" + str(n) + "," + str(h) + ")=" + str(solution["w"][n][h]))
+
+    if False  and solution["w"][n][h] == newval:
+        #print(" update_checkers skpping!")
+        return
+
+    else:
+
+        if solution["w"][n][h] == 0 and newval == 1:
+            if printlog2 and n==0:
+                print("   update_checkers - increment!")
+            #increment
+            solution["w"][n][h] = 1
+            checker['sumW'] += 1
+            #print("    updating sumw " + str(checker["sumW"]))
+            if h>0 and solution["w"][n][h-1] == 0:
+                #if start is -1 then start
+                if checker["start"] == -1:
+                    checker["start"] = h
+
+                # new end
+                checker["oldend"] = checker["end"]
+                checker["end"] = h
+
+                # consec = 1
+                checker["consec"] = 1
+
+                # rest is ok
+
+            elif h>0 and solution["w"][n][h-1] == 1:
+                if checker["start"] == -1:
+                    # should never happend!
+                    checker["start"] = h - 1
+
+                # new end
+                checker["oldend"] = h-1
+                checker["end"] = h
+
+                # consec = 1
+                checker["consec"] += 1 
+
+            elif h==0:
+                checker["start"]=h
+                checker["end"]=h
+                checker["oldend"]=-1
+                checker["consec"]=1
+
+        elif solution["w"][n][h] == 0 and newval == 0:
+            if printlog2 and pn==0:
+                print("   update_checkers - initialize with 0")
+            
+            #print("          sumw=" + str(checker["sumW"]))
+            if h>0 and solution["w"][n][h-1] == 0:
+                #if start is -1 then start
+                if checker["start"] == h:
+                    checker["start"] = -1
+
+                if checker["end"] == h:
+                    checker["oldend"] = h
+                    checker["end"] = checker["oldend"]
+
+                # consec = 1
+                checker["consec"] = 0
+
+
+            elif h>0 and solution["w"][n][h-1] == 1:
+                if checker["start"] == -1:
+                    # should never happend!
+                    checker["start"] = h - 1
+
+                # new end
+                checker["oldend"] = h
+                checker["end"] = h -1 
+
+                # consec 
+                checker["consec"] -= 1 
+
+            elif h==0:
+                checker["start"]=-1
+                checker["end"]=-1
+                checker["oldend"]=0
+                checker["consec"]=0
+
+
+        elif solution["w"][n][h] == 1 and newval == 0:
+            # decrement
+            if printlog2 and n==0:
+                print("   update_checkers decrement")
+            solution["w"][n][h] = 0
+            checker['sumW'] -= 1
+            if h>0 and solution["w"][n][h-1] == 0:
+                #if start is -1 then start
+                if checker["start"] == h:
+                    checker["start"] = -1
+
+                if checker["end"] == h:
+                    checker["oldend"] = h
+                    checker["end"] = checker["oldend"]
+
+                # consec = 1
+                checker["consec"] = 0
+
+
+            elif h>0 and solution["w"][n][h-1] == 1:
+                if checker["start"] == -1:
+                    # should never happend!
+                    checker["start"] = h - 1
+
+                # new end
+                checker["oldend"] = h
+                checker["end"] = h -1 
+
+                # consec = 1
+                checker["consec"] -= 1 
+
+            elif h==0:
+                checker["start"]=-1
+                checker["end"]=-1
+                checker["oldend"]=0
+                checker["consec"]=0
+
+        else:
+            if printlog2 and n==0:
+                print("Strange case!"  + str(solution["w"][n][h]) + str(newval))
+
+    if printlog2 and n==0:
+        print(checkers[n])
+        print(solution["w"][n])
+
+
+
+
+
 def checkIfCanWork_fast(solution, h, n, data, sumW, checkers, hini=None):
     minHours = data["minHours"]
     hours = data["hours"]
     z = solution["z"]
     w = solution["w"]
+
 
     #print("checkIfCanWOrk_fast h:"+str(h) + " n:" + str(n))
         
@@ -834,33 +841,30 @@ def checkIfCanWork_fast(solution, h, n, data, sumW, checkers, hini=None):
             #print("nurse " + str(n) + "cannot work at " + str(h) + " cause hini =" + str(hini[n]))
             return False
 
-    aux = w[n][h]
-    #w[n][h] = 1
+
     # update checkers
     update_checkers(solution, data, n, h, 1,checkers)
     #print(solution["w"][n][h])
 
     # minHours validity
     verify_minHours = False
-    if z[n] == 1 and hours - h + 1 < minHours - sumW[n]:
-        verify_minHours=True
-
-
 
     # verify max rest constraint if not working
-    rest_check, maxPresence_check, maxConsec_check, maxHours_check, minHours_check = complete_schedule_validation_fast(solution, data, n, h, checkers,  verify_minHours=verify_minHours, whattoreturn='All')
+    # rest_check, maxPresence_check, maxConsec_check, maxHours_check, minHours_check = complete_schedule_validation_fast(solution, data, n, h, checkers,  verify_minHours=verify_minHours, whattoreturn='All')
+    rest_check, maxPresence_check, maxConsec_check, maxHours_check, minHours_check = incremental_schedule_validation_fast(solution, data, h, n, checkers, verify_minHours=verify_minHours, whattoreturn='All', force_rest_check=True)
 
     # undo changes, just a verification
-    #w[n][h] = aux
-    update_checkers(solution, data, n, h, aux, checkers)
+    update_checkers(solution, data, n, h, 0, checkers)
     #print(solution["w"][n][h])
-    
+
+    # if minHours cannot be satisfied from h to hours
+    if z[n] == 0 and h >= hours - minHours + checkers[n]["sumW"]:
+        return False
 
     if rest_check and \
         maxPresence_check and \
         maxConsec_check and  \
-        maxHours_check and \
-        minHours_check:
+        maxHours_check:
 
 
         return True
@@ -875,7 +879,6 @@ def checkIfMustWork_fast(solution, h, n, data, sumW, canWork_check, checkers,hin
     w = solution["w"]
     aux = w[n][h]
 
-    #print("checkIfCMustWOrk_fast h:"+str(h) + " n:" + str(n))
 
     # should already be 0
     if w[n][h] == 1:
@@ -885,27 +888,15 @@ def checkIfMustWork_fast(solution, h, n, data, sumW, canWork_check, checkers,hin
 
     # minHours validity
     verify_minHours = False
-    if z[n] == 1 and hours - h + 1 < minHours - sumW[n]:
+    if z[n] == 1 and h >= hours - minHours + checkers[n]["sumW"]:
         verify_minHours = True
 
 
-
-
     # verify max rest constraint if not working
-    rest_check, maxPresence_check, maxConsec_check, maxHours_check, minHours_check = incremental_schedule_validation_fast(solution, data, h, n, checkers, verify_minHours=verify_minHours, whattoreturn='All', force_rest_check=False, set_end=h)
+    rest_check, maxPresence_check, maxConsec_check, maxHours_check, minHours_check = incremental_schedule_validation_fast(solution, data, h, n, checkers, verify_minHours=verify_minHours, whattoreturn='All', force_rest_check=False)
 
     # undo changes, just a verification
     w[n][h] = aux
-
-
-
-    # print("CanRest w[" + str(n) + "][" + str(h) + "] = " + str(w[n][h]) + " ?:")
-    # # print(rest_check)
-    # print("rest_checkt " + str(rest_check))
-    # print("minHours_checkt " + str(minHours_check))
-    # print("maxHours_checkt " + str(maxHours_check))
-    # print("maxConsec_checkt " + str(maxConsec_check))
-    # print("maxPresence_checkt " + str(maxPresence_check))
 
     if ((not rest_check and minHours_check) or \
         (not rest_check and not minHours_check) or \

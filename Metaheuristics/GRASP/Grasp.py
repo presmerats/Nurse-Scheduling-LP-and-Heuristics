@@ -8,7 +8,7 @@ def GraspConstructive(data, alpha_param=None):
 
     alpha = 0.5
     if alpha_param is not None:
-        alpha = alpha_param
+        alpha = float(alpha_param)
 
     # initialize solution and cost
     solution = {
@@ -67,7 +67,7 @@ def GraspConstructive(data, alpha_param=None):
     solution["cost"], solution["totalw"] = computeCost(solution, data)
     
     greedytype = ""
-    if alpha > 0:
+    if float(alpha) > 0:
         greedytype= "Randomized "
 
     print( greedytype + "Greedy Constructive - cost:" + str(solution["cost"]) +  " Elements remaining=" + str(len(elements)) + " and isFeasible(solution)=" +  str(isFeasible(solution, data)) )

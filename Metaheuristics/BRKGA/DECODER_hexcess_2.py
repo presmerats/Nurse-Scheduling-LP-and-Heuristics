@@ -12,6 +12,8 @@ if parentPath not in sys.path:
 from Common.NurseSchedulingProblem import *
 from Greedy import isFeasible
 
+printlog = False
+
 
 """
     vars to save
@@ -74,21 +76,24 @@ def computeAssignments(solution, h, data, sumW, checkers, hini=None):
     # for each nurse
     for n in sorted_nurses:
 
-        # print()
-        # print("computeAssignments " + str(n))
-
         # canWork Check-------------------------------
         canWork_check = checkIfCanWork_fast(solution, h, n, data, sumW, checkers=checkers, hini=hini)
         if canWork_check:
-           
-            # mustWork Check-------------------------------
-            # avoid repeating canWork_check
-            mustWork_check = checkIfMustWork_fast(solution, h, n, data, sumW, canWork_check, checkers,  hini)
+
+
+            mustWork_check = checkIfMustWork_fast(solution, h, n, data, sumW, True, checkers,  hini)
             if mustWork_check:
                 mustWork.append(n)
-            else:
+            else:    
                 canWork.append(n)
 
+            # # mustWork Check-------------------------------
+            # # avoid repeating canWork_check
+            # mustWork_check = checkIfMustWork_fast(solution, h, n, data, sumW, canWork_check, checkers,  hini)
+            # if mustWork_check:
+            #     mustWork.append(n)
+            # else:
+           
     return mustWork, canWork
 
 
@@ -126,9 +131,12 @@ def assignNurses(solution, hini, data):
     z = solution["z"]
     w = solution["w"]
 
+
     for h in range(hours):
 
         #print(" for loop h="+str(h))
+
+        solution["mustWork_count"] = 0
         
         mustWork, canWork = computeAssignments(solution, h, data, checkers=checkers, sumW=sumW )
 
@@ -151,9 +159,6 @@ def assignNurses(solution, hini, data):
             # print("nurse :" + str(n) + "  h: " + str(h) + " pending: ")
             # print(pending)
             update_checkers(solution, data, n, h, 1,checkers)
-            if n==-1:
-                print("must-----------------------"*2)
-                print("")
             w[n][h] = 1
             sumW[n] += 1
             pending[h] -= 1
@@ -161,21 +166,15 @@ def assignNurses(solution, hini, data):
                 z[n] = 1
                 solution["cost"] += 1
             
-
-
             #print("w[" + str(n) + "," + str(h) + "] = 1")
             # pp.pprint(solution["w"])
 
-
-
         for n in canWork:
+
             # print("nurse :" + str(n) + "  h: " + str(h) + " pending: ")
             # print(pending)
             if pending[h] + hini[h] > 0:
-                update_checkers(solution, data, n, h, 1,checkers)
-                if n==-1:
-                    print("can-----------------------"*2)
-                    print("")    
+                update_checkers(solution, data, n, h, 1,checkers)   
                 w[n][h] = 1
                 sumW[n] += 1
                 pending[h] -= 1
@@ -185,30 +184,21 @@ def assignNurses(solution, hini, data):
                 
                 #print("w[" + str(n) + "," + str(h) + "] = 1")
             # print("w[" + str(n) + "]")
-            # pp.pprint(solution["w"])
-
-        # if h == 1 or h == 23:
-        #     print("demand")
-        #     print(data["demand"])
-        #     print("pending")
-        #     print(solution["pending"])
-        #     pp.pprint(solution["w"])
-        #     pp.pprint(checkers)
-
-
-
-        
-            
+            # pp.pprint(solution["w"])           
 
     # pp.pprint(data)
     # pp.pprint(solution["cost"])
-    # exit()
-
+    # print("")
 
     # compute feasibility: if unfeasible -> fitness should be inf
     if not isFeasible(solution, data):
         # assign the max cost
-        solution["cost"] = 200000 * data["nNurses"]
+        #solution["cost"] = 200000 * data["nNurses"]
+        solution["cost"] = 100 * solution["cost"]
+        # print(data["demand"])
+        # print(solution["pending"])
+        # print("")
+
 
 
 

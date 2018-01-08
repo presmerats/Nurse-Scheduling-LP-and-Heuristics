@@ -52,6 +52,7 @@ from pathlib import Path, PurePath
 import argparse
 import time
 from launcher import *
+from random import shuffle
 
 demo = True
 
@@ -472,24 +473,24 @@ if __name__ == '__main__':
 
     basic_params_grasp ={
         'alpha': '0.2',
-        'maxiter': 3,
+        'maxiter': 1,
         'lstype': 'first',
-        'lsiterations': 5
+        'lsiterations': 3
     }
-    alphas = [0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.6, 0.7, 0.8, 0.9]
-    maxiters = range(1,10)
+    alphas = [0.1, 0.15, 0.2, 0.25, 0.3, 0.4, 0.5]
+    maxiters = range(3,8)
     lstypes = "first"
     lsiterations = range(1,5)
 
     basic_params_brkga ={
-        'generation': 3,
+        'generation': 5,
         'eliteprop': 0.3,
         'mutantprop': 0.1,
         'population': 100,
         'inheritance': 0.7,
         'decoder': 'hexcess'
     }
-    generations = range(1,10)
+    generations = range(5,25,5)
     eliteprops = [0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.6, 0.7, 0.8, 0.9]
     mutantprops = [0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.6, 0.7, 0.8, 0.9]
     inheritances = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.75, 0.8, 0.85, 0.9]
@@ -500,6 +501,9 @@ if __name__ == '__main__':
 
     for root, dirs, files in os.walk(instances_folder):
         all_ok = True
+
+        shuffle(files)
+
         for inst in files:
             try:
 
