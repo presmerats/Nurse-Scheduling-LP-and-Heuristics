@@ -2,3 +2,6 @@
 ../../Instances/Final/LargeSet_20180106/0710-i-ng-60-192-120-24h-16mxP-5mxC-10mxH-1mnH-3Cnt-20171227_23-56-30345.dat,0.2
 ../../Instances/Final/LargeSet_20180106/0710-i-ng-60-192-120-24h-16mxP-5mxC-10mxH-1mnH-3Cnt-20171227_23-56-30345.dat,0.3
 ../../Instances/Final/LargeSet_20180106/0710-i-ng-60-192-120-24h-16mxP-5mxC-10mxH-1mnH-3Cnt-20171227_23-56-30345.dat,0.4
+../../Instances/Final/LargeSet_20180106/0710-i-ng-60-192-120-24h-16mxP-5mxC-10mxH-1mnH-3Cnt-20171227_23-56-30345.dat,0.5
+../../Instances/Final/LargeSet_20180106/0710-i-ng-60-192-120-24h-16mxP-5mxC-10mxH-1mnH-3Cnt-20171227_23-56-30345.dat,0.6
+../../Instances/Final/LargeSet_20180106/0710-i-ng-60-192-120-24h-16mxP-5mxC-10mxH-1mnH-3Cnt-20171227_23-56-30345.dat,0.7
