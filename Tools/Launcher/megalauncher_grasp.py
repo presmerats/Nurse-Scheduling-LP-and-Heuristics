@@ -478,8 +478,10 @@ if __name__ == '__main__':
         'lstype': 'first',
         'lsiteration': 3
     }
-    alphas = [0.1, 0.15, 0.2, 0.25, 0.3, 0.4, 0.5]
-    maxiters = range(3,8)
+    #alphas = [0.1, 0.15, 0.2, 0.25, 0.3, 0.4, 0.5]
+    alphas = [0.6, 0.7, 0.8, 0.9]
+    #maxiters = range(3,8)
+    maxiters = [2, 8, 9, 10]
     lstypes = "first"
     lsiterations = range(1,15)
 
