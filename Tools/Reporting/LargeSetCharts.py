@@ -38,8 +38,43 @@ import traceback
 from datetime import datetime
 import argparse
 import operator
+import shutil
+import pprint
+
+pp = pprint.PrettyPrinter(indent=2)
 
 
+def chartPlot(plotname, savefilename, x, y, axisnames, labels):
+
+    fig, ax = plt.subplots()
+    
+    xs = range(len(y))
+    x0 = xs[0]
+    x1 = xs[-1]
+    y1 = y[0]
+    for ys in y:
+        if ys < y1:
+            y1 = ys
+    ax.plot([x0, x1], [y1, y1], 'k-', c='r')
+    
+    plt.plot(range(len(y)),y, marker='.', color='b', ls='', label=labels[0])
+
+    plt.xticks(range(len(x)),x)
+    plt.xlabel(axisnames[0])
+    plt.ylabel(axisnames[1])
+
+
+    ax.legend(loc='upper right', fontsize='small')
+    #fig.subplots_adjust(bottom=0.9)
+    fig.tight_layout()
+    #plt.axis([0, len(results), 0, max(y)])
+    plt.savefig(os.path.join('..','LargeSet_graphs',savefilename  + '.png'))
+    plt.show()
+    plt.close()
+
+    # copy to Documentation folder
+    savename2 = 'best-' + savefilename[18:]
+    shutil.copy(os.path.join('..','LargeSet_graphs',savefilename  + '.png'), os.path.join('..','..','..','Documentation','img',savename2  + '.png'))
 
 
 def buildCharts(parameters_list, name):
@@ -79,15 +114,76 @@ def buildCharts(parameters_list, name):
         
     """
 
+    best_values = {}
+
     for elem in parameters_list:
-        print(elem["name"])
+        #print(elem["name"])
         elem["results"] = sorted(elem["results"], key=lambda k: k['paramval'])
+
+        bestvalue = elem["results"][0]["paramval"]
+        min_objfunc_avg = elem["results"][0]["objfunc_avg"]
+
+        # if elem["name"] == "generation":
+        #     pp.pprint(elem)
+
         for paramval in elem["results"]:
-            print(paramval["paramval"])
-            print(paramval["objfunc_avg"])
+            #print(paramval["paramval"])
+            #print(paramval["objfunc_avg"])
+        
+            #avg verification
+            thesum = 0
+            for objfs in paramval["objfunc"]:
+                thesum += objfs
+
+            theavg = thesum / len(paramval["objfunc"])
+            if round(theavg,2) != round(paramval["objfunc_avg"],2):
+                print("----->Avg error!")
+                print(theavg)
+                print(paramval["objfunc_avg"])
+                print()
+
+            if paramval["objfunc_avg"] < min_objfunc_avg:
+                min_objfunc_avg = paramval["objfunc_avg"]
+                bestvalue = paramval["paramval"]
+
+        best_values[elem["name"]] = bestvalue
+
+        # plotname
+        # plotfilename
+        # x
+        x_ = [ x["paramval"] for x in elem["results"]]
+        # y
+        y_ = [ y["objfunc_avg"] for y in elem["results"]]
+        # legend
+        # axes
+
+        thelabel = elem["name"]
+        if elem["name"] == "lsiteration":
+            thelabel = "failedIterations"
+        elif elem["name"] == "maxIter":
+            thelabel = "maxIterations"
+        elif elem["name"] == "generation":
+            thelabel = "generations"
+        
         
 
-    pass
+        chartPlot(
+            plotname=elem["name"], 
+            savefilename=name + "-" + elem["name"], 
+            x=x_, 
+            y=y_, 
+            axisnames=["Parameter values", "Average objective function"], 
+            labels=[thelabel])
+
+        
+    
+    print(best_values)
+    with open(os.path.join('..','LargeSet_graphs','BestValues-') +  name, 'w+' ) as fout:
+        fout.write(json.dumps(best_values))
+
+
+
+        
 
 
 def extractParameterValue(parameter, filename):
@@ -144,6 +240,12 @@ def parsefile(fileobject, parameters_list, parameter, filename):
     # get param value from filename
     paramval = extractParameterValue(parameter, filename)
 
+
+    if parameter == "generation" and not (paramval in [5,10 ,15 ,20 ]):
+        return 
+
+
+
     # extract objective function
     results = json.load(fileobject)
 
@@ -187,7 +289,7 @@ def parsefile(fileobject, parameters_list, parameter, filename):
 
 if __name__ == '__main__':
 
-    results_folder = '../../Results/Final/LargeSet_20180106'
+    results_folder = os.path.join('..','..','Results','Final','LargeSet_20180106')
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--folder",help="folder where to read results from")
