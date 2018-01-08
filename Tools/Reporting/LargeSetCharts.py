@@ -40,7 +40,30 @@ import argparse
 import operator
 
 
+def chartPlot(plotname, savefilename, x, y, axisnames, labels):
 
+    fig, ax = plt.subplots()
+    plt.plot(range(len(y)),y, marker='.', color='b', ls='', label=labels[0])
+    plt.xticks(range(len(x)),x)
+    plt.xlabel(axisnames[0])
+    plt.ylabel(axisnames[1])
+
+
+    x0, x1 = ax.get_xlim()
+    y1 = y[0]
+    for ys in y:
+        if ys < y1:
+            y1 = ys
+
+
+    ax.plot([x0, x1], [y1, y1], 'k-', c='r')
+    ax.legend(loc='upper right', fontsize='small')
+    #fig.subplots_adjust(bottom=0.9)
+    fig.tight_layout()
+    #plt.axis([0, len(results), 0, max(y)])
+    plt.savefig('../LargeSet_graphs/' + savefilename  + '.png')
+    plt.show()
+    plt.close()
 
 def buildCharts(parameters_list, name):
     """
@@ -83,11 +106,41 @@ def buildCharts(parameters_list, name):
         print(elem["name"])
         elem["results"] = sorted(elem["results"], key=lambda k: k['paramval'])
         for paramval in elem["results"]:
-            print(paramval["paramval"])
-            print(paramval["objfunc_avg"])
+            #print(paramval["paramval"])
+            #print(paramval["objfunc_avg"])
         
+            #avg verification
+            thesum = 0
+            for objfs in paramval["objfunc"]:
+                thesum += objfs
+            theavg = thesum / len(paramval["objfunc"])
+            if round(theavg,2) != round(paramval["objfunc_avg"],2):
+                print("----->Avg error!")
+                print(theavg)
+                print(paramval["objfunc_avg"])
 
-    pass
+        # plotname
+        # plotfilename
+        # x
+        x_ = [ x["paramval"] for x in elem["results"]]
+        # y
+        y_ = [ y["objfunc_avg"] for y in elem["results"]]
+        # legend
+        # axes
+        chartPlot(
+            plotname=elem["name"], 
+            savefilename=name + "-" + elem["name"], 
+            x=x_, 
+            y=y_, 
+            axisnames=["Parameter values", "Objective function"], 
+            labels=[elem["name"]])
+
+        print()
+
+
+
+
+        
 
 
 def extractParameterValue(parameter, filename):
