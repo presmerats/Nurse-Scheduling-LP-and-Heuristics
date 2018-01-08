@@ -27,6 +27,9 @@
 \usepackage[square,sort,comma,numbers]{natbib}
 \usepackage[colorinlistoftodos]{todonotes}
 \usepackage{xcolor}
+\usepackage{indentfirst}
+\setlength\parskip{.5\baselineskip plus .1\baselineskip  minus .1\baselineskip}
+\setlength{\parindent}{1em}
 \definecolor{darkgreen}{rgb}{0.0, 0.4, 0.0}
 
 %%%%%%%% DOCUMENT %%%%%%%%
@@ -38,48 +41,93 @@
 \begin{titlepage}
 
 \newcommand{\HRule}{\rule{\linewidth}{0.5mm}} 							% horizontal line and its thickness
+\newenvironment{bottompar}{\par\vspace*{\fill}}{\clearpage}
 \center 
+\begin{center}
+%----------------------------------------------------------------------------------------
+%	HEADING SECTIONS
+%----------------------------------------------------------------------------------------
+\includegraphics[scale=0.8]{upclogo.png}\\[2cm] % Include a department/university logo - this will require the graphicx package
  
-% University
-\textsc{\LARGE Facultat Informàtica de Barcelona}\\[1cm]
+%\textsc{\LARGE Polytechnical University of Catalonia}\\[1cm] % Name of your university/college
+\textsc{\Large Master in Innovation and Research in Informatics}\\[0.5cm] % Major heading such as course name
+\textsc{\large Algorithmic Methods for Mathematical Models}\\[5cm] % Minor heading such as course title
 
-% Document info
-\textsc{\Large Algorithmic Methods for Mathematical Modeling}\\[0.2cm]
-\textsc{\large AMMM(MIRI)}\\[1cm] 										% Course Code
-\HRule \\[0.8cm]
-{ \huge \bfseries AMMM Project}\\[0.7cm]								% Assignment
-\HRule \\[2cm]
-\large
-\emph{Authors: }\\
-Adrian Rodriguez Bazaga,\\[0.25cm]
-Pau Rodriguez Esmerats\\[1.5cm]													% Author info
-{\large \today}\\[2.5cm]
-\includegraphics[width=0.4\textwidth]{./img/fib-upc-v2-transparent.png}\\[0.8cm] 	% University logo
-\vfill 
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\HRule \\[0.4cm]
+{ \huge \bfseries AMMM: Nurse Scheduling Problem}\\[0.4cm] % Title of your document
+\HRule \\[1.5cm]
+ 
+%----------------------------------------------------------------------------------------
+%	AUTHOR SECTION
+%----------------------------------------------------------------------------------------
+\begin{bottompar}
+\begin{minipage}{0.5\textwidth}
+\begin{flushleft} \large
+\emph{Authors:}\\
+Adrián Rodríguez Bazaga \\ Pau Rodríguez Esmerats % Your name
+\end{flushleft}
+\end{minipage}
+~
+\begin{minipage}{0.4\textwidth}
+\begin{flushright} \large
+\emph{Professors:} \\
+Albert Oliveras Llunel \\ Marc Ruiz Ramírez % Supervisor's Name
+\end{flushright}
+\end{minipage}\\[2cm]
+
+% If you don't want a supervisor, uncomment the two lines below and remove the section above
+%\Large \emph{Author:}\\
+%John \textsc{Smith}\\[3cm] % Your name
+
+%----------------------------------------------------------------------------------------
+%	DATE SECTION
+%----------------------------------------------------------------------------------------
+
+{\large \today}\\[2cm] % Date, change the \today to a set date if you want to be precise
+\end{bottompar}
+\end{center}
 \end{titlepage}
 
 \tableofcontents
+\pagebreak
+
+\begin{abstract}
+   Optimization problems can appear in almost all situations on life, but there are special important cases where those problems appears, specially on the industry, since if we can achieve an optimal solution, we will improve the efficiency of the industrial process and then get lower production cost with the same (or better) efficiency. This improvement of the costs have an effect on the competitiveness of the companies and on the final quality of their products, including that this is an important money-saving factor. 
+   
+   The challenging part is when this kind of problems become really big, since then they have a attached really high computational complexity and cost, therefore we need some methods to face them. 
+   
+   To do so, we have two approaches, the always-optimal methods that obtain the optimal solution but taking into account every possible combination of the problems' solutions, as for instance Integer Linear Programming does. By the other hand we have those methods that concerns about fair execution times and are looking for a trade-off between acceptable execution times and the quality of the solution.
+   
+   In this work we will propose two approaches in order to solve the scheduling of nurses in a hospital taking into account several constraints.
+
+\end{abstract}
 
 \pagebreak
 
 \section{Introduction}
 \input{./tex/Introduction.tex}
 
-\section{Models}
+\section{Integer Linear Programming}
 \input{./tex/ILPmodel.tex}
+
+\section{Meta-heuristics}
 
 \input{./tex/Metaheuristics-grasp.tex}
 
 \input{./tex/Metaheuristics-brkga.tex}
 
-\section{Tests}
+\section{Testing, Tunning and Comparisons}
 \input{./tex/Instances.tex}
 
 \input{./tex/ILPvsMetaheuristics.tex}
 
 \input{./tex/MetaheuristicsPerformance.tex}
 
-\section{Conclusion}
+\section{Conclusions}
 \input{./tex/Conclusion.tex}
 
 \end{document}

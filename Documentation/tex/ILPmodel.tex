@@ -1,74 +1,68 @@
+Integer Linear Programming is the first of the two methods that has been used in this project (see Introduction for more details about the problem). This method always finds the optimal solution without taking into account the amount of computational
+resources needed. This model is developed in CPLEX and the model implemented is described in the next sections.
 
 
-\subsection{ ILP Model }
-
-This section explains how the Mixed Integer LP model has been designed and impemented according to the constraints of the problem (see Introduction for more details).
-First, the mathematical constraints that allows us to build a SIMPLEX problem instance are explained. 
-Second, the code used to implement the model in ILOG script is presented.
-Finally, we present a brief explanation of the tests that have been performed on the model to determine its correctness.
-
-
-\subsubsection{Mathematical formulation of the model}
-
-\paragraph{ Decision vars }
+\subsection{Decision variables}
 
 \begin{itemize}
 
-\item $ w_{n,h} (\mathbb{B})  : \text{ whether the nurse n works at the hour h }  $
-\item $ z_{n} (\mathbb{B})  : \text{ whether the nurse n works during the shift(24h) or not } $ 
+\item $ w_{n,h} (\mathbb{B})  : \text{This boolean variable specifies whether the nurse n works at the hour h (1) or not (0)}  $
+\item $ z_{n} (\mathbb{B})  : \text{This boolean variable specifies whether the nurse n works during the shift or not.} $ 
 	\begin{itemize}[label=$\star$]
  	\item $ z{n} = 1  \Rightarrow \text{ The nurse n works at least 1 hour, } \exists h, w_{n,h} = 1 $ 
  	\item $ z{n} = 0 \Rightarrow \forall h, w_{n,h} = 0 $ 
  	\end{itemize}
-\item $  s_{n} (\mathbb{N}) : \text{hour in which the nurse n starts working,} \\ \text{  such that $ w_{n,s_{n}}=1 $ and  $ w_{n,s_{n}-i}=0 $,  $ \forall i: 1 \leq s_{n} - i < s_{n} $ } $
-\item $  e_{n} (\mathbb{N}) : \text{hour in which the nurse n stops working,} \\ \text{such that $ w_{n,e_{n}}=1 $ and  $ w_{n,e_{n}+i}=0,\forall i : e_{n} < e_{n}+i \leq 24 $  } $
+\item $  s_{n} (\mathbb{N}) : \text{Positive integer variable specifying the hour in which the nurse n starts working,} \\ \text{  such that $ w_{n,s_{n}}=1 $ and  $ w_{n,s_{n}-i}=0 $,  $ \forall i: 1 \leq s_{n} - i < s_{n} $ } $
+\item $  e_{n} (\mathbb{N}) : \text{Positive integer variable specifying the hour in which the nurse n stops working,} \\ \text{such that $ w_{n,e_{n}}=1 $ and  $ w_{n,e_{n}+i}=0,\forall i : e_{n} < e_{n}+i \leq 24 $  } $
 \end{itemize}
 
-\paragraph{  Known instance variables }
+\subsection{Instance parameters}
 
 \begin{itemize}
-\item  $ demand_h $
-\item  $ nNurses  $
-\item  $minHours $
-\item  $maxHours $
-\item  $maxConsec $
-\item  $maxPresence $
+\item  $ demand_h $: Array of integers, specifying the required number of nurses at hour h
+\item  $ nNurses $: Integer that specifies the number of available nurses to assign.
+\item  $minHours$: Integer that specifies the minimum number of hours that a nurse must work if she works.
+\item  $maxHours$: Integer that specifies the maximum number of hours that a nurse must work if she works.
+\item  $maxConsec$: Integer that specifies the maximum number of consecutive hours that a nurse can work.
+\item  $maxPresence$: Integer that specifies the maximum number of hours that a nurse can stay at the hospital.
 \end{itemize}
 
-\paragraph{  Objective function }
+\subsection{Objective function}
 
-Min: $ \sum\limits_{n=1}^{nNurses} z_{n}  $
+Min: $ \sum\limits_{n=1}^{nNurses} z_{n}  $ \\
 
-\paragraph{  Constraints }
+This objective function aims to minimize the number of working nurses, which is the main goal for our problem.
+
+\subsection{Constraints}
 
 \begin{itemize}
-\item  set the zn values correctly:
+\item  Set the $z_n$ values correctly: \\ \\
 $  \forall n: 1 \leq n \leq nNurses,  \\
 	24 \cdot z_{n}  \geq \sum\limits_{1 \leq h \leq 24} w_{n,h} \\
    z_{n} \leq \sum\limits_{1 \leq h \leq 24} w_{n,h}
 $
 
-\item  At any hour h, at least demandh nurses should be working: \\
+\item  At any hour h, at least demandh nurses must be working: \\ \\
 $ \forall h : 1 \leq h \leq 24, \\
  \sum\limits_{1 \leq n \leq nNurses} w_{n,h} \geq demand_{h}
 $
 
-\item  Each nurse that works, should work at least minHours: \\
+\item  Each nurse that works, must work at least minHours: \\ \\
 $ \forall n: 1 \leq n \leq nNurses \\
 	\sum\limits_{1 \leq h \leq 24} w_{n,h} \geq minHours \cdot z_{n}
 $
 
-\item  Each nurse that works, should work at most maxHours: \\
+\item  Each nurse that works, must work at most maxHours: \\ \\
 $ \forall n: 1 \leq n \leq nNurses \\
 	\sum\limits_{1 \leq h \leq 24} w_{n,h} \leq maxHours \cdot z_{n}
 $
 
-\item  Each nurse works at most maxConsec consecutive hours: \\
+\item  Each nurse works at most maxConsec consecutive hours: \\ \\
 $	\forall n:  1 \leq n \leq nNurses, \\
 	\forall h_{1}:  1 \leq h_{1} \leq 24 - maxConsec, \\
 	\sum\limits_{ h_{1} \leq h \leq h_{1} + maxConsec} w_{n,h} \leq maxConsec $
 
-\item  Each nurse can stay in the hospital at most maxPresence hours: \\
+\item  Each nurse can stay in the hospital at most maxPresence hours: \\ \\
 $ 
 %\forall n:  1 \leq n \leq nNurses, e_{n} \leq 24 \cdot z_{n} \\
  \forall n:  1 \leq n \leq nNurses, \forall h: 1 \leq h \leq 24, e_{n} \geq h \cdot w_{n,h} \\ 
@@ -107,13 +101,5 @@ $
 
 
 \end{itemize}
-
-
-\subsubsection{ILOG script implementation of the ILP model}
-
-
-\subsubsection{Testing the ILP model}
-
-
 
 \pagebreak
