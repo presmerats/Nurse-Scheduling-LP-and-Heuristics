@@ -194,7 +194,7 @@ def update_instance_list(folder):
         )
     update_instance_list_aux(
         folder=folder,
-        filename='done_lstireation_current_instance.txt',
+        filename='done_lsiteration_current_instance.txt',
         listname="current_lsiteration",
         status_list=status_list,
         listtype="dict"
@@ -331,7 +331,7 @@ def makeRunInstance(instance,
             grasp_alpha=params["alpha"],
             grasp_iterations=params["maxiter"],
             grasp_lstype=params["lstype"],
-            grasp_lsiterations=params["lsiterations"],
+            grasp_lsiterations=params["lsiteration"],
             brkga_generations=None,
             brkga_eliteprop=None,
             brkga_mutantprop=None,
@@ -416,6 +416,7 @@ def parameter_executions_loop(
 
     if not done(instance, status_list, parameter_name):
         for param_value in parameter_values_list:
+            print(" doing " + str(parameter_name) + ": " + str(param_value) )
             if not done(instance, status_list, "current_" + str(parameter_name), param_value):
                 success = makeRunInstance(
                     instance=instance,
@@ -475,12 +476,12 @@ if __name__ == '__main__':
         'alpha': '0.2',
         'maxiter': 1,
         'lstype': 'first',
-        'lsiterations': 3
+        'lsiteration': 3
     }
     alphas = [0.1, 0.15, 0.2, 0.25, 0.3, 0.4, 0.5]
     maxiters = range(3,8)
     lstypes = "first"
-    lsiterations = range(1,5)
+    lsiterations = range(1,15)
 
     basic_params_brkga ={
         'generation': 5,
@@ -528,14 +529,14 @@ if __name__ == '__main__':
                     solver_basic_params=basic_params_grasp,
                     progress_files_folder=progress_files_folder)
 
-                parameter_executions_loop(
-                    instance,
-                    status_list,
-                    parameter_name="lsiteration",
-                    parameter_values_list=lsiterations,
-                    parameter_solver="grasp",
-                    solver_basic_params=basic_params_grasp,
-                    progress_files_folder=progress_files_folder)
+                # parameter_executions_loop(
+                #     instance,
+                #     status_list,
+                #     parameter_name="lsiteration",
+                #     parameter_values_list=lsiterations,
+                #     parameter_solver="grasp",
+                #     solver_basic_params=basic_params_grasp,
+                #     progress_files_folder=progress_files_folder)
 
                 # parameter_executions_loop(
                 #     instance,
