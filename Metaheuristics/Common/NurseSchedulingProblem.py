@@ -270,7 +270,7 @@ def incremental_schedule_validation(candidate_sol, d, nurse, verify_minHours = T
     return validity
 
 
-def incremental_schedule_validation_fast(candidate_sol, d, h, nurse, checkers, verify_minHours = True, whattoreturn = 'summary', force_rest_check = False, set_end=-1):
+def incremental_schedule_validation_fast(candidate_sol, d, h, nurse, checkers, verify_minHours = True, whattoreturn = 'summary', force_rest_check = False):
 
     #print("incremental_sched_val_fast h=" + str(h), " n=" + str(nurse))
 
@@ -642,6 +642,54 @@ def checkIfCanWork(solution, h, n, data, sumW, hini=None):
     return False
 
 
+
+
+def checkIfMustWork(solution, h, n, data, sumW, canWork_check, hini=None):
+    minHours = data["minHours"]
+    hours = data["hours"]
+    z = solution["z"]
+    w = solution["w"]
+    aux = w[n][h]
+
+    w[n][h] = 0
+
+    # minHours validity
+    verify_minHours = False
+    if z[n] == 1 and hours - h + 1 < minHours - sumW[n]:
+        verify_minHours = True
+
+    # verify max rest constraint if not working
+    rest_check, maxPresence_check, maxConsec_check, maxHours_check, minHours_check = incremental_schedule_validation(solution, data, n, verify_minHours=verify_minHours, whattoreturn='All', force_rest_check=False, set_end=h)
+
+    # undo changes, just a verification
+    w[n][h] = aux
+
+    # print("CanRest w[" + str(n) + "][" + str(h) + "] = " + str(w[n][h]) + " ?:")
+    # # print(rest_check)
+    # print("rest_checkt " + str(rest_check))
+    # print("minHours_checkt " + str(minHours_check))
+    # print("maxHours_checkt " + str(maxHours_check))
+    # print("maxConsec_checkt " + str(maxConsec_check))
+    # print("maxPresence_checkt " + str(maxPresence_check))
+
+    if ((not rest_check and minHours_check) or \
+        (not rest_check and not minHours_check) or \
+        (rest_check and not minHours_check)) and \
+       maxPresence_check and \
+       maxConsec_check and  \
+       maxHours_check :
+
+        # cannot rest!, verify if can work:
+        # should always be true at the same time!
+        if not canWork_check:
+            print(" INCOHERENCE DETECTED cannot rest but cannot work!")
+
+        return canWork_check
+
+    return False
+
+
+
 def update_checkers(solution, data, n, h, newval, checkers):
 
     checker = checkers[n]
@@ -694,7 +742,7 @@ def update_checkers(solution, data, n, h, newval, checkers):
                 checker["consec"]=1
 
         elif solution["w"][n][h] == 0 and newval == 0:
-            if rintlog2 and pn==0:
+            if printlog2 and pn==0:
                 print("   update_checkers - initialize with 0")
             
             #print("          sumw=" + str(checker["sumW"]))
@@ -778,51 +826,6 @@ def update_checkers(solution, data, n, h, newval, checkers):
 
 
 
-def checkIfMustWork(solution, h, n, data, sumW, canWork_check, hini=None):
-    minHours = data["minHours"]
-    hours = data["hours"]
-    z = solution["z"]
-    w = solution["w"]
-    aux = w[n][h]
-
-    w[n][h] = 0
-
-    # minHours validity
-    verify_minHours = False
-    if z[n] == 1 and hours - h + 1 < minHours - sumW[n]:
-        verify_minHours = True
-
-    # verify max rest constraint if not working
-    rest_check, maxPresence_check, maxConsec_check, maxHours_check, minHours_check = incremental_schedule_validation(solution, data, n, verify_minHours=verify_minHours, whattoreturn='All', force_rest_check=False, set_end=h)
-
-    # undo changes, just a verification
-    w[n][h] = aux
-
-    # print("CanRest w[" + str(n) + "][" + str(h) + "] = " + str(w[n][h]) + " ?:")
-    # # print(rest_check)
-    # print("rest_checkt " + str(rest_check))
-    # print("minHours_checkt " + str(minHours_check))
-    # print("maxHours_checkt " + str(maxHours_check))
-    # print("maxConsec_checkt " + str(maxConsec_check))
-    # print("maxPresence_checkt " + str(maxPresence_check))
-
-    if ((not rest_check and minHours_check) or \
-        (not rest_check and not minHours_check) or \
-        (rest_check and not minHours_check)) and \
-       maxPresence_check and \
-       maxConsec_check and  \
-       maxHours_check :
-
-        # cannot rest!, verify if can work:
-        # should always be true at the same time!
-        if not canWork_check:
-            print(" INCOHERENCE DETECTED cannot rest but cannot work!")
-
-        return canWork_check
-
-    return False
-
-
 
 def checkIfCanWork_fast(solution, h, n, data, sumW, checkers, hini=None):
     minHours = data["minHours"]
@@ -838,44 +841,30 @@ def checkIfCanWork_fast(solution, h, n, data, sumW, checkers, hini=None):
             #print("nurse " + str(n) + "cannot work at " + str(h) + " cause hini =" + str(hini[n]))
             return False
 
-    aux = w[n][h]
-    #w[n][h] = 1
+
     # update checkers
     update_checkers(solution, data, n, h, 1,checkers)
     #print(solution["w"][n][h])
 
     # minHours validity
     verify_minHours = False
-    if z[n] == 1 and hours - h + 1 < minHours:
-        verify_minHours=True
-
-
 
     # verify max rest constraint if not working
-    rest_check, maxPresence_check, maxConsec_check, maxHours_check, minHours_check = complete_schedule_validation_fast(solution, data, n, h, checkers,  verify_minHours=verify_minHours, whattoreturn='All')
+    # rest_check, maxPresence_check, maxConsec_check, maxHours_check, minHours_check = complete_schedule_validation_fast(solution, data, n, h, checkers,  verify_minHours=verify_minHours, whattoreturn='All')
+    rest_check, maxPresence_check, maxConsec_check, maxHours_check, minHours_check = incremental_schedule_validation_fast(solution, data, h, n, checkers, verify_minHours=verify_minHours, whattoreturn='All', force_rest_check=True)
 
     # undo changes, just a verification
-    #w[n][h] = aux
-    update_checkers(solution, data, n, h, aux, checkers)
+    update_checkers(solution, data, n, h, 0, checkers)
     #print(solution["w"][n][h])
 
-    if printlog3:
-        summin = 0
-        for hmin in range(data["hours"]):
-            summin += solution["w"][n][hmin]
-        if summin != checkers[n]["sumW"]:
-            print("found erroneous checkers[n][sumW]:" + str(checkers[n]["sumW"]) + " real sum:" + str(summin))
-        if printlog3 and h==23 and summin > 0 and summin < data["minHours"] and minHours_check == True: # and checkers[n]["sumW"]>0: # and checkers[n]["sumW"]< data["minHours"]:
-            print("h:" + str(h) + " verify_minhours: " + str(verify_minHours) + " minHours_check:" + str(minHours_check) + " minHours" + str(data["minHours"]) + " sumW:" + str(checkers[n]["sumW"]))
-            print(w[n])
-            print("")
-        
+    # if minHours cannot be satisfied from h to hours
+    if z[n] == 0 and h >= hours - minHours + checkers[n]["sumW"]:
+        return False
 
     if rest_check and \
         maxPresence_check and \
         maxConsec_check and  \
-        maxHours_check and \
-        minHours_check:
+        maxHours_check:
 
 
         return True
@@ -891,9 +880,6 @@ def checkIfMustWork_fast(solution, h, n, data, sumW, canWork_check, checkers,hin
     aux = w[n][h]
 
 
-    solution["mustWork_count"] += 1
-    #print("checkIfCMustWOrk_fast h:"+str(h) + " n:" + str(n))
-
     # should already be 0
     if w[n][h] == 1:
         print("srange case! checkIfMustWork_fast")
@@ -904,59 +890,13 @@ def checkIfMustWork_fast(solution, h, n, data, sumW, canWork_check, checkers,hin
     verify_minHours = False
     if z[n] == 1 and h >= hours - minHours + checkers[n]["sumW"]:
         verify_minHours = True
-    
-    if z[n] == 1 and h > 0 and w[n][h - 1] == 0 and w[n][h] == 0:
-        verify_minHours = True
-
-    # if z[n] == 1 and h > 0 and w[n][h - 1] == 0 and w[n][h] == 0:
-    #     if data["minHours"] > checkers[n]["sumW"]:
-    #         return True
 
 
     # verify max rest constraint if not working
-    rest_check, maxPresence_check, maxConsec_check, maxHours_check, minHours_check = incremental_schedule_validation_fast(solution, data, h, n, checkers, verify_minHours=verify_minHours, whattoreturn='All', force_rest_check=False, set_end=h)
-
-
+    rest_check, maxPresence_check, maxConsec_check, maxHours_check, minHours_check = incremental_schedule_validation_fast(solution, data, h, n, checkers, verify_minHours=verify_minHours, whattoreturn='All', force_rest_check=False)
 
     # undo changes, just a verification
     w[n][h] = aux
-
-    if printlog3:
-        summin = 0
-        for hmin in range(data["hours"]):
-            summin += solution["w"][n][hmin]
-        if summin != checkers[n]["sumW"]:
-            print("found erroneous checkers[n][sumW]:" + str(checkers[n]["sumW"]) + " real sum:" + str(summin))
-        if printlog3 and h==23 and summin > 0 and summin < data["minHours"]: # and checkers[n]["sumW"]>0: # and checkers[n]["sumW"]< data["minHours"]:
-            print("h:" + str(h) + " verify_minhours: " + str(verify_minHours) + " minHours_check:" + str(minHours_check) + " minHours" + str(data["minHours"]) + " sumW:" + str(checkers[n]["sumW"]))
-            print(w[n])
-            print("")
-
-    # print("CanRest w[" + str(n) + "][" + str(h) + "] = " + str(w[n][h]) + " ?:")
-    # # print(rest_check)
-    # print("rest_checkt " + str(rest_check))
-    # print("minHours_checkt " + str(minHours_check))
-    # print("maxHours_checkt " + str(maxHours_check))
-    # print("maxConsec_checkt " + str(maxConsec_check))
-    # print("maxPresence_checkt " + str(maxPresence_check))
-
-
-    if z[n] == 1 and h > 0 and w[n][h - 1] == 0 and w[n][h] == 0 and data["minHours"] > checkers[n]["sumW"]:
-        if minHours_check:
-            print(" incohoerence in minHours check!")
-        if not canWork_check:
-            print(" incoherence in minHours check!")
-
-
-    # if z[n] == 1 and h > 0 and w[n][h - 1] == 0 and w[n][h] == 0:
-    #     if data["minHours"] > checkers[n]["sumW"]:         
-    #         # print("minHours_check " + str(((not rest_check and minHours_check) or \
-    #         #     (not rest_check and not minHours_check) or \
-    #         #     (rest_check and not minHours_check)) and \
-    #         #     maxPresence_check and \
-    #         #     maxConsec_check and  \
-    #         #     maxHours_check))
-    #         print("minHours_check " + str(canWork_check))
 
     if ((not rest_check and minHours_check) or \
         (not rest_check and not minHours_check) or \
