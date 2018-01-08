@@ -24,3 +24,4 @@
 ../../Instances/Final/LargeSet_20180106/0035-i-ng-60-64-40-24h-16mxP-4mxC-10mxH-1mnH-3Cnt-20171218_23-50-0198.dat
 ../../Instances/Final/LargeSet_20180106/i-ng-60-800-500-72h-27mxP-9mxC-8mxH-6mnH-3Cnt-20180105_12-30-47312.dat
 ../../Instances/Final/LargeSet_20180106/i-ng-60-1600-1000-72h-20mxP-10mxC-9mxH-6mnH-3Cnt-20180105_12-31-40358.dat
+../../Instances/Final/LargeSet_20180106/0008-i-ng-60-64-40-24h-16mxP-5mxC-10mxH-6mnH-3Cnt-20171218_23-50-01282.dat
