@@ -62,7 +62,10 @@ if __name__ == '__main__':
                                 solver = v["solver"]
 
                             # extract obj func
-                            objf = int(v["ObjectiveFunction"])
+                            if "ObjectiveFunction" in v.keys():
+                                objf = int(v["ObjectiveFunction"])
+                            else:
+                                objf = int(v["objectivefunction"])
 
                             # extract time
                             solvtime = float(v["time"])
@@ -180,11 +183,11 @@ if __name__ == '__main__':
     print(len(GRASP_instances))
 
 
-    print(ILP_instances)
-    print("")
-    print(BRKGA_instances)
-    print("")
-    print(GRASP_instances)
+    # print(ILP_instances)
+    # print("")
+    # print(BRKGA_instances)
+    # print("")
+    # print(GRASP_instances)
 
     # plot the times,
 
@@ -236,7 +239,7 @@ if __name__ == '__main__':
     #fig.subplots_adjust(bottom=0.9)
     fig.tight_layout()
 
-    #plt.show()
+    plt.show()
     plt.savefig('../../../Documentation/img/ILPvsMetah_objf.png')
     plt.close()
 
@@ -268,6 +271,6 @@ if __name__ == '__main__':
     #fig.subplots_adjust(bottom=0.9)
     fig.tight_layout()
 
-    #plt.show()
+    plt.show()
     plt.savefig('../../../Documentation/img/ILPvsMetah_objf.png')
     plt.close()
