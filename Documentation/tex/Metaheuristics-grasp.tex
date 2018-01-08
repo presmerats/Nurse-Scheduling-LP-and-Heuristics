@@ -1,27 +1,39 @@
 \subsection{GRASP implementation}
 
-A brief context of the GRASP:
-\begin{itemize}
-	\item acronym
-	\item building blocks / components
-	\item intensification, diversification and strategy applied
-\end{itemize}
-
 \subsubsection{Constructive phase}
 
-This paragraph shows the pseudocode of our GRASP model for the problem of interest.
+The GRASP meta-heuristic has a constructive phase that is concerned to build up a feasible solution. This phase is not deterministic because the randomness done on the candidate pick process. It means
+that for every execution, different solution could be emerge. This part is based on a randomized greedy algorithm, so a greedy function is also needed.
 
-After the pseudocode is shown, brief comments of each line should be added.
+You can see the constructive phase into two pseudo-codes. The constructive phase itself is at pseudocode X. But in order to understand better what the developed heuristic is doing, you can
+see how the candidates set is generated at pseudocode Y.
+
+The essential idea is ... very brief here pls!.
+
+[] Pseudocode + brief comment per line
 
 
 
 \subsubsection{Local Search}
 
-Tests performed to determine if the model is correct. Results obtained (very brief)
+The other part that will be shown is about the local search. Once the constructive phase ends up with a solution, eventually it is the optimal, but usually it is not. In order to improve the solution a neighbourhoods of the constructive phase solution, i.e. near solutions will be searched. This phase is called local search. You can see the pseudocode 4.1.3 for the implemented local search procedure.
 
 \subsubsection{Greedy cost function}
 
-Aab
+Finally, an important function for this meta-heuristic is the greedy function. This greedy function is giving us information about the quality of a candidate in order to decide if this candidate should
+be part of the solution or not. In this case, the greedy value depends on ... BRIEF
+
+Greedy.py line 351:
+
+for e in range(len(elements)):
+        element = elements[e]
+        partial\_sum = 0
+
+        element.gc = data["nNurses"]
+        
+        for h in range(data["hours"]):
+            pendingh = solution["pending"][h]
+            element.gc -= element.schedule[h] * pendingh
 
 
 \pagebreak

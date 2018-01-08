@@ -1,23 +1,16 @@
 \subsection{BRKGA implementation}
 
-A brief context of the BRKGA metaheuristic algorithm:
-\begin{itemize}
-	\item acronym
-	\item building blocks / components
-	\item intensification, diversification and strategy applied
-\end{itemize}
-
 \subsubsection{Chromosome structure}
 
-This paragraph shows the pseudocode of our BRKGA model for the problem of interest.
-
-After the pseudocode is shown, brief comments of each line should be added.
+For this implementation, the chromosome will encode the order in which the hours are tried to be fulfilled with nurses. The decoder is behaving as a greedy algorithm but with some modification in order to work with the chromosome as you will see at X. Then the chromosome will have as many gens as hours, and every gen will have a value from 0 to 1. This value is the weight that modify the order of the fulfilled hours at the decoder.
 
 
 
 \subsubsection{Decoder}
 
-Tests performed to determine if the model is correct. Results obtained (very brief)
+Recapping, the greedy algorithm is based on the idea to bring for every candidate a value that depicts the quality of every of them. This value is provided by the greedy function. For purely greedy algorithms, the candidates are sorted by this value and then the best one (the first one of the list) will be included on the solution. An evolution of greedy is GRASP that is randomizing the pick of a candidate with its RCL. This decoder is following the same idea, but taking as order the one given my the chromosome structure, being this order the priority of hours to fulfill.
+
+This means that the gens are affecting to the position of the hours to fulfill in the assignment phase. Once we have all the hours sorted, the first one is picked. Notice that the decoder is deterministic. The randomness in BRKGA is not in the greedy part but in the generation of mutants
 
 
 
