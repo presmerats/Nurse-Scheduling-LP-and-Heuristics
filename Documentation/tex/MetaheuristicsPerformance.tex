@@ -1,46 +1,93 @@
 \subsection{Comparison: GRASP vs BRKGA}
 
-Test of the section: parameter selection for each model, model performance comparision with best parameter setup.
+In this section we are going to compare the performance of both metaheuristic algorithms applied to the assignment problem.\\
+
+In order to do that, we are first going to choose the best parameters for each algorithm using the large set of problem instances described previously to execute several times each algorithm. The procedure consists of execution the same subset of samples drawn from the large set of problem instances for different proposed values of each parameter tested. The executions can be performed in different computers since the time is not important, only the objective function. The only caveat, is that all parameter values have to solve the same set of instances, since we use the average of objective functions. Otherwise the results would not be coherent from one parameter value to another. We record the objetive function for each execution and compute its average for each parameter value. Then we plot its evolution. We choose the parameter that produces the minimum objective function average.\\
+
+Finally, we will use the best parameter values for each algorithm, to solve one of the biggest instances with both GRASP and BRKGA. We will compare the results with a graph that plot the evolution of both algorithms in terms of time and objective function. \\
 
 
 \subsubsection{Tuning GRASP parameters}
 
+For the parameters of the GRASP algorithm, we have tested the $\alpha$, the $maxIterations$ of the main loop and the $failedIterations$ for the final and more intensive local search.\\
+The results of the tests are shown below.
 
-Setup of the tests:\\
+\begin{figure}
+\begin{subfigure}[b]{.49\linewidth}
+\centering
+\includegraphics[width=\linewidth]{./img/best-alpha.png}
+\caption{ Parameter $\alpha$}\label{fig1a}
+\end{subfigure}\hfill
+\begin{subfigure}[b]{.49\linewidth}
+\centering
+\includegraphics[width=\linewidth]{./img/best-maxiter.png}
+\caption{Parameter $maxIterations$ }\label{fig1b}
+\end{subfigure}\vfill
+\begin{subfigure}[b]{.49\linewidth}
+\centering
+\includegraphics[width=\linewidth]{./img/best-lsiteration.png}
+\caption{Parameter $failedIterations$ }\label{fig2c}
+\end{subfigure}%
+\caption{Objective function for different \subref{fig1a} $\alpha$, \subref{fig1b} $maxIterations$ and  \subref{fig2c} $failedIterations$ values.  }
+\end{figure}
+
+
+The output of our experiments is the following: 
 \begin{itemize}
-	\item instances set
-	\item execution conditions (same computer)
-	\item procedure
-	\item results and times gathering procedure
+	\item best $\alpha$ = 0.5
+	\item best $maxIterations$ = 6
+	\item best $failedIterations$ = 4
 \end{itemize}
 
-
-Graph of alpha\\
-Graph of Iterations\\
-Graph of best improvement vs first improvement?\\
 
 \subsubsection{Tuning BRKGA parameters}
 
+For the parameters of the BRKGA algorithm, we have tested the number of generatons ($generations$), the number of individuals in the population ($population$), the inheritance probability ($inheritance$), the proportion of elite individuals in each generation ($eliteprop$) and the proportion of mutant individuals in each generation ($mutantprop$) .\\
+The results of the tests are shown below.
 
-Setup of the tests:\\
+\begin{figure}
+\begin{subfigure}[b]{.49\linewidth}
+\centering
+\includegraphics[width=\linewidth]{./img/best-generation.png}
+\caption{ Parameter $generations$}\label{fig2a}
+\end{subfigure}\hfill
+\begin{subfigure}[b]{.49\linewidth}
+\centering
+\includegraphics[width=\linewidth]{./img/best-population.png}
+\caption{Parameter $population$ }\label{fig2b}
+\end{subfigure}\vfill
+\begin{subfigure}[b]{.49\linewidth}
+\centering
+\includegraphics[width=\linewidth]{./img/best-inheritance.png}
+\caption{Parameter $inheritance$ }\label{fig2c}
+\end{subfigure}%
+\begin{subfigure}[b]{.49\linewidth}
+\centering
+\includegraphics[width=\linewidth]{./img/best-eliteprop.png}
+\caption{Parameter $eliteprop$ }\label{fig2d}
+\end{subfigure}\vfill
+\begin{subfigure}[b]{.49\linewidth}
+\centering
+\includegraphics[width=\linewidth]{./img/best-mutantprop.png}
+\caption{Parameter $mutantprop$ }\label{fig2e}
+\end{subfigure}%
+\caption{Objective function for different \subref{fig2a} $generations$, \subref{fig2b} $population$, \subref{fig2c} $inheritance$, \subref{fig2d} $eliteprop$ and \subref{fig2e} $mutantprop$ values.  }
+\end{figure}
+
+
+The output of our experiments is the following: 
 \begin{itemize}
-	\item instances set
-	\item execution conditions (same computer)
-	\item procedure
-	\item results and times gathering procedure
+	\item best $generations$ = 20
+	\item best $population$ = 200
+	\item best $inheritance$ = 0.8
+	\item best $eliteprop$ = 0.1
+	\item best $mutantprop$ = 0.15
 \end{itemize}
-
-
-Graph of iheritance probability\\
-Graph of elite proportion\\
-Graph of mutant proportion\\
-Graph of population size\\
-Graph of number of generations\\
 
 \subsubsection{Comparative results of meta-heuristics performance}
 
-Choosing the best performing parameter setup of the two models, perform a comparison of how objective function evolves in relation to time.
+Choosing the best performing parameter setup of the two models, we performed a comparison of how objective function evolves in relation to time.
 
-Draw conclusions about, why one is better than the other, why one stops sooner than the other. (think in terms of diversification and intensification and solution space exploration)\\
+Based on the results, we draw conclusions about, why one is better than the other, why one stops sooner than the other. We think in terms of diversification and intensification and solution space exploration.\\
 
 \pagebreak
