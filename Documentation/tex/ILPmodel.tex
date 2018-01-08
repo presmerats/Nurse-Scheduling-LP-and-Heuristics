@@ -1,12 +1,8 @@
-\subsection{ ILP Model }
-
 Integer Linear Programming is the first of the two methods that has been used in this project (see Introduction for more details about the problem). This method always finds the optimal solution without taking into account the amount of computational
 resources needed. This model is developed in CPLEX and the model implemented is described in the next sections.
 
 
-\subsubsection{Mathematical formulation of the model}
-
-\paragraph{ Decision variables }
+\subsection{Decision variables}
 
 \begin{itemize}
 
@@ -20,7 +16,7 @@ resources needed. This model is developed in CPLEX and the model implemented is 
 \item $  e_{n} (\mathbb{N}) : \text{Positive integer variable specifying the hour in which the nurse n stops working,} \\ \text{such that $ w_{n,e_{n}}=1 $ and  $ w_{n,e_{n}+i}=0,\forall i : e_{n} < e_{n}+i \leq 24 $  } $
 \end{itemize}
 
-\paragraph{  Known instance parameters }
+\subsection{Instance parameters}
 
 \begin{itemize}
 \item  $ demand_h $: Array of integers, specifying the required number of nurses at hour h
@@ -31,13 +27,13 @@ resources needed. This model is developed in CPLEX and the model implemented is 
 \item  $maxPresence$: Integer that specifies the maximum number of hours that a nurse can stay at the hospital.
 \end{itemize}
 
-\paragraph{  Objective function }
+\subsection{Objective function}
 
 Min: $ \sum\limits_{n=1}^{nNurses} z_{n}  $ \\
 
 This objective function aims to minimize the number of working nurses, which is the main goal for our problem.
 
-\paragraph{  Constraints }
+\subsection{Constraints}
 
 \begin{itemize}
 \item  Set the $z_n$ values correctly: \\ \\
