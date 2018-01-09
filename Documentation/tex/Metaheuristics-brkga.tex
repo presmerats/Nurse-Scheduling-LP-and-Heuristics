@@ -10,7 +10,36 @@ For this implementation, the chromosome will encode the order in which the hours
 
 Recapping, the greedy algorithm is based on the idea to bring for every candidate a value that depicts the quality of every of them. This value is provided by the greedy function. For purely greedy algorithms, the candidates are sorted by this value and then the best one (the first one of the list) will be included on the solution. An evolution of greedy is GRASP that is randomizing the pick of a candidate with its RCL. This decoder is following the same idea, but taking as order the one given my the chromosome structure, being this order the priority of hours to fulfill.
 
-This means that the gens are affecting to the position of the hours to fulfill in the assignment phase. Once we have all the hours sorted, the first one is picked. Notice that the decoder is deterministic. The randomness in BRKGA is not in the greedy part but in the generation of mutants
+This means that the gens are affecting to the position of the hours to fulfill in the assignment phase. Once we have all the hours sorted, the first one is picked. Notice that the decoder is deterministic. The randomness in BRKGA is not in the greedy part but in the generation of mutants.
+
+\begin{algorithm}[H]
+\KwIn{nNurses, hours, demand}
+%\Parameter{Some parameter}
+\KwOut{<solution, cost>}    
+
+\SetKwData{Left}{left}
+\SetKwData{This}{this}
+\SetKwData{Up}{up}
+\SetKwFunction{Union}{Union}
+\SetKwFunction{FindCompress}{FindCompress}
+
+solution $\leftarrow$ $\emptyset$ \\
+E $\leftarrow$ $computeCandidateElements(nNurses, hours, demand)$ \\
+\While{$E$ $\neq$ $\emptyset$}{
+computeGreedyCost(solution, E, nNurses, hours, demand) \\
+min\_gc $\leftarrow$ min(e.gc | e $\in$ E) \\
+max\_gc $\leftarrow$ max(e.gc | e $\in$ E) \\
+RCL $\leftarrow$ \{ e $\in$ E | e.gc < min\_gc + (max\_gc - min\_gc) $\times$ $\alpha$ \} \\
+e $\leftarrow$ randomSelection(RCL) \\
+solution $\leftarrow$ solution $\cup$ {e} \\
+\If{isFeasible(solution, nNurses, hours, demand)}{\label{lt}
+$\textbf{break}$
+}
+}
+cost $\leftarrow$ computeObjectiveFunctionCost(solution)\\
+$\textbf{return}$ <solution,cost>
+\caption{Decoder}\label{alg.mainLoop}
+\end{algorithm}
 
 
 

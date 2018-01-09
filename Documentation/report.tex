@@ -28,16 +28,16 @@
 \usepackage[colorinlistoftodos]{todonotes}
 \usepackage{xcolor}
 \usepackage{indentfirst}
-\usepackage[subrefformat=parens]{subcaption}
-%\usepackage{tabularx}
-%\usepackage{paralist}
-
-%\usepackage{pdflscape}
-
-
+\usepackage{amsmath}
+\usepackage[linesnumbered,algoruled,boxed,lined]{algorithm2e}
 \setlength\parskip{.5\baselineskip plus .1\baselineskip  minus .1\baselineskip}
 \setlength{\parindent}{1em}
 \definecolor{darkgreen}{rgb}{0.0, 0.4, 0.0}
+
+\makeatletter
+\def\BState{\State\hskip-\ALG@thistlm}
+\makeatother
+
 
 %%%%%%%% DOCUMENT %%%%%%%%
 \begin{document}
