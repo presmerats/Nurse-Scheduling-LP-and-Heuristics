@@ -3,49 +3,12 @@
 \subsubsection{Constructive phase}
 
 The GRASP meta-heuristic has a constructive phase that is concerned to build up a feasible solution. This phase can be deterministic or include a certain amount of randomness by controlling a paremeter value $\alpha$.  This means
-that for every execution, different solution could emerge.
-
-% \makeatletter 
-% \g@addto@macro{\@algocf@init}{\SetKwInOut{Parameter}{Parameters}} 
-% \makeatother
-
-% Explain GRASP constructive 
-
-% \begin{algorithm}[H]
-% \KwIn{nNurses, hours, demand}
-% %\Parameter{Some parameter}
-% \KwOut{<solution, cost>}    
-
-% \SetKwData{Left}{left}
-% \SetKwData{This}{this}
-% \SetKwData{Up}{up}
-% \SetKwFunction{Union}{Union}
-% \SetKwFunction{FindCompress}{FindCompress}
-
-% solution $\leftarrow$ $\emptyset$ \\
-% E $\leftarrow$ $computeCandidateElements(nNurses, hours, demand)$ \\
-% \While{$E$ $\neq$ $\emptyset$}{
-% computeGreedyCost(solution, E, nNurses, hours, demand) \\
-% min\_gc $\leftarrow$ min(e.gc | e $\in$ E) \\
-% max\_gc $\leftarrow$ max(e.gc | e $\in$ E) \\
-% RCL $\leftarrow$ \{ e $\in$ E | e.gc < min\_gc + (max\_gc - min\_gc) $\times$ $\alpha$ \} \\
-% e $\leftarrow$ randomSelection(RCL) \\
-% solution $\leftarrow$ solution $\cup$ {e} \\
-% \If{isFeasible(solution, nNurses, hours, demand)}{\label{lt}
-% $\textbf{break}$
-% }
-% }
-% cost $\leftarrow$ computeObjectiveFunctionCost(solution)\\
-% $\textbf{return}$ <solution,cost>
-% \caption{GRASP constructive phase}\label{alg.mainLoop}
-% \end{algorithm}
-
-We use the basic GRASP construction phase described in \cite{grasp}. The specific part of the implementation is the initialization of the candidate set $C$, implemented in the function $computeCandidateElements$ depicted in $Algorithm$ $2$, and the greedy cost function shown in the next subsection.
+that for every execution, different solution could emerge. We use the basic GRASP construction phase described in \cite{grasp}. The specific parts of the implementation are the initialization of the candidate set $C$, implemented in the function $initializeCandidates$ depicted in $Algorithm$ $1$, and the greedy cost function shown in the next subsection.
 
 \begin{algorithm}[H]
-\KwIn{nNurses, hours, demand}
+\KwIn{nNurses, hours, schedule\_constraints}
 %\Parameter{Some parameter}
-\KwOut{<solution, cost>}    
+\KwOut{candidate list C}    
 
 \SetKwData{Left}{left}
 \SetKwData{This}{this}
@@ -53,33 +16,58 @@ We use the basic GRASP construction phase described in \cite{grasp}. The specifi
 \SetKwFunction{Union}{Union}
 \SetKwFunction{FindCompress}{FindCompress}
 
-solution $\leftarrow$ $\emptyset$ \\
-E $\leftarrow$ $computeCandidateElements(nNurses, hours, demand)$ \\
-\While{$E$ $\neq$ $\emptyset$}{
-computeGreedyCost(solution, E, nNurses, hours, demand) \\
-min\_gc $\leftarrow$ min(e.gc | e $\in$ E) \\
-max\_gc $\leftarrow$ max(e.gc | e $\in$ E) \\
-RCL $\leftarrow$ \{ e $\in$ E | e.gc < min\_gc + (max\_gc - min\_gc) $\times$ $\alpha$ \} \\
-e $\leftarrow$ randomSelection(RCL) \\
-solution $\leftarrow$ solution $\cup$ {e} \\
-\If{isFeasible(solution, nNurses, hours, demand)}{\label{lt}
-$\textbf{break}$
-}
-}
-cost $\leftarrow$ computeObjectiveFunctionCost(solution)\\
-$\textbf{return}$ <solution,cost>
-\caption{computeCandidateElements}\label{alg.mainLoop}
+$C$ $\leftarrow$ $\emptyset$ \\
+\ForEach{$h \in hours$}{
+	
+	$E$ $\leftarrow$ $initializeEmptySchedules(10, hours, schedule_constraints)$ \\
+	\ForEach{$hindex \in [h+1, hours]$}{ 
+		$modulo\_param = 2$ \\
+		\ForEach{$e \in E$}{
+			\If{$hindex - h \bmod  modulo\_param > 0$}{
+				addWorkingHour(e, hindex) \\
+				\If{notValidConstraints(e)}{
+					removeWorkingHour(e,hindex) \\
+					addRestingHour(e, hindex)  \\
+				}
+			}
+			\Else{
+				addRestingHour(e, hindex) \\
+				\If{notValidConstraints(e)}{
+					removeRestigHour(e,hindex) \\
+					addWorkingHour(e, hindex) \\
+				}
+			}
+
+			\If{notValidConstraints(e, hindex - h)}{
+
+				$E$ $\leftarrow$ $E \cap e$ \\
+			}
+			$modulo\_param += 1$
+		}
+	}
+	$C$ $\leftarrow$ $C \cup E$
+} 
+$\textbf{return}$ <$C$>
+\caption{initializeCandidates}\label{alg.mainLoop}
 \end{algorithm}
 
 
-The ComputeCandidateElements function takes as input the total number of nurses, the number of hours to schedule, the demand per hour and the rest of the constraints(maximum presence hours, consecutive hours, total hours and minimum hours). The output is a list of multiple schedules that each nurse can be assigned to. A schedule is the list of hours in which a nurse works must work.
+The ComputeCandidateElements function takes as input the total number of nurses, the number of hours to schedule and the rest of the constraints(maximum presence hours, consecutive hours, total hours and minimum hours). The output is a list of multiple schedules that each nurse can be assigned to. A schedule is the list of hours in which a nurse works must work.\\
+First, the algorithm initializes an empty candidate set. 
+Then, for each hour in the schedule, it creates 10 different types of schedules beginning a this specific hour(line3). The difference between the 10 types of schedules is the compactness of the working hours. This is controlled by a parameter used to do the modulo with current hour index in the built schedule. This allows to create from the most compact schedule with all working hours consecutive until the constraints allows to do it ($hindex - h \bmod hours + 1$), to the most sparse schedule consisting of alternating working and resting hours (using $ hindex -h  \bmod 2$).
+The different schedules, started at different hours are built incrementally by adding work or rest hours depending on the modulo parameter (line 7), and always taking into consideration the validity of the resulting partial schedule (line 9, 16), in which case the validity is temptatively fixed. If no more options remain and the schedule becomes invalid for the constraints of the problem(line 21), it is removed from the set $E$ (line 22) and so it is not later saved to the candidate set $C$ (line 27).
 
+\subsubsection{Greedy cost function}
 
+As all the nurses are equal in this scenario, there's only one thing that the greedy cost function can determine, the number of hours of demand that a single nurse schedule contributes to. We are able to do this because all schedule candidates produced are valid (they follow the constraints). We conside $e$ to be a candidate schedule for a single nurse, being $e_{h} = 1$ if the nurse has to work or 0 otherwise. We also use a big constant number K, that should be bigger than the value $hours$ (for example $nNurses$) and we consider $remaining\_demand_h$ to be the demand that is not covered by any other schedule that is present in the solution at the hour $h$	.
 
+\begin{center}
+ $ gc(e) = K - \sum_{h=1}^{Hours} remaining\_demand_h \times e_{h}$
+\end{center}
 
-There are some specific modifications of the GRASP constructie phase of \cite{grasp} applied to this problem. After updating the candidate set, in \cite{grasp} page 2, we test the feasibility of the updated solution in each iteration of the constructive phase, and in the case we are having a feasible solution, we leave the loop. If not, we continue looping until no candidate schedules are available or no more candidate schedules can be added (all nurses have a schedule). A solution is feasible if for each hour, the demand is less or equal to the number of nurses working at this hour.
- 
-Another improvement introduced in the basic version of the algorithm, is the fact that instead of removing candidate elements(single nurse schedules) from the candidate set and adding them to the solution, we generate a basic list of possible candidates and each time a nurse is assigned one of them, we don't remove it from the candidate set. What we do is recompute each time the greedy cost of each candidate when the solution is updated. That way we reduce the number of candidates that we have to generate and sort.
+\subsubsection{Other problem specific details}
+
+There are some specific modifications of the GRASP constructie phase of \cite{grasp} applied to this problem. After updating the candidate set, in \cite{grasp} page 2, we test the feasibility of the updated solution in each iteration of the constructive phase, and in the case we are having a feasible solution, we leave the loop. If not, we continue looping until no candidate schedules are available or no more candidate schedules can be added (all nurses have a schedule). A solution is feasible if for each hour, the demand is less or equal to the number of nurses working at this hour. Another improvement introduced in the basic version of the algorithm, is the fact that instead of removing candidate elements(single nurse schedules) from the candidate set and adding them to the solution, we generate a basic list of possible candidates and each time a nurse is assigned one of them, we don't remove it from the candidate set. What we do is recompute each time the greedy cost of each candidate when the solution is updated. This is possible thanks to the fact that all nurses are equal under the problem assumptions and constraints. That way we reduce the number of candidates that we have to generate and sort.
 
 
 
@@ -148,12 +136,4 @@ $\textbf{return}$ solution
 \caption{First Improvement Local Search}\label{alg.mainLoop}
 \end{algorithm}
 
-\subsubsection{Greedy cost function}
-
-Finally, an important function for this meta-heuristic is the greedy function. This greedy function is giving us information about the quality of a candidate in order to decide if this candidate should
-be part of the solution or not. In this case, the greedy value depends on ... BRIEF
-
-\begin{center}
-q = $(\sum_{h=1}^{nHours} demand_h \times w_{n,h})^{-1}$
-\end{center}
 
