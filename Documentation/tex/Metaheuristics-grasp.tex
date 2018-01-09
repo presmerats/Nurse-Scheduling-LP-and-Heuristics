@@ -73,36 +73,7 @@ There are some specific modifications of the GRASP constructie phase of \cite{gr
 
 \subsubsection{Local Search}
 
-The other part that will be shown is about the local search. Once the constructive phase ends up with a solution, eventually it is the optimal, but usually it is not. In order to improve the solution a neighbourhoods of the constructive phase solution, i.e. near solutions will be searched. This phase is called local search. You can see the pseudocode 4.1.3 for the implemented local search procedure.
-
-In the intensive Local Search ($Algorithm$ $3$) we take as input an incumbent solution, the max number of failed iterations for this Local Search procedure and finally the parameters of the problem instance (number of nurses, number of hours, demand per hour). As output a solution is returned.
-
-The procedure starts by initializing the number of failed iterations ($failedIterations$) to 0 (line 1). Now we iterate while the number of failed iterations is less than the number of max failed iterations (line 2). Inside the loop, we start by calculating an auxiliary solution by applying a first improvement local search over the incumbent solution (line 3). We check if the used nurses (objective function of the problem) of the auxiliary solution we have just got from the first improvement local search is greater or equal than the  used nurses by the incumbent solution (line 4), this means that the intensified solution is of the same quality or worse than the previous solution, so in this case we have failed to intensify the solution and get a better one, so the failed iterations counter is increased by 1 (line 5). Otherwise we successfully got a better solution by intensification so the failed iterations counter is reinitialized to 0. At the end of the loop, the incumbent solution is replaced by the auxiliary solution found (line 11) and returned as solution (line 12).
-
-\begin{algorithm}[H]
-\KwIn{incumbentSolution, maxFailedIterations, nNurses, hours, demand}
-%\Parameter{Some parameter}
-\KwOut{solution}    
-
-\SetKwData{Left}{left}
-\SetKwData{This}{this}
-\SetKwData{Up}{up}
-\SetKwFunction{Union}{Union}
-\SetKwFunction{FindCompress}{FindCompress}
-
-failedIterations $\leftarrow$ 0 \\
-\While{$failedIterations$ $<$ $maxFailedIterations$}{
-solution' $\leftarrow$ firstImprovementLocalSearch(incumbentSolution, nNurses, hours, demand) \\
-\If{getUsedNurses(solution') $\geq$ getUsedNurses(incumbentSolution)}{\label{lt}
-failedIterations += 1
-}
-\Else{failedIterations = 0}{\label{lt}
-}
-}
-incumbentSolution $\leftarrow$ solution'\\
-$\textbf{return}$ incumbentSolution
-\caption{Intensive Local Search}\label{alg.mainLoop}
-\end{algorithm}
+Once the constructive phase ends, the local search tries to improve the given solution by looking at its neighbourhood,i.e. the near solutions will be searched. We show the pseudocode in ($Algorithm$ $2$). We perform a lightweight local search after every GRASP constructive phase, and then when $maxIterations$ of GRASP constructive phases have been performed, we execute a more intensive local search.
 
 \begin{algorithm}[H]
 \KwIn{solution, nNurses, hours, demand}
@@ -114,26 +85,47 @@ $\textbf{return}$ incumbentSolution
 \SetKwData{Up}{up}
 \SetKwFunction{Union}{Union}
 \SetKwFunction{FindCompress}{FindCompress}
-solution' $\leftarrow$ solution \\
-computeExceedingNurseHours(solution', nNurses, hours, demand) \\
-exceedingCapacityRemoval(solution', nNurses, hours, demand) \\
-improved $\leftarrow$ $\textbf{TRUE}$ \\
-\While{$improved$}{
-improved $\leftarrow$ $\textbf{FALSE}$ \\
-findRestschedules(solution, nNurses, hours, demand) \\
-\ForEach{$n$ $\in$ $nNurses$}{\label{lt}
-solution' $\leftarrow$ exchangeWorkingHours(n) \\
-\If{isNotFeasible(solution', nNurses, hours, demand)}{\label{lt}
-$\textbf{break}$
+
+sol $\leftarrow$ removeExceedingWorkingHours(solution) \\
+improved = True \\
+\While{improved}{
+	
+	improved = False \\
+	$G \leftarrow findValidScheduleGaps(sol)$ \\
+	\While{ $G \neq \emptyset $}{
+		\ForEach{$n \in nNurses $}{
+			$sol' \leftarrow sol$ \\
+			$G_{aux} \leftarrow G$ \\
+			\ForEach{$h \in hours$}{
+				\If{$sol'(n,h) \neq 1$ }{
+					continue \\
+				}
+				$sol' \leftarrow swapHourAssignment(sol', n, G(h), h) $ \\
+				$G \leftarrow removeFirstScheduleGap(G,h) $ \\
+				
+			}
+
+			\If{$isValidSolution(sol')$ and $improvesCost(sol', sol)$}{
+				$sol \leftarrow sol' $ \\
+				Improved = True
+			}\Else{
+				$G \leftarrow G_{aux}$ \\
+			}
+		}
+	}
 }
-\ElseIf{getUsedNurses(solution') $<$ getUsedNurses(solution)}{\label{lt}
-improved $\leftarrow$ $\textbf{TRUE}$ \\
-}
-}
-}
-solution $\leftarrow$ solution'\\
+
+
+solution $\leftarrow$ sol\\
 $\textbf{return}$ solution
-\caption{First Improvement Local Search}\label{alg.mainLoop}
+\caption{Local Search}\label{alg.mainLoop}
 \end{algorithm}
+
+The local search algorithm starts by removing any work assignment that is not needed to fulfill the demand of the problem (line 1). This will make room for later swaping of hour assignments (and sometimes frees some nurses). At the same time we have created a copy of the curret solution. Then we initialize the improvement while loop, a loop that will stop when no nurse can be freed anymore. Inside the loop(line 5), we first save all the gaps of the schedule. That means all hours that a working nurse is resting but that he/she could work and its schedule would still be valid. The gap list $G$ contains for each possible hour of the schedule, a list of nurses that have a valid gap a these specific hour. A new loop is created until there's no more valid gap left (line 6). Inside this loop, we try, for each nurse, to assign its working hours to the first nurse that is listed in the gap list for each hour(line 14, 15).  
+If after swaping all the hours of a nurse the resulting solution is valid and improves the solution, then the solution is updated (line 17). If not, we undo all the changes to the gap list (line 22) and we don't update the current solution. At the end, the returned solution contains either the same solution as the beginning, or a new solution with less working nurses but all valid and fullfiling the demand at each hour.
+
+To transform the firts improvement local search shown previously into an intensive local search,  we can add room for performing iterations of the local search even if the solution has not improved. We could limit that with a variable called $failedIterations$. Thats the approach we choose to perform on the last localsearch we perform after the main GRASP loop (see first algorithm in \cite{grasp} on page 2).
+Usually, there's also the possibility to implement a first improvement local search and a best improvement local search. There is no such possibility with this implementation. We would require to start swaping nurse hour assignments from different nurses instead of following always the same order. This turned to be too costly and we decided to go with this simpler approach.
+
 
 
