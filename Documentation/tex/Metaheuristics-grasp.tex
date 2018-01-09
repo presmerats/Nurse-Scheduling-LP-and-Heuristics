@@ -86,7 +86,7 @@ Once the constructive phase ends, the local search tries to improve the given so
 \SetKwFunction{Union}{Union}
 \SetKwFunction{FindCompress}{FindCompress}
 
-sol $\leftarrow$ removeExceedingWorkingHours(solution) \\
+$sol \leftarrow removeExceedingWorkingHours(solution)$ \\
 improved = True \\
 \While{improved}{
 	
@@ -101,7 +101,7 @@ improved = True \\
 					continue \\
 				}
 				$sol' \leftarrow swapHourAssignment(sol', n, G(h), h) $ \\
-				$G \leftarrow removeFirstScheduleGap(G,h) $ \\
+				$G \leftarrow removeFirstScheduleGapAtHourH(G,h) $ \\
 				
 			}
 
@@ -121,11 +121,11 @@ $\textbf{return}$ solution
 \caption{Local Search}\label{alg.mainLoop}
 \end{algorithm}
 
-The local search algorithm starts by removing any work assignment that is not needed to fulfill the demand of the problem (line 1). This will make room for later swaping of hour assignments (and sometimes frees some nurses). At the same time we have created a copy of the curret solution. Then we initialize the improvement while loop, a loop that will stop when no nurse can be freed anymore. Inside the loop(line 5), we first save all the gaps of the schedule. That means all hours that a working nurse is resting but that he/she could work and its schedule would still be valid. The gap list $G$ contains for each possible hour of the schedule, a list of nurses that have a valid gap a these specific hour. A new loop is created until there's no more valid gap left (line 6). Inside this loop, we try, for each nurse, to assign its working hours to the first nurse that is listed in the gap list for each hour(line 14, 15).  
+The local search algorithm starts by removing any work assignment that is not needed to fulfill the demand of the problem (line 1). This will make room for later swaping of hour assignments (and sometimes frees some nurses). Then we initialize the improvement while loop, a loop that will stop when no nurse can be freed anymore. Inside the loop(line 5), we first save all the gaps of the solution. That means all hours that a working nurse is resting but that he/she could work and its schedule would still be valid. The gap list $G$ contains for each possible hour of the schedule, a list of nurses that have a valid gap at these specific hour. A new loop is created until there's no more valid gap left (line 6). Inside this loop, we try, for each nurse, to assign its working hours to the first nurse that is listed in the gap list for each hour(line 14, 15).  
 If after swaping all the hours of a nurse the resulting solution is valid and improves the solution, then the solution is updated (line 17). If not, we undo all the changes to the gap list (line 22) and we don't update the current solution. At the end, the returned solution contains either the same solution as the beginning, or a new solution with less working nurses but all valid and fullfiling the demand at each hour.
 
 To transform the firts improvement local search shown previously into an intensive local search,  we can add room for performing iterations of the local search even if the solution has not improved. We could limit that with a variable called $failedIterations$. Thats the approach we choose to perform on the last localsearch we perform after the main GRASP loop (see first algorithm in \cite{grasp} on page 2).
-Usually, there's also the possibility to implement a first improvement local search and a best improvement local search. There is no such possibility with this implementation. We would require to start swaping nurse hour assignments from different nurses instead of following always the same order. This turned to be too costly and we decided to go with this simpler approach.
+Usually, there's also the possibility to implement a first improvement local search and a best improvement local search. There is no such possibility with this implementation. We would require to start swaping nurse hour assignments from different nurses instead of following always the same order. This turned to be too costly in terms of algorithmic cost and we decided to go with this simpler approach.
 
 
 

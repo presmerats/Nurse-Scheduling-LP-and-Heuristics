@@ -2,8 +2,34 @@
 
 \subsubsection{Chromosome structure}
 
-For this implementation, the chromosome will encode the order in which the hours are tried to be fulfilled with nurses. The decoder is behaving as a greedy algorithm but with some modification in order to work with the chromosome as you will see at X. Then the chromosome will have as many gens as hours, and every gen will have a value from 0 to 1. This value is the weight that modify the order of the fulfilled hours at the decoder.
+Since in this problem all the nurses are equal in terms of schedule, to exploit the diversification of the chromosoem we have chosen between two approaches. The firsts is to assign each gene of the chromosome in order to each hour of the schedule (chromosome length $hours$). This ways we can sort the hours of the schedule and assign nurses to hours in that order. The other choice is instead to define an excess of working nurses for each hours, that is, to increase the demand of each hour randomly by the chromosome. We choose the second approach as it appears to diversify more in the initial tests that we have performed (around 20\% of different fitness between individuals in each breed versus only around 5\% for the first approach).
 
+
+\begin{algorithm}[H]
+\KwIn{chromosome, hours, demand, nNurses}
+%\Parameter{Some parameter}
+\KwOut{demand}    
+
+\SetKwData{Left}{left}
+\SetKwData{This}{this}
+\SetKwData{Up}{up}
+\SetKwFunction{Union}{Union}
+\SetKwFunction{FindCompress}{FindCompress}
+
+i = 0 \\
+\ForEach{$gene$ $\in$ $chromosome$}{
+
+	\If{$gene < 0.2$}{
+		$new\_hourly\_demand = ceil(demand_{i} \cdot 0.8 \cdot nNurses)  $ \\
+		$demand_{i} = new\_hourly\_demand$ \\
+	}
+	$ i += 1$\\
+
+}
+
+$\textbf{return}$ demand
+\caption{BRKGA Decoding algorithm}\label{brkga.decoding}
+\end{algorithm}
 
 
 \subsubsection{Decoder}
