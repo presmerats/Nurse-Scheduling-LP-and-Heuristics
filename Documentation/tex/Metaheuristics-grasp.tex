@@ -2,52 +2,45 @@
 
 \subsubsection{Constructive phase}
 
-The GRASP meta-heuristic has a constructive phase that is concerned to build up a feasible solution. This phase is not deterministic because the randomness done on the candidate pick process. It means
-that for every execution, different solution could be emerge. This part is based on a randomized greedy algorithm, so a greedy function is also needed.
+The GRASP meta-heuristic has a constructive phase that is concerned to build up a feasible solution. This phase can be deterministic or include a certain amount of randomness by controlling a paremeter value $\alpha$.  This means
+that for every execution, different solution could emerge.
 
-You can see the constructive phase into two pseudo-codes. The constructive phase itself is at pseudocode X. But in order to understand better what the developed heuristic is doing, you can
-see how the candidates set is generated at pseudocode Y.
+% \makeatletter 
+% \g@addto@macro{\@algocf@init}{\SetKwInOut{Parameter}{Parameters}} 
+% \makeatother
 
-The essential idea is ... very brief here pls!.
+% Explain GRASP constructive 
 
-\makeatletter 
-\g@addto@macro{\@algocf@init}{\SetKwInOut{Parameter}{Parameters}} 
-\makeatother
+% \begin{algorithm}[H]
+% \KwIn{nNurses, hours, demand}
+% %\Parameter{Some parameter}
+% \KwOut{<solution, cost>}    
 
-Explain GRASP constructive
+% \SetKwData{Left}{left}
+% \SetKwData{This}{this}
+% \SetKwData{Up}{up}
+% \SetKwFunction{Union}{Union}
+% \SetKwFunction{FindCompress}{FindCompress}
 
-\begin{algorithm}[H]
-\KwIn{nNurses, hours, demand}
-%\Parameter{Some parameter}
-\KwOut{<solution, cost>}    
+% solution $\leftarrow$ $\emptyset$ \\
+% E $\leftarrow$ $computeCandidateElements(nNurses, hours, demand)$ \\
+% \While{$E$ $\neq$ $\emptyset$}{
+% computeGreedyCost(solution, E, nNurses, hours, demand) \\
+% min\_gc $\leftarrow$ min(e.gc | e $\in$ E) \\
+% max\_gc $\leftarrow$ max(e.gc | e $\in$ E) \\
+% RCL $\leftarrow$ \{ e $\in$ E | e.gc < min\_gc + (max\_gc - min\_gc) $\times$ $\alpha$ \} \\
+% e $\leftarrow$ randomSelection(RCL) \\
+% solution $\leftarrow$ solution $\cup$ {e} \\
+% \If{isFeasible(solution, nNurses, hours, demand)}{\label{lt}
+% $\textbf{break}$
+% }
+% }
+% cost $\leftarrow$ computeObjectiveFunctionCost(solution)\\
+% $\textbf{return}$ <solution,cost>
+% \caption{GRASP constructive phase}\label{alg.mainLoop}
+% \end{algorithm}
 
-\SetKwData{Left}{left}
-\SetKwData{This}{this}
-\SetKwData{Up}{up}
-\SetKwFunction{Union}{Union}
-\SetKwFunction{FindCompress}{FindCompress}
-
-solution $\leftarrow$ $\emptyset$ \\
-E $\leftarrow$ $computeCandidateElements(nNurses, hours, demand)$ \\
-\While{$E$ $\neq$ $\emptyset$}{
-computeGreedyCost(solution, E, nNurses, hours, demand) \\
-min\_gc $\leftarrow$ min(e.gc | e $\in$ E) \\
-max\_gc $\leftarrow$ max(e.gc | e $\in$ E) \\
-RCL $\leftarrow$ \{ e $\in$ E | e.gc < min\_gc + (max\_gc - min\_gc) $\times$ $\alpha$ \} \\
-e $\leftarrow$ randomSelection(RCL) \\
-solution $\leftarrow$ solution $\cup$ {e} \\
-\If{isFeasible(solution, nNurses, hours, demand)}{\label{lt}
-$\textbf{break}$
-}
-}
-cost $\leftarrow$ computeObjectiveFunctionCost(solution)\\
-$\textbf{return}$ <solution,cost>
-\caption{GRASP constructive phase}\label{alg.mainLoop}
-\end{algorithm}
-
-In the $computeCandidateElements$ function depicted in $Algorithm$ $2$, we take as an input the number of nurses available, the number of hours to schedule and the demand per hour. As output we give a solution and it's cost.
-
-The algorithm starts by initializing an empty solution (line 1), then the candidate elements for the given problem parameters are calculated. A candidate element is a nurse assignment. So, while the candidate elements set $E$ is not empty (line 3) we are going to iterate in a loop. In this loop we start by calculating the greedy cost (line 4) of each element in the candidate set, and after that we compute the minimum greedy cost (line 5) and the maximum greedy cost (line 6), in order to calculate the restricted candidate list (line 7). After that, a candidate element is chosen at random from the restricted candidate list (line 8) and is added to the solution (line 9). We test the feasibility of this new solution (line 10), and in the case of validity we leave the loop so that at this point we have a valid and feasible solution, if not, continue looping until no candidates are available and the previous condition has not been reached.
+We use the basic GRASP construction phase described in \cite{grasp}. The specific part of the implementation is the initialization of the candidate set $C$, implemented in the function $computeCandidateElements$ depicted in $Algorithm$ $2$, and the greedy cost function shown in the next subsection.
 
 \begin{algorithm}[H]
 \KwIn{nNurses, hours, demand}
@@ -77,6 +70,17 @@ cost $\leftarrow$ computeObjectiveFunctionCost(solution)\\
 $\textbf{return}$ <solution,cost>
 \caption{computeCandidateElements}\label{alg.mainLoop}
 \end{algorithm}
+
+
+The ComputeCandidateElements function takes as input the total number of nurses, the number of hours to schedule, the demand per hour and the rest of the constraints(maximum presence hours, consecutive hours, total hours and minimum hours). The output is a list of multiple schedules that each nurse can be assigned to. A schedule is the list of hours in which a nurse works must work.
+
+
+
+
+There are some specific modifications of the GRASP constructie phase of \cite{grasp} applied to this problem. After updating the candidate set, in \cite{grasp} page 2, we test the feasibility of the updated solution in each iteration of the constructive phase, and in the case we are having a feasible solution, we leave the loop. If not, we continue looping until no candidate schedules are available or no more candidate schedules can be added (all nurses have a schedule). A solution is feasible if for each hour, the demand is less or equal to the number of nurses working at this hour.
+ 
+Another improvement introduced in the basic version of the algorithm, is the fact that instead of removing candidate elements(single nurse schedules) from the candidate set and adding them to the solution, we generate a basic list of possible candidates and each time a nurse is assigned one of them, we don't remove it from the candidate set. What we do is recompute each time the greedy cost of each candidate when the solution is updated. That way we reduce the number of candidates that we have to generate and sort.
+
 
 
 \subsubsection{Local Search}
@@ -153,4 +157,3 @@ be part of the solution or not. In this case, the greedy value depends on ... BR
 q = $(\sum_{h=1}^{nHours} demand_h \times w_{n,h})^{-1}$
 \end{center}
 
-\pagebreak
