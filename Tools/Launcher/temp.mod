@@ -89,13 +89,13 @@ function myTest(def, cplex, filename, logname, tilim,  goal, objf,  showsol) {
 
 
 
-var src = new IloOplModelSource("/home/homero/localgoogledrive/MIRI-DS/AMMM-Project/ILP/model01.mod");
+var src = new IloOplModelSource("C:\Users\Adrian Bazaga\IdeaProjects\AMMM-Project\ILP\model01.mod");
 
 var def = new IloOplModelDefinition(src);
 
 var cplex = new IloCplex();
 
-var logname = "../../Results/Pending/test-oplrun-from-python.json";
+var logname = "../../Results/Final/GRASPvsBRKGA/i_ng_60_4096_2560_24h_16mxP_4mxC.json";
 var ofile = new IloOplOutputFile(logname, true);
 ofile.writeln("[");
 ofile.close();
@@ -107,7 +107,7 @@ var tilim = 300.0;
 
 
 
-myTest(def, cplex,"./test-oplrun-from-python.dat", logname, 1800.0,  "SUCCESS", 1 );
+myTest(def, cplex,"C:\Users\Adrian Bazaga\IdeaProjects\AMMM-Project\Instances\Final\4096nurses\i_ng_60_4096_2560_24h_16mxP_4mxC.dat", logname, 4200.0,  "SUCCESS", 1 );
 var ofile = new IloOplOutputFile(logname, true);
 ofile.writeln("{\"end\":\"end\"}]");
 ofile.close();
