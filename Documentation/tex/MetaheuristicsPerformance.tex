@@ -89,19 +89,16 @@ GRASP &  BRKGA \\
 
 \end{tabular}
 
-Finally, we execute the same problem instance from the large set with both GRASP and BRKGA models. The selected problem instance is the following:
-\begin{itemize}
-	\item i\-ng\-60\-1600\-1000\-72h\-27mxP\-13mxc\-6mxH\-4mnH\-3Cnt\-20180105\_12\-31\-30343\.dat
-\end{itemize}
+Finally, we execute the same problem instance from the large set with both GRASP and BRKGA models. The selected problem instance is the following: \textbf{i-ng-60-4096-2560-24h-16mxP-4mxc-10mxH-1mnH-3Cnt-20180109\_08-04-50394.dat }
 
 
 
 \begin{figure}[h!]
 \centering
 \begin{subfigure}[b]{.8\linewidth}
-
-\includegraphics[width=\linewidth]{./img/metah_comparison_objfunc.png}
-\caption{ Plot of the evolution of objective function values of the GRASP and BRKGA models }\label{fig1a}
+\centering
+\includegraphics[width=0.7\linewidth]{./img/metah_comparison_objfunc.png}
+\caption{ Plot of the evolution of objective function values of the GRASP and BRKGA models for the same instance prolbem. }\label{fig1a}
 \end{subfigure}%
 % \begin{subfigure}[b]{.49\linewidth}
 % \centering
@@ -113,14 +110,13 @@ Finally, we execute the same problem instance from the large set with both GRASP
 \end{figure}
 
 
+In the figure~\ref{meta_comparison} we observe that it takes the GRASP almost two more hours than BRKGA to finish. However, it finds a better local optimum (3190) than BRKGA(3209), except that both models find a local optimum around 3200 and the optimum is 2560.
+The evolution of the objective function for the GRASP model shows a series of steps, that are combinations of the result of the Randomized Greedy constructive algorithm and then the Localsearch (which in most cases does not improve the solution). Then, around 2 hours from the beginning the objective function of the GRASP model starts to decrease. This is where the final intensive Localsearch algorithm is improving the solution (from the best pure Greedy or randomized Greedy constructive result). Because of the construction of the graph, the last Localsearch seems to improve from the last iteration of the Grasp ( Constructive plus Local search) but in fact it starts from the pure Greedy result at the very beginning. The final Localsearch does 36 iterations, starting at the best incumbent 3225 and decreasing slowly from 3222 to finally get an objective function value of 3190.
 
-As we can observe in the chart, the BRKGA model finds the optimal in the fourth generation but it is setup to do twenty generations. This is caused by the fact that we have tested the parameters in isolation. We have not taken into account their interactions and strange results can appear like this early optimal finding of the BRKGA.
-We can also appreciate that the BRKGA model starts by having a fitness diversity of 25\% of the total population. Then it gets more than 50\% diversification in the middle generations and then it decreases slowly until the last generation where the diversity is minimum.
-An improvement that could be implemented is, as is done in the intensive localsearch, introduce a limited number of non improving iterations upon which the algorithm stops.
+As we can observe in the chart, the BRKGA model finds the a local optimum in the fourth generation, but as it is setup to do twenty generations, it continues for 30 more minutes. This is caused by the fact that we have tested the parameters in isolation. We have not taken into account their interactions and strange results can appear like this early optimal finding of the BRKGA. An improvement that could be implemented is, as is done in the intensive localsearch, to introduce a limited number of non improving iterations upon which the algorithm stops. 
+Looking at the diversity for each breed of individuals of the BRKGA model, we find that it starts with a rate of 30\% (61 different fitness values out of 200 individuals), increases to 41\% in the third generation then decreases to around 10\% and stays there. In the last generations it reaches 17\%, but the objective function stays the same as in the third generation where it finds the local optimum 3209.
 
-
-
-
-Based on the results, we draw conclusions about, why one is better than the other, why one stops sooner than the other. We think in terms of diversification and intensification and solution space exploration.\\
+In terms of intensification we can say that the final Localsearch of the GRASP algorithm does a good job, as well as the mating in the BRKGA's decoder. However the lightweight Localsearch during the GRASP iterations hasn't found improvements. 
+In terms of diversification, this problem instance hasn't yield very impressive results. For example, the GRASP starts from 9 different constructive phases but they are close in terms of objective function. Moreover, the randomized constructive phases do not improve the pure Greedy approach so the space exploration capabilities of GRASP are not exploited as they could be. 
 
 \pagebreak

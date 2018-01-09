@@ -88,7 +88,7 @@ def buildChart(name, x,y, label1, x2,y2, label2):
         ls=lss[1], 
         label=label2)
     
-    plt.xlabel('Time s')
+    plt.xlabel('Time (day hh:mm)')
     plt.ylabel('Objective function')
     
     ax.legend(loc='upper right', fontsize='medium')
