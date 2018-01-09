@@ -14,6 +14,8 @@ The essential idea is ... very brief here pls!.
 \g@addto@macro{\@algocf@init}{\SetKwInOut{Parameter}{Parameters}} 
 \makeatother
 
+Explain GRASP constructive
+
 \begin{algorithm}[H]
 \KwIn{nNurses, hours, demand}
 %\Parameter{Some parameter}
@@ -42,6 +44,10 @@ cost $\leftarrow$ computeObjectiveFunctionCost(solution)\\
 $\textbf{return}$ <solution,cost>
 \caption{GRASP constructive phase}\label{alg.mainLoop}
 \end{algorithm}
+
+In the $computeCandidateElements$ function depicted in $Algorithm$ $2$, we take as an input the number of nurses available, the number of hours to schedule and the demand per hour. As output we give a solution and it's cost.
+
+The algorithm starts by initializing an empty solution (line 1), then the candidate elements for the given problem parameters are calculated. A candidate element is a nurse assignment. So, while the candidate elements set $E$ is not empty (line 3) we are going to iterate in a loop. In this loop we start by calculating the greedy cost (line 4) of each element in the candidate set, and after that we compute the minimum greedy cost (line 5) and the maximum greedy cost (line 6), in order to calculate the restricted candidate list (line 7). After that, a candidate element is chosen at random from the restricted candidate list (line 8) and is added to the solution (line 9). We test the feasibility of this new solution (line 10), and in the case of validity we leave the loop so that at this point we have a valid and feasible solution, if not, continue looping until no candidates are available and the previous condition has not been reached.
 
 \begin{algorithm}[H]
 \KwIn{nNurses, hours, demand}
@@ -76,6 +82,8 @@ $\textbf{return}$ <solution,cost>
 \subsubsection{Local Search}
 
 The other part that will be shown is about the local search. Once the constructive phase ends up with a solution, eventually it is the optimal, but usually it is not. In order to improve the solution a neighbourhoods of the constructive phase solution, i.e. near solutions will be searched. This phase is called local search. You can see the pseudocode 4.1.3 for the implemented local search procedure.
+
+In the intensive Local Search ($Algorithm$ $3$) we take as input an incumbent solution, the max number of failed iterations for this Local Search procedure and finally the parameters of the problem instance (number of nurses, number of hours, demand per hour). As output a solution is returned.
 
 \begin{algorithm}[H]
 \KwIn{incumbentSolution, maxFailedIterations, nNurses, hours, demand}
