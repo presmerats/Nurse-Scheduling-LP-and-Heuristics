@@ -85,6 +85,8 @@ The other part that will be shown is about the local search. Once the constructi
 
 In the intensive Local Search ($Algorithm$ $3$) we take as input an incumbent solution, the max number of failed iterations for this Local Search procedure and finally the parameters of the problem instance (number of nurses, number of hours, demand per hour). As output a solution is returned.
 
+The procedure starts by initializing the number of failed iterations ($failedIterations$) to 0 (line 1). Now we iterate while the number of failed iterations is less than the number of max failed iterations (line 2). Inside the loop, we start by calculating an auxiliary solution by applying a first improvement local search over the incumbent solution (line 3). We check if the used nurses (objective function of the problem) of the auxiliary solution we have just got from the first improvement local search is greater or equal than the  used nurses by the incumbent solution (line 4), this means that the intensified solution is of the same quality or worse than the previous solution, so in this case we have failed to intensify the solution and get a better one, so the failed iterations counter is increased by 1 (line 5). Otherwise we successfully got a better solution by intensification so the failed iterations counter is reinitialized to 0. At the end of the loop, the incumbent solution is replaced by the auxiliary solution found (line 11) and returned as solution (line 12).
+
 \begin{algorithm}[H]
 \KwIn{incumbentSolution, maxFailedIterations, nNurses, hours, demand}
 %\Parameter{Some parameter}
@@ -98,16 +100,15 @@ In the intensive Local Search ($Algorithm$ $3$) we take as input an incumbent so
 
 failedIterations $\leftarrow$ 0 \\
 \While{$failedIterations$ $<$ $maxFailedIterations$}{
-solution' $\leftarrow$ firstImprovementLocalSearch(incumbent, nNurses, hours, demand) \\
-\If{getUsedNurses(solution') $\geq$ getUsedNurses(incumbent)}{\label{lt}
+solution' $\leftarrow$ firstImprovementLocalSearch(incumbentSolution, nNurses, hours, demand) \\
+\If{getUsedNurses(solution') $\geq$ getUsedNurses(incumbentSolution)}{\label{lt}
 failedIterations += 1
 }
-\Else{}{\label{lt}
-failedIterations = 0
+\Else{failedIterations = 0}{\label{lt}
 }
 }
-incumbent $\leftarrow$ solution'\\
-$\textbf{return}$ incumbent
+incumbentSolution $\leftarrow$ solution'\\
+$\textbf{return}$ incumbentSolution
 \caption{Intensive Local Search}\label{alg.mainLoop}
 \end{algorithm}
 
