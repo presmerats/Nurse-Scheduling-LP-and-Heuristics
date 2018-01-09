@@ -14,7 +14,7 @@ The algorithm takes as input: the number of nurses, the proportion of extra nurs
 
 To decide how the size of a problem is determined, we choose to reference the time it takes for the ILP model to solve the problem instance using the Cplex solver. We generate and solve a series of instances with the ILP until we have around 20 instances that take 60 minutes or less to solve by ILP. Then, as we cannot perform the same procedure to generate the large size set, we execute a series of experiments to determine the influence of the problem variables in the time it takes for the ILP model to solve it.\\
 
-The next figures show different executions of a small modification of a problem instance. In each figure, a parameter of the problem is modified to increase the time it takes to the ILP model to solve the instance problem. This gives us an idea of what parameters increase the size of the problem instance.\\
+The next figures show different executions of a small modification of a problem instance. In each figure, a parameter of the problem is modified and that modifies the number of steps the ILP model has to do to decrease the gap between the best integer and the best bound until a gap of 0.05 is reached. The number of steps is then an indication of the time it takes to solve the problem, and thus it gives us an idea of what parameters increase do the size of the problem instance.\\
 
 
 \begin{figure}[h!]
@@ -66,7 +66,7 @@ The next figures show different executions of a small modification of a problem 
 \end{figure}
 
 
-The results in figure~\ref{fig_ilp_size}, figure~\ref{fig_ilp_size2} and figure~\ref{fig_ilp_size3} allow us to conclude how the parameters of the problem instance can be modified to increase its solving time and thus what we consider its size. The large set of problem instances will be generated using modifications of those instance variables, applied to some problems of the medium size set. The table~\ref{tab:ilp_size} page~\pageref{tab:ilp_size} summarizes the findings and shows the attributes of each benchmark instance set.
+The results in figure~\ref{fig_ilp_size}, figure~\ref{fig_ilp_size2} and figure~\ref{fig_ilp_size3} page~\pageref{fig_ilp_size} allow us to conclude how the parameters of the problem instance can be modified to increase its solving time and thus what we consider its size. The large set of problem instances will be generated using modifications of those instance variables, applied to some problems of the medium size set. The table~\ref{tab:ilp_size} page~\pageref{tab:ilp_size} summarizes the findings and shows the attributes of each benchmark instance set.
 
 \begin{table}[ht] 
 \centering 
