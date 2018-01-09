@@ -1,0 +1,69 @@
+(ammm-env) pau@Lenovo-Y520-15IKBN:/media/disk/home/pau/AMMM-P/AMMM-Project/Tools/Launcher$ python launcher.py --solver brkga --instance ../../Instances/Final/GRASPvsBRKGA/ --results ../../Results/Final/GRASPvsBRKGA/ --decoder hexcess --eliteprop 0.1 --mutantprop 0.15 --population 200 --generation 20 --solver brkga --inheritance 0.7
+/media/disk/home/pau/AMMM-P/AMMM-Project/Tools/Launcher
+Processing instance: i-ng-60-1600-1000-72h-27mxP-13mxC-6mxH-4mnH-3Cnt-20180105_12-31-30343.dat
+breed: 200 individuals
+diversity: 49
+1279
+breed: 200 individuals
+diversity: 97
+1126
+breed: 200 individuals
+diversity: 133
+1094
+breed: 200 individuals
+diversity: 134
+1000
+breed: 200 individuals
+diversity: 125
+1000
+breed: 200 individuals
+diversity: 106
+1000
+breed: 200 individuals
+diversity: 72
+1000
+breed: 200 individuals
+diversity: 61
+1000
+breed: 200 individuals
+diversity: 57
+1000
+breed: 200 individuals
+diversity: 54
+1000
+breed: 200 individuals
+diversity: 47
+1000
+breed: 200 individuals
+diversity: 45
+1000
+breed: 200 individuals
+diversity: 51
+1000
+breed: 200 individuals
+diversity: 50
+1000
+breed: 200 individuals
+diversity: 48
+1000
+breed: 200 individuals
+diversity: 46
+1000
+breed: 200 individuals
+diversity: 41
+1000
+breed: 200 individuals
+diversity: 39
+1000
+breed: 200 individuals
+diversity: 48
+1000
+breed: 200 individuals
+diversity: 47
+1000
+breed: 200 individuals
+diversity: 40
+Fitness:  1000
+     written result to: /media/disk/home/pau/AMMM-P/AMMM-Project/Results/Final/GRASPvsBRKGA/i-ng-60-1600-1000-72h-27mxP-13mxC-6mxH-4mnH-3Cnt-20180105_12-31-30343-brkga-brkga-g20-p200-e0.1-m0.15-i0.7.json
+
+

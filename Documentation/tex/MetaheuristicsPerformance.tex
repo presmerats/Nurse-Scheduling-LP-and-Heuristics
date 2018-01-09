@@ -81,34 +81,44 @@ The output of the parameter selection experiments is the following:
 \begin{tabular}{ll}
 GRASP &  BRKGA \\
  $\alpha$ = 0.5  &  $generations$ = 20 \\
- $maxIterations$ = 6 &  $population$ = 200 \\
+ $maxIterations$ = 8 &  $population$ = 200 \\
  $failedIterations$ = 4 & $inheritance$ = 0.8 \\
- 						&  $inheritance$ = 0.8 \\
+ 						&  $eliteprop$ = 0.1 \\
  						& $mutantprop$ = 0.15 \\
 
 
 \end{tabular}
 
+Finally, we execute the same problem instance from the large set with both GRASP and BRKGA models. The selected problem instance is the following:
+\begin{itemize}
+	\item i\-ng\-60\-1600\-1000\-72h\-27mxP\-13mxc\-6mxH\-4mnH\-3Cnt\-20180105\_12\-31\-30343\.dat
+\end{itemize}
 
 
-% \begin{tabularx}{\textwidth}{|p{2cm}|X|}
-% GRASP &  BRKGA \\
-% \begin{itemize}
-% 	\item best $\alpha$ = 0.5
-% 	\item best $maxIterations$ = 6
-% 	\item best $failedIterations$ = 4
-% \end{itemize}
-% &
-% \begin{itemize}
-% 	\item best $generations$ = 20
-% 	\item best $population$ = 200
-% 	\item best $inheritance$ = 0.8
-% 	\item best $eliteprop$ = 0.1
-% 	\item best $mutantprop$ = 0.15
-% \end{itemize}
 
-% \\
-% \end{tabularx}
+\begin{figure}[h!]
+\centering
+\begin{subfigure}[b]{.8\linewidth}
+
+\includegraphics[width=\linewidth]{./img/metah_comparison_objfunc.png}
+\caption{ Plot of the evolution of objective function values of the GRASP and BRKGA models }\label{fig1a}
+\end{subfigure}%
+% \begin{subfigure}[b]{.49\linewidth}
+% \centering
+% \includegraphics[width=\linewidth]{./img/instances_hours_ilp_evol.png}
+% \caption{ Evolution of Gap of the ILP model with different number of hours }\label{fig1b}
+% \end{subfigure}\vfill
+% \caption{Evolution of Gap of the ILP model with different values of number of nurses (\subref{fig1a}) and number of hours (\subref{fig1b}). }
+\label{meta_comparison}
+\end{figure}
+
+
+
+As we can observe in the chart, the BRKGA model finds the optimal in the fourth generation but it is setup to do twenty generations. This is caused by the fact that we have tested the parameters in isolation. We have not taken into account their interactions and strange results can appear like this early optimal finding of the BRKGA.
+We can also appreciate that the BRKGA model starts by having a fitness diversity of 25\% of the total population. Then it gets more than 50\% diversification in the middle generations and then it decreases slowly until the last generation where the diversity is minimum.
+An improvement that could be implemented is, as is done in the intensive localsearch, introduce a limited number of non improving iterations upon which the algorithm stops.
+
+
 
 
 Based on the results, we draw conclusions about, why one is better than the other, why one stops sooner than the other. We think in terms of diversification and intensification and solution space exploration.\\
