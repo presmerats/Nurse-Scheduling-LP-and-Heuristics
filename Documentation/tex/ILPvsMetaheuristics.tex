@@ -1,6 +1,6 @@
 \subsection{Comparing Integer Linear Programing to Meta-heuristics}
 
-In this section, we are going to compare the execution results of the Cplex ILP solver and the two metaheuristics algorithms. We are going to solve the problem instances of the medium size data set with our three solvers and plot the results in terms of solving time and objective function. All executions have been performed on the same computer. The parameters for the BRGKA and GRASP algorithms are respectively kept with the same values during all executions. For this experiment, the size of the problems will be determined by the time it takes the ILP solver to find the optimal solution.\\
+In this section, we are going to compare the execution results of the Cplex ILP solver and the two metaheuristics algorithms. We are going to solve the problem instances of the medium size data set with our three models and plot the results in terms of solving time and objective function. All executions have been performed on the same computer. The parameters for the BRGKA and GRASP algorithms are respectively kept with the same values during all executions. For this experiment, the size of the problems will be determined by the time it takes to the ILP model to find the optimal solution.\\
 
 
 \begin{figure}[h!]
@@ -32,5 +32,3 @@ In this section, we are going to compare the execution results of the Cplex ILP 
 
 The figure~\ref{fig_ilp_vs_meta} on page~\pageref{fig_ilp_vs_meta}, shows that the ILP execution times increase exponentially as the size of the problem instance increases, whereas the GRASP and BRKGA solving times increase much more slowly.
 We observe that for the bigger instances, the GRASP algorithm produces worse results (bigger objective function values), whereas the BRKGA produces results very close to the optimum objective function found by the ILP solver.
-
-\pagebreak

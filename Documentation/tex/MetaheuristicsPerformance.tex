@@ -1,32 +1,26 @@
 \subsection{Comparison: GRASP vs BRKGA}
 
 In this section we are going to compare the performance of both metaheuristic algorithms applied to the assignment problem.\\
-In order to do that, we are first going to choose the best parameters for each algorithm using the large set of problem instances described previously to execute several times each algorithm. The procedure consists of execution the same subset of samples drawn from the large set of problem instances for different proposed values of each parameter tested. The executions can be performed in different computers since the time is not important, only the objective function. The only caveat, is that all parameter values have to solve the same set of instances, since we use the average of objective functions. Otherwise the results would not be coherent from one parameter value to another. We record the objetive function for each execution and compute its average for each parameter value. Then we plot its evolution. We choose the parameter that produces the minimum objective function average.\\
+In order to do that, we are first going to choose the best parameters for each algorithm using the large set of problem instances described previously to execute several times each algorithm. The procedure consists of executing the same subset of samples drawn from the large set of problem instances for different proposed values of each parameter tested. The executions can be performed in different computers since the time is not important, only the objective function. The only caveat, is that all parameter values have to solve the same set of instances, since we use the average of objective functions. Otherwise the results would not be coherent from one parameter value to another. We record the objetive function for each execution and compute its average for each parameter value. Then we plot its evolution. We choose the parameter that produces the minimum objective function average.\\
 Finally, we will use the best parameter values for each algorithm, to  compare the performance of both algorithm solving the same problem instance.
 
 
 \subsubsection{Tuning GRASP parameters}
 
-For the parameters of the GRASP algorithm, we have tested the $\alpha$, the $maxIterations$ of the main loop and the $failedIterations$ for the final and more intensive local search.\\
-The results of the tests are shown in figure~\ref{fig_grasp_params} on page~\pageref{fig_grasp_params}.
+For the parameters of the GRASP algorithm, we have tested the $\alpha$, the $maxIterations$ of the main loop and the $failedIterations$ for the final and more intensive local search. The results of the tests are shown in figure~\ref{fig_grasp_params} on page~\pageref{fig_grasp_params} and figure~\ref{fig_grasp_brkga_params} on page~\pageref{fig_grasp_brkga_params}.
 
 \begin{figure}[h!]
 \begin{subfigure}[b]{.49\linewidth}
 \centering
 \includegraphics[width=0.8\linewidth]{./img/best-alpha.png}
-\caption{ Parameter $\alpha$}\label{fig1a}
+\caption{GRASP Parameter $\alpha$}\label{fig1a}
 \end{subfigure}\hfill
 \begin{subfigure}[b]{.49\linewidth}
 \centering
 \includegraphics[width=0.8\linewidth]{./img/best-maxiter.png}
-\caption{Parameter $maxIterations$ }\label{fig1b}
+\caption{GRASP Parameter $maxIterations$ }\label{fig1b}
 \end{subfigure}\vfill
-\begin{subfigure}[b]{.49\linewidth}
-\centering
-\includegraphics[width=0.8\linewidth]{./img/best-lsiteration.png}
-\caption{Parameter $failedIterations$ }\label{fig1c}
-\end{subfigure}%
-\caption{Average objective function for different \subref{fig1a} $\alpha$, \subref{fig1b} $maxIterations$ and  \subref{fig1c} $failedIterations$ values.  }
+\caption{Average objective function for different (\subref{fig1a}) $\alpha$ and (\subref{fig1b}) $maxIterations$ values of the GRASP model}
 \label{fig_grasp_params}
 \end{figure}
 
@@ -35,7 +29,25 @@ The results of the tests are shown in figure~\ref{fig_grasp_params} on page~\pag
 
 \subsubsection{Tuning BRKGA parameters}
 
-For the parameters of the BRKGA algorithm, we have tested the number of generatons ($generations$), the number of individuals in the population ($population$), the inheritance probability ($inheritance$), the proportion of elite individuals in each generation ($eliteprop$) and the proportion of mutant individuals in each generation ($mutantprop$). The results of the tests are shown in figure~\ref{fig_brkga_params} on page~\pageref{fig_brkga_params} .\\
+For the parameters of the BRKGA algorithm, we have tested the number of generatons ($generations$), the number of individuals in the population ($population$), the inheritance probability ($inheritance$), the proportion of elite individuals in each generation ($eliteprop$) and the proportion of mutant individuals in each generation ($mutantprop$). The results of the tests are shown in figure~\ref{fig_grasp_brkga_params} on page~\pageref{fig_grasp_brkga_params}, figure~\ref{fig_brkga_params} on page~\pageref{fig_brkga_params} and  figure~\ref{fig_brkga_params2} on page~\pageref{fig_brkga_params2} .\\
+
+
+\begin{figure}[h!]
+\begin{subfigure}[b]{.49\linewidth}
+\centering
+\includegraphics[width=0.8\linewidth]{./img/best-lsiteration.png}
+\caption{GRASP Parameter $failedIterations$ }\label{fig1c}
+\end{subfigure}
+\begin{subfigure}[b]{.49\linewidth}
+\centering
+\includegraphics[width=0.8\linewidth]{./img/best-mutantprop.png}
+\caption{BRKGA Parameter $mutantprop$ }\label{fig2e}
+\end{subfigure}\vfill
+\caption{Average objective function for different (\subref{fig1c}) $failedIterations$ of the GRASP model and (\subref{fig2e}) $mutantprop$ values of the BRKGA model}
+\label{fig_grasp_brkga_params}
+\end{figure}
+
+
 
 \begin{figure}[H]
 \begin{subfigure}[b]{.49\linewidth}
@@ -48,6 +60,11 @@ For the parameters of the BRKGA algorithm, we have tested the number of generato
 \includegraphics[width=0.8\linewidth]{./img/best-population.png}
 \caption{Parameter $population$ }\label{fig2b}
 \end{subfigure}\vfill
+\caption{Average objective function for different (\subref{fig2a}) $generations$ and (\subref{fig2b}) $population$ values for the BRKGA model}
+\label{fig_brkga_params2}
+\end{figure}
+
+\begin{figure}[H]
 \begin{subfigure}[b]{.49\linewidth}
 \centering
 \includegraphics[width=0.8\linewidth]{./img/best-inheritance.png}
@@ -58,14 +75,11 @@ For the parameters of the BRKGA algorithm, we have tested the number of generato
 \includegraphics[width=0.8\linewidth]{./img/best-eliteprop.png}
 \caption{Parameter $eliteprop$ }\label{fig2d}
 \end{subfigure}\vfill
-\begin{subfigure}[b]{.49\linewidth}
-\centering
-\includegraphics[width=0.8\linewidth]{./img/best-mutantprop.png}
-\caption{Parameter $mutantprop$ }\label{fig2e}
-\end{subfigure}%
-\caption{Average objective function for different \subref{fig2a} $generations$, \subref{fig2b} $population$, \subref{fig2c} $inheritance$, \subref{fig2d} $eliteprop$ and \subref{fig2e} $mutantprop$ values.  }
+\caption{Average objective function for different (\subref{fig2c})$inheritance$ and (\subref{fig2d}) $eliteprop$ values for the BRKGA model }
 \label{fig_brkga_params}
 \end{figure}
+
+
 
 
 
