@@ -10,19 +10,24 @@
 \contentsline {section}{\numberline {3}Meta-heuristics}{6}{section.3}
 \contentsline {subsection}{\numberline {3.1}GRASP implementation}{6}{subsection.3.1}
 \contentsline {subsubsection}{\numberline {3.1.1}Constructive phase}{6}{subsubsection.3.1.1}
-\contentsline {subsubsection}{\numberline {3.1.2}Local Search}{6}{subsubsection.3.1.2}
-\contentsline {subsubsection}{\numberline {3.1.3}Greedy cost function}{6}{subsubsection.3.1.3}
-\contentsline {subsection}{\numberline {3.2}BRKGA implementation}{7}{subsection.3.2}
-\contentsline {subsubsection}{\numberline {3.2.1}Chromosome structure}{7}{subsubsection.3.2.1}
-\contentsline {subsubsection}{\numberline {3.2.2}Decoder}{7}{subsubsection.3.2.2}
-\contentsline {section}{\numberline {4}Testing, Tunning and Comparisons}{8}{section.4}
-\contentsline {subsection}{\numberline {4.1}Benchmarking instances}{8}{subsection.4.1}
-\contentsline {subsubsection}{\numberline {4.1.1}The instance generator}{8}{subsubsection.4.1.1}
-\contentsline {subsubsection}{\numberline {4.1.2}Medium Set instances}{11}{subsubsection.4.1.2}
-\contentsline {subsubsection}{\numberline {4.1.3}Large Set instances}{11}{subsubsection.4.1.3}
-\contentsline {subsection}{\numberline {4.2}Comparing Integer Linear Programing to Meta-heuristics}{11}{subsection.4.2}
+\contentsline {subsubsection}{\numberline {3.1.2}Greedy cost function}{7}{subsubsection.3.1.2}
+\contentsline {subsubsection}{\numberline {3.1.3}Other problem specific details}{7}{subsubsection.3.1.3}
+\contentsline {subsubsection}{\numberline {3.1.4}Local Search}{7}{subsubsection.3.1.4}
+\contentsline {subsection}{\numberline {3.2}BRKGA implementation}{9}{subsection.3.2}
+\contentsline {subsubsection}{\numberline {3.2.1}Chromosome structure}{9}{subsubsection.3.2.1}
+\contentsline {subsubsection}{\numberline {3.2.2}Decoder}{9}{subsubsection.3.2.2}
+\contentsline {section}{\numberline {4}Testing, Tunning and Comparisons}{10}{section.4}
+\contentsline {subsection}{\numberline {4.1}Benchmarking instances}{10}{subsection.4.1}
+\contentsline {subsubsection}{\numberline {4.1.1}The instance generation process}{10}{subsubsection.4.1.1}
+\contentsline {subsubsection}{\numberline {4.1.2}The medium and large instance sets}{11}{subsubsection.4.1.2}
+\contentsline {subsection}{\numberline {4.2}Comparing Integer Linear Programing to Meta-heuristics}{12}{subsection.4.2}
 \contentsline {subsection}{\numberline {4.3}Comparison: GRASP vs BRKGA}{12}{subsection.4.3}
-\contentsline {subsubsection}{\numberline {4.3.1}Tuning GRASP parameters}{12}{subsubsection.4.3.1}
+\contentsline {subsubsection}{\numberline {4.3.1}Tuning GRASP parameters}{13}{subsubsection.4.3.1}
 \contentsline {subsubsection}{\numberline {4.3.2}Tuning BRKGA parameters}{14}{subsubsection.4.3.2}
-\contentsline {subsubsection}{\numberline {4.3.3}Comparative results of meta-heuristics performance}{14}{subsubsection.4.3.3}
-\contentsline {section}{\numberline {5}Conclusions}{16}{section.5}
+\contentsline {subsubsection}{\numberline {4.3.3}Comparative results of meta-heuristics performance}{15}{subsubsection.4.3.3}
+\contentsline {section}{\numberline {5}Conclusions}{17}{section.5}
+\contentsline {section}{\numberline {A}Appendices}{18}{appendix.A}
+\contentsline {subsection}{\numberline {A.1}Running the launcher}{18}{subsection.A.1}
+\contentsline {subsection}{\numberline {A.2}Parameter validation (LargeSet)}{18}{subsection.A.2}
+\contentsline {subsubsection}{\numberline {A.2.1}Other options}{18}{subsubsection.A.2.1}
+\contentsline {subsection}{\numberline {A.3}Reporting}{18}{subsection.A.3}

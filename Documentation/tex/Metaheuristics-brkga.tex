@@ -34,14 +34,9 @@ $\textbf{return}$ demand
 
 \subsubsection{Decoder}
 
-Recapping, the greedy algorithm is based on the idea to bring for every candidate a value that depicts the quality of every of them. This value is provided by the greedy function. For purely greedy algorithms, the candidates are sorted by this value and then the best one (the first one of the list) will be included on the solution. An evolution of greedy is GRASP that is randomizing the pick of a candidate with its RCL. This decoder is following the same idea, but taking as order the one given my the chromosome structure, being this order the priority of hours to fulfill.
-
-This means that the gens are affecting to the position of the hours to fulfill in the assignment phase. Once we have all the hours sorted, the first one is picked. Notice that the decoder is deterministic. The randomness in BRKGA is not in the greedy part but in the generation of mutants.
-
-The essential idea of the decoder algorithm described in $Algorithm$ $5$ is to diversify the solution by using the excess of nurses assignments per hour. To do so, the decoder starts by looping over each individual in the population (line 1), then compute the starting hours to fulfill demand for the individual (see $Algorithm$ $6$), and creating a solution which starts assigning nurses to hours using the computed starting hours (line 3). As said, this is repeated until all the individuals in the population have been iterated and then a fully valid solution has been built. Finally the population with the calculated assignments per individual and their fitness is returned.
 
 \begin{algorithm}[H]
-\KwIn{population, nNurses, hours, demand}
+\KwIn{population, nNurses, hours, demand, constraints}
 %\Parameter{Some parameter}
 \KwOut{population}    
 
@@ -52,39 +47,52 @@ The essential idea of the decoder algorithm described in $Algorithm$ $5$ is to d
 \SetKwFunction{FindCompress}{FindCompress}
 
 \ForEach{$individual$ $\in$ $population$}{
-startingHours $\leftarrow$ computeStartingHours(individual, nNurses, hours, demand) \\
-solution $\leftarrow$ assignNurses(startingHours, nNurses, hours, demand) \\
-calculateFitness(solution) \\
+new\_demand $\leftarrow decoding(individual, hours, demand, nNurses, constraints)$ \\
+population $\leftarrow assignNurses(solution, nNurses, hours, new\_demand)$ \\
 }
-fitness $\leftarrow$ computeObjectiveFunctionCost(solution)\\
 $\textbf{return}$ population
-\caption{BRKGA Decoder algorithm}\label{alg.mainLoop}
+\caption{BRKGA Decoder algorithm}\label{BRKGA.decoder.mainLoop}
 \end{algorithm}
 
-As illustrated in $Algorithm$ $6$, the function to compute the starting hours goes as follows: the function receives as input an individual, the number of nurses available in the problem instance, the hours (number of hours for the schedule) and the demands per hour. In the line 1, the algorithm starts by initializing the startingHours set to be empty, then, for each gene in the individual chromosome (line 2). Then, to compute the initial range of starting hours, we use the demanded nurses at the hour with the index corresponding to the index of the currently iterated gene. In the case that the gene value is less than 0.2 (line 5), which in a uniformly distributed context happens the 20\% of the times. On this case the range is going to be the 80\% of the total number of nurses (line 6). After this the candidate starting hour is finally computed (line 7) by multiplying the range by the gene value, taking the result as an integer value (line 7). This value represents an starting hour. Finally the starting hour is appended to the startingHours array (line 9). This whole calculation process is repeated while the chromosome has not yet been fully traversed (loop of line 2). At the end, the array with the order which will be used in order to fulfill the demands (startingHours) is returned as output (line 11).
+As illustrated in $Algorithm$ \ref{BRKGA.decoder.mainLoop}, the decoder simply decodes each individual chromosome with $Algorithm$ \ref{brkga.decoding}, and calls $assignNurses$ to assign the nurses according to the newly computed $new\_demand$. Each solution is stored in the population with its corresponding fitness already computed in the $assignNurses$ function ($Algorithm$ \ref{BRKGA.assignNurses}).
 
 \begin{algorithm}[H]
-\KwIn{individual, nNurses, hours, demand}
+\KwIn{solution, nNurses, hours, new\_demand, constraints}
 %\Parameter{Some parameter}
-\KwOut{startingHours}    
+\KwOut{solution}    
 
 \SetKwData{Left}{left}
 \SetKwData{This}{this}
 \SetKwData{Up}{up}
 \SetKwFunction{Union}{Union}
 \SetKwFunction{FindCompress}{FindCompress}
-startingHours $\leftarrow$ $\emptyset$ \\
-\ForEach{$<gene, index>$ $\in$ $getChromosome(individual)$}{
-range $\leftarrow$ $demand_{index}$ \\
-startingHour $\leftarrow$ 0 \\
-\If{gene $<$ 0.2}{\label{lt}
-range $\leftarrow$ $\ceil*{0.8 \times nNurses}$ \\
-startingHour $\leftarrow$ $(int)$(range $\times$ gene) \\ 
+
+
+\ForEach{$h \in hours$}{
+	$mustWorkList, canWorkList = computeCandidateAssignments(solution, h, constraints)$\\
+	\ForEach{$n \in mustWorkList$}{
+		$ assignWorkingHour(solution, n, h)$\\
+		$ demand_{h} \leftarrow updateRemainingDemand(solution,h)$\\
+	}
+	\ForEach{$n \in canWorkList$}{
+		\If{$demand_{h} > 0$}{
+			$ assignWorkingHour(solution, n, h)$\\
+			$ demand_{h} \leftarrow updateRemainingDemand(solution,h)$\\
+		}
+	}
 }
-startingHours.add(startingHour) \\
+
+\If{$Feasible(solution)$}{
+	$solution(fitness) \leftarrow computeFitness(solution)$ \\
 }
-$\textbf{return}$ startingHours
-\caption{computeStartingHours}\label{alg.mainLoop}
+\Else{
+	$solution(fitness) \leftarrow \infty $
+}
+
+$\textbf{return}$ solution
+\caption{assignNurses}\label{BRKGA.assignNurses}
 \end{algorithm}
 
+
+As shown in $Algorithm$ \ref{BRKGA.assignNurses}, this algorithm assigns nurses to the schedule according to the demand and the constraints. For each possible hour in the schedule, in order, the algorithm selects the nurses that should work at this specific hour according to the constraints, and the nurses that could work at this specific hour according to the constraints (line 2). The function $computeCandidateAssignments$ walks through all the nurses, assigning the current hour and verifying if the nurse schedule is valid according to the constraints. From that "canWorkList", it walks through all the nurses from that list, removing the assignment in the specific hour and verifying if the schedule would be valid or not. That way it creates the second "mustWorkList" with nurses that must work to have valid schedules, removing them from the first list in order to have two disjoint sets. Once the two lists are set, it first assigns all the nurses that must work to have a valid schedule (lines 3 to 5). Each time, the remaining demand is updated (line 5). Then it walks throught the list of nurses that can work and assign the hour if and only if the remaining demand in that specific hour is positive (line 8). The final solution is then updated with its fitness, which is the same as the cost or number of nurses that work any hour during the schedule. If the solution is not feasible, that means that the demand is not fulfilled in each hour, then the fitness is set to be infinite or big enough.
 
