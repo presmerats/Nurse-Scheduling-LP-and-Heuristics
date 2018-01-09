@@ -78,9 +78,9 @@ $\textbf{return}$ <solution,cost>
 The other part that will be shown is about the local search. Once the constructive phase ends up with a solution, eventually it is the optimal, but usually it is not. In order to improve the solution a neighbourhoods of the constructive phase solution, i.e. near solutions will be searched. This phase is called local search. You can see the pseudocode 4.1.3 for the implemented local search procedure.
 
 \begin{algorithm}[H]
-\KwIn{nNurses, hours, demand}
+\KwIn{incumbentSolution, maxFailedIterations, nNurses, hours, demand}
 %\Parameter{Some parameter}
-\KwOut{<solution, cost>}    
+\KwOut{solution}    
 
 \SetKwData{Left}{left}
 \SetKwData{This}{this}
@@ -88,22 +88,51 @@ The other part that will be shown is about the local search. Once the constructi
 \SetKwFunction{Union}{Union}
 \SetKwFunction{FindCompress}{FindCompress}
 
-solution $\leftarrow$ $\emptyset$ \\
-E $\leftarrow$ $computeCandidateElements(nNurses, hours, demand)$ \\
-\While{$E$ $\neq$ $\emptyset$}{
-computeGreedyCost(solution, E, nNurses, hours, demand) \\
-min\_gc $\leftarrow$ min(e.gc | e $\in$ E) \\
-max\_gc $\leftarrow$ max(e.gc | e $\in$ E) \\
-RCL $\leftarrow$ \{ e $\in$ E | e.gc < min\_gc + (max\_gc - min\_gc) $\times$ $\alpha$ \} \\
-e $\leftarrow$ randomSelection(RCL) \\
-solution $\leftarrow$ solution $\cup$ {e} \\
-\If{isFeasible(solution, nNurses, hours, demand)}{\label{lt}
+failedIterations $\leftarrow$ 0 \\
+\While{$failedIterations$ $<$ $maxFailedIterations$}{
+solution' $\leftarrow$ firstImprovementLocalSearch(incumbent, nNurses, hours, demand) \\
+\If{getUsedNurses(solution') $\geq$ getUsedNurses(incumbent)}{\label{lt}
+failedIterations += 1
+}
+\Else{}{\label{lt}
+failedIterations = 0
+}
+}
+incumbent $\leftarrow$ solution'\\
+$\textbf{return}$ incumbent
+\caption{Intensive Local Search}\label{alg.mainLoop}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\KwIn{solution, nNurses, hours, demand}
+%\Parameter{Some parameter}
+\KwOut{solution}    
+
+\SetKwData{Left}{left}
+\SetKwData{This}{this}
+\SetKwData{Up}{up}
+\SetKwFunction{Union}{Union}
+\SetKwFunction{FindCompress}{FindCompress}
+solution' $\leftarrow$ solution \\
+computeExceedingNurseHours(solution', nNurses, hours, demand) \\
+exceedingCapacityRemoval(solution', nNurses, hours, demand) \\
+improved $\leftarrow$ $\textbf{TRUE}$ \\
+\While{$improved$}{
+improved $\leftarrow$ $\textbf{FALSE}$ \\
+findRestschedules(solution, nNurses, hours, demand) \\
+\ForEach{$n$ $\in$ $nNurses$}{\label{lt}
+solution' $\leftarrow$ exchangeWorkingHours(n) \\
+\If{isNotFeasible(solution', nNurses, hours, demand)}{\label{lt}
 $\textbf{break}$
 }
+\ElseIf{getUsedNurses(solution') $<$ getUsedNurses(solution)}{\label{lt}
+improved $\leftarrow$ $\textbf{TRUE}$ \\
 }
-cost $\leftarrow$ computeObjectiveFunctionCost(solution)\\
-$\textbf{return}$ <solution,cost>
-\caption{Local Search}\label{alg.mainLoop}
+}
+}
+solution $\leftarrow$ solution'\\
+$\textbf{return}$ solution
+\caption{First Improvement Local Search}\label{alg.mainLoop}
 \end{algorithm}
 
 \subsubsection{Greedy cost function}

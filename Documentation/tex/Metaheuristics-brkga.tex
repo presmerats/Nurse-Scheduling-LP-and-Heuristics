@@ -12,10 +12,12 @@ Recapping, the greedy algorithm is based on the idea to bring for every candidat
 
 This means that the gens are affecting to the position of the hours to fulfill in the assignment phase. Once we have all the hours sorted, the first one is picked. Notice that the decoder is deterministic. The randomness in BRKGA is not in the greedy part but in the generation of mutants.
 
+diversify by excess of assignments per hour
+
 \begin{algorithm}[H]
-\KwIn{nNurses, hours, demand}
+\KwIn{population, nNurses, hours, demand}
 %\Parameter{Some parameter}
-\KwOut{<solution, cost>}    
+\KwOut{population}    
 
 \SetKwData{Left}{left}
 \SetKwData{This}{this}
@@ -23,22 +25,38 @@ This means that the gens are affecting to the position of the hours to fulfill i
 \SetKwFunction{Union}{Union}
 \SetKwFunction{FindCompress}{FindCompress}
 
-solution $\leftarrow$ $\emptyset$ \\
-E $\leftarrow$ $computeCandidateElements(nNurses, hours, demand)$ \\
-\While{$E$ $\neq$ $\emptyset$}{
-computeGreedyCost(solution, E, nNurses, hours, demand) \\
-min\_gc $\leftarrow$ min(e.gc | e $\in$ E) \\
-max\_gc $\leftarrow$ max(e.gc | e $\in$ E) \\
-RCL $\leftarrow$ \{ e $\in$ E | e.gc < min\_gc + (max\_gc - min\_gc) $\times$ $\alpha$ \} \\
-e $\leftarrow$ randomSelection(RCL) \\
-solution $\leftarrow$ solution $\cup$ {e} \\
-\If{isFeasible(solution, nNurses, hours, demand)}{\label{lt}
-$\textbf{break}$
+\ForEach{$individual$ $\in$ $population$}{
+startingHours $\leftarrow$ computeStartingHours(individual, nNurses, hours, demand) \\
+solution $\leftarrow$ assignNurses(startingHours, nNurses, hours, demand) \\
+calculateFitness(solution) \\
 }
+fitness $\leftarrow$ computeObjectiveFunctionCost(solution)\\
+$\textbf{return}$ population
+\caption{BRKGA Decoder algorithm}\label{alg.mainLoop}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\KwIn{individual, nNurses, hours, demand}
+%\Parameter{Some parameter}
+\KwOut{startingHours}    
+
+\SetKwData{Left}{left}
+\SetKwData{This}{this}
+\SetKwData{Up}{up}
+\SetKwFunction{Union}{Union}
+\SetKwFunction{FindCompress}{FindCompress}
+startingHours $\leftarrow$ $\emptyset$ \\
+\ForEach{$<gene, index>$ $\in$ $getChromosome(individual)$}{
+range $\leftarrow$ $demand_{index}$ \\
+startingHour $\leftarrow$ 0 \\
+\If{gene $<$ 0.2}{\label{lt}
+range $\leftarrow$ $\ceil*{0.8 \times nNurses}$ \\
+startingHour $\leftarrow$ $(int)$(range $\times$ gene) \\ 
 }
-cost $\leftarrow$ computeObjectiveFunctionCost(solution)\\
-$\textbf{return}$ <solution,cost>
-\caption{Decoder}\label{alg.mainLoop}
+startingHours.add(startingHour) \\
+}
+$\textbf{return}$ startingHours
+\caption{computeStartingHours}\label{alg.mainLoop}
 \end{algorithm}
 
 
