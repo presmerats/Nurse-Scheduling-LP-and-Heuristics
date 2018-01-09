@@ -117,7 +117,10 @@ def buildCharts(parameters_list, name):
     best_values = {}
 
     for elem in parameters_list:
-        #print(elem["name"])
+        print(elem["name"])
+        if elem["name"] == "generation":
+            pp.pprint(elem)
+
         elem["results"] = sorted(elem["results"], key=lambda k: k['paramval'])
 
         bestvalue = elem["results"][0]["paramval"]
@@ -241,8 +244,8 @@ def parsefile(fileobject, parameters_list, parameter, filename):
     paramval = extractParameterValue(parameter, filename)
 
 
-    if parameter == "generation" and not (paramval in [5,10 ,15 ,20 ]):
-        return 
+    # if parameter == "generation" and not (paramval in [5,10 ,15 ,20 ]):
+    #     return 
 
 
 
@@ -307,7 +310,7 @@ if __name__ == '__main__':
     for root, dirs, files in os.walk("."):
         
         for folder in dirs:
-            # print(folder)
+            print(folder)
             parameter = folder
             parameter_results = {
                 'name': parameter,

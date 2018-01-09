@@ -73,41 +73,48 @@ For the parameters of the BRKGA algorithm, we have tested the number of generato
 
 \subsubsection{Comparative results of meta-heuristics performance}
 
-Choosing the best performing parameter setup of the two models, we performed a comparison of how objective function evolves in relation to time.
-
-The output of the parameter selection experiments is the following: 
-
-
-\begin{tabular}{ll}
-GRASP &  BRKGA \\
- $\alpha$ = 0.25  &  $generations$ = 12 \\
- $maxIterations$ = 10 &  $population$ = 200 \\
- $failedIterations$ = 4 & $inheritance$ = 0.8 \\
- 						&  $eliteprop$ = 0.1 \\
- 						& $mutantprop$ = 0.15 \\
-
-
-\end{tabular}
 
 Finally, we execute the same problem instance from the large set with both GRASP and BRKGA models. The selected problem instance is the following: \textbf{i-ng-60-4096-2560-24h-16mxP-4mxc-10mxH-1mnH-3Cnt-20180109\_08-04-50394.dat }
 
 
+\begin{table}[h!]
+  \centering
+  \begin{tabular}{ m{5cm}  c   }
 
-\begin{figure}[h!]
-\centering
-\begin{subfigure}[b]{.8\linewidth}
-\centering
-\includegraphics[width=0.7\linewidth]{./img/metah_comparison_objfunc.png}
-\caption{ Plot of the evolution of objective function values of the GRASP and BRKGA models for the same instance prolbem. }\label{fig1a}
-\end{subfigure}%
-% \begin{subfigure}[b]{.49\linewidth}
-% \centering
-% \includegraphics[width=\linewidth]{./img/instances_hours_ilp_evol.png}
-% \caption{ Evolution of Gap of the ILP model with different number of hours }\label{fig1b}
-% \end{subfigure}\vfill
-% \caption{Evolution of Gap of the ILP model with different values of number of nurses (\subref{fig1a}) and number of hours (\subref{fig1b}). }
-\label{meta_comparison}
-\end{figure}
+  	\textbf{GRASP}
+	\begin{itemize}
+		\item $\alpha$ = 0.25
+		\item $maxIterations$ = 10
+		\item $failedIterations$ = 4
+	\end{itemize}
+
+	\textbf{BRKGA}
+	\begin{itemize}
+		\item $generations$ = 12
+		\item $population$ = 200
+		\item $inheritance$ = 0.8 
+		\item $eliteprop$ = 0.1
+		\item $mutantprop$ = 0.15
+	\end{itemize}
+
+
+	&
+
+  	\begin{minipage}{\textwidth}
+	%\begin{figure}[h!]
+	%\centering
+	\begin{subfigure}[b]{.8\linewidth}
+	%\centering
+	\includegraphics[width=0.8\linewidth]{./img/metah_comparison_objfunc.png}
+	\end{subfigure}
+	\end{minipage}
+
+
+	 \\
+
+  \end{tabular}
+  \captionof{figure}{Objective function evolution by GRASP and BRKGA models using the best parameter setup.}\label{meta_comparison}
+\end{table}
 
 
 In the figure~\ref{meta_comparison} we observe that it takes the GRASP almost two more hours than BRKGA to finish. However, it finds a better local optimum (3190) than BRKGA(3209), except that both models find a local optimum around 3200 and the optimum is 2560.
