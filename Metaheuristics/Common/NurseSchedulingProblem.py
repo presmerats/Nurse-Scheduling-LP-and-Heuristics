@@ -6,6 +6,10 @@ Created on Mon Jan  1 21:07:25 2018
 """
 import pprint
 import logging
+import time
+from datetime import datetime
+import os
+import json
 
 printlog = False
 printlog2 = False
@@ -913,3 +917,57 @@ def checkIfMustWork_fast(solution, h, n, data, sumW, canWork_check, checkers,hin
         return canWork_check
 
     return False
+
+
+class Writelog():
+
+    """
+    # log name: data-solver-instance
+
+    # format:
+        [
+            {'objf': objf, 'time': time, 'diversity': diversity},
+            {'objf': objf, 'time': time, 'diversity': diversity},
+            {'objf': objf, 'time': time, 'diversity': diversity}
+        ]
+    """
+
+    def __init__(self, solver, instance,):
+        self.solver = solver
+        thedate = '{0:%Y%m%d_%H-%M-%S}'.format(datetime.now())
+        self.filename = thedate + "-" + solver + "-" + instance
+        self.filename = os.path.join('..','..','Results','Final','GRASPvsBRKGA', self.filename)
+
+        t = time.time()
+        step = {
+            'objf': -1,
+            'time': t,
+            'diversity': 0
+        }
+
+        with open(self.filename,'a+') as logfile:
+            logfile.write("[" + json.dumps(step) + ",\n")
+    
+
+    def update(self, objf, diversity=0 ):
+
+        self.solver
+        self.filename
+        objf
+        t = time.time()
+        diversity
+
+        step = {
+            'objf': objf,
+            'time': t,
+            'diversity': diversity
+        }
+
+        with open(self.filename,'a+') as logfile:
+            logfile.write(json.dumps(step) + ",\n")
+
+
+    def finish(self):
+        with open(self.filename,'a+') as logfile:
+            logfile.write("{\"end\":\"end\"}]\n")
+ 

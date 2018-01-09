@@ -19,7 +19,8 @@ def brkga_run(data,
               mutantprop=None,
               population=None,
               inheritance=None,
-              decoder="hexcess"):
+              decoder="hexcess",
+              logger=None):
 
     # params
     #   - num generations
@@ -76,7 +77,10 @@ def brkga_run(data,
     i = 0
     while (i<maxNumGen):
         population = decoder.decode(population,data)
-        evol.append(brkga.getBestFitness(population)['fitness'])
+        bestfitness = brkga.getBestFitness(population)['fitness']
+        if logger:
+            logger.update(bestfitness, decoder.diversity(population)/len(population))
+        evol.append(bestfitness)
         print(evol[-1])
         if numElite>0:
             elite, nonelite = brkga.classifyIndividuals(population,numElite)
@@ -99,6 +103,9 @@ def brkga_run(data,
     print('Fitness: ', bestIndividual['fitness'])
     # pp.pprint(bestIndividual.keys())
     # pp.pprint(bestIndividual['solution'].keys())
+    if logger:
+        logger.update(bestIndividual['fitness'])
+        logger.finish()
     return bestIndividual["solution"]
 
 if __name__ == '__main__':

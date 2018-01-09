@@ -357,7 +357,7 @@ def updateCost(s, data):
 
 
 
-def firstImprovementLocalSearch(solution, data):
+def firstImprovementLocalSearch(solution, data, logger):
     # first improvement Local search: looks for new sols while improves
 
     # computes and stores the exceeding capacity
@@ -461,6 +461,8 @@ def firstImprovementLocalSearch(solution, data):
                 # then compute and print again
 
                 updateCost(s, data)
+                if logger:
+                    logger.update(s["cost"],0)
 
                 # print("after computing new z")
                 # print(s["z"])
@@ -543,12 +545,12 @@ def firstImprovementLocalSearch(solution, data):
 
 
 
-def firstImprovementLocalSearch_intensive(incumbent, maxFailed, data):
+def firstImprovementLocalSearch_intensive(incumbent, maxFailed, data, logger=None):
 
     failed_iterations = 0
     while failed_iterations < maxFailed:
 
-        solution2 = firstImprovementLocalSearch(incumbent, data)
+        solution2 = firstImprovementLocalSearch(incumbent, data, logger)
         
         if solution2["cost"] >= incumbent["cost"]:
             print("     Searching, Cost=" +

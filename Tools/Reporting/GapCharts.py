@@ -22,6 +22,9 @@ def buildGapChart(data, name, namei):
 
     #colors = ['b', 'g', 'r', 'c', 'm', 'y', 'k', 'w']
     colors = [
+        'xkcd:orange',
+        'xkcd:royal blue',
+        'xkcd:forest green',
         'xkcd:green',
         'xkcd:purple',
         'xkcd:blue',
@@ -30,9 +33,8 @@ def buildGapChart(data, name, namei):
         'xkcd:red',
         'xkcd:light blue',
         'xkcd:teal',
-        'xkcd:orange',
         'xkcd:light green',
-        'xkcd:magenta',
+        'xkcd:magent',
         'xkcd:yellow',
         'xkcd:sky blue',
         'xkcd:grey',
@@ -41,16 +43,38 @@ def buildGapChart(data, name, namei):
         'xkcd:dark green',
         'xkcd:olive',
         'xkcd:dark purple',
-        'xkcd:forest green',
+        
         'xkcd:tan',
-        'xkcd:royal blue',
+        
         'xkcd:black',
         'xkcd:beige',
         'xkcd:peach',
         'xkcd:indigo',
         'xkcd:mustard'
     ]
-    i = 0
+
+    markers = [
+        '+',
+        ',',
+        '^',
+        '.',
+        'v',
+        's',
+        'd',
+        'o',
+    ]
+
+    lss = [
+        ':',
+        '-.',
+        '--',
+        '-',
+    ]
+
+
+
+    data_names = []
+
     for k, v in data.items():
 
         filename = k
@@ -58,14 +82,40 @@ def buildGapChart(data, name, namei):
         mylabel = subnames[3]
         if namei is not None:
             mylabel = subnames[int(namei)]
-        
 
+        data_names.append(mylabel)
+
+    data_names = sorted(data_names, 
+                        key=lambda k: float(k))
+
+    i = 0
+    for k in data_names:
+
+        found = False
+        for key in data.keys():
+            if key.find(k)>-1:
+                v = data[key]
+                found = True
+                break        
+
+        if not found:
+            print("not found!")
+            continue
+        
+        mylabel = k
         gap = v['gap']
 
         j = i % len(colors)
         thecolor = colors[j]
 
-        plt.plot(range(len(gap)),gap, marker='+', color=thecolor, ls='-', label=mylabel)
+        j = i % len(markers)
+        themarker = markers[j]
+
+        j = i % len(lss)
+        thels = lss[j]
+
+        mylabel = mylabel+" nurses"
+        plt.plot(range(len(gap)),gap, marker=themarker, color=thecolor, ls=thels, label=mylabel)
 
         #plt.bar(range(len(y)),y, align='center')
         #plt.xticks(range(len(x)),x)
@@ -79,13 +129,8 @@ def buildGapChart(data, name, namei):
     plt.xlabel('Steps')
     plt.ylabel('Gap(%)')
 
-    handles, labels = ax.get_legend_handles_labels()
-    hl = sorted(zip(handles, labels),
-                key=lambda x: float(str(x[1])) )
-
-    handles2, labels2 = zip(*hl)
-    print(labels2)
-    ax.legend(handles2, labels2, loc='upper right', fontsize='small')
+    
+    ax.legend(loc='upper right', fontsize='medium')
 
 
 
@@ -104,101 +149,103 @@ def buildGapChart(data, name, namei):
     plt.close()
 
 
-def buildChart(data, name, gap):
-    """
-        data = {
-        'bi' : [],
-        'bb' :[]
-        }
-    """
+# def buildChart(data, name, gap):
+#     """
+#         data = {
+#         'bi' : [],
+#         'bb' :[]
+#         }
+#     """
     
 
 
-    # plot 
-    fig, ax = plt.subplots() 
+#     # plot 
+#     fig, ax = plt.subplots() 
 
-    #colors = ['b', 'g', 'r', 'c', 'm', 'y', 'k', 'w']
-    colors = [
-        'xkcd:green',
-        'xkcd:purple',
-        'xkcd:blue',
-        'xkcd:pink',
-        'xkcd:brown',
-        'xkcd:red',
-        'xkcd:light blue',
-        'xkcd:teal',
-        'xkcd:orange',
-        'xkcd:light green',
-        'xkcd:magent',
-        'xkcd:yellow',
-        'xkcd:sky blue',
-        'xkcd:grey',
-        'xkcd:lime green',
-        'xkcd:violet',
-        'xkcd:dark green',
-        'xkcd:olive',
-        'xkcd:dark purple',
-        'xkcd:forest green',
-        'xkcd:tan',
-        'xkcd:royal blue',
-        'xkcd:black',
-        'xkcd:beige',
-        'xkcd:peach',
-        'xkcd:indigo',
-        'xkcd:mustard'
-    ]
-    i = 0
-    for k, v in data.items():
+#     #colors = ['b', 'g', 'r', 'c', 'm', 'y', 'k', 'w']
+#     colors = [
+#         'xkcd:orange',
+#         'xkcd:royal blue',
+#         'xkcd:forest green',
+#         'xkcd:green',
+#         'xkcd:purple',
+#         'xkcd:blue',
+#         'xkcd:pink',
+#         'xkcd:brown',
+#         'xkcd:red',
+#         'xkcd:light blue',
+#         'xkcd:teal',
+#         'xkcd:light green',
+#         'xkcd:magent',
+#         'xkcd:yellow',
+#         'xkcd:sky blue',
+#         'xkcd:grey',
+#         'xkcd:lime green',
+#         'xkcd:violet',
+#         'xkcd:dark green',
+#         'xkcd:olive',
+#         'xkcd:dark purple',
+        
+#         'xkcd:tan',
+        
+#         'xkcd:black',
+#         'xkcd:beige',
+#         'xkcd:peach',
+#         'xkcd:indigo',
+#         'xkcd:mustard'
+#     ]
+#     i = 0
+#     for k, v in data.items():
 
-        filename = k
-        subnames = filename.split("-")
-        mylabel = subnames[3]
+#         filename = k
+#         subnames = filename.split("-")
+#         mylabel = subnames[3]
         
 
-        bi = v['bi']
-        bb = v['bb']
+#         bi = v['bi']
+#         bb = v['bb']
 
-        j = i % len(colors)
-        thecolor = colors[j]
+#         j = i % len(colors)
+#         thecolor = colors[j]
 
-        plt.plot(range(len(bi)),bi, marker='.', color=thecolor, ls='-', label=mylabel)        
-        plt.plot(range(len(bb)),bb, marker='.', color=thecolor, ls='-', label=mylabel )
-
-
-
-        #plt.bar(range(len(y)),y, align='center')
-        #plt.xticks(range(len(x)),x)
-
-        #plt.xticks(rotation='vertical')
-        #plt.xticks(rotation=45, ha='right')
-
-        i +=1
-
-    handles, labels = ax.get_legend_handles_labels()
-    hl = sorted(zip(handles, labels),
-                key= lambda x: float(operator.itemgetter(1)[:-1]) )
-
-    handles2, labels2 = zip(*hl)
-    print(labels2)
-    ax.legend(handles2, labels2, loc='upper right', fontsize='small')
-
-    plt.xlabel('Steps( gap =' +  str(gap) + ')')
-    plt.ylabel('Best Integer/Bound')
+#         plt.plot(range(len(bi)),bi, marker='.', color=thecolor, ls='-', label=mylabel)        
+#         plt.plot(range(len(bb)),bb, marker='.', color=thecolor, ls='-', label=mylabel )
 
 
 
-    #fig.subplots_adjust(bottom=0.9)
-    fig.tight_layout()
-    #plt.axis([0, len(results), 0, max(y)])
+#         #plt.bar(range(len(y)),y, align='center')
+#         #plt.xticks(range(len(x)),x)
 
-    # plt.savefig(pp, format='pdf')
-    # pp.close()
+#         #plt.xticks(rotation='vertical')
+#         #plt.xticks(rotation=45, ha='right')
 
-    plt.savefig('../graphs/' + name  + '.png')
+#         i +=1
 
-    plt.show()
+#     handles, labels = ax.get_legend_handles_labels()
+#     hl = sorted(zip(handles, labels),
+#                 key= lambda x: float(operator.itemgetter(1)[:-1]) )
 
-    plt.close()
+#     handles2, labels2 = zip(*hl)
+#     print(labels2)
+#     ax.legend(handles2, labels2, loc='upper right', fontsize='small')
+
+#     plt.xlabel('Steps( gap =' +  str(gap) + ')')
+#     plt.ylabel('Best Integer/Bound')
+
+
+
+#     #fig.subplots_adjust(bottom=0.9)
+#     fig.tight_layout()
+#     #plt.axis([0, len(results), 0, max(y)])
+
+#     # plt.savefig(pp, format='pdf')
+#     # pp.close()
+
+#     plt.savefig('../graphs/' + name  + '.png')
+
+#     plt.show()
+
+#     plt.close()
 
 
 

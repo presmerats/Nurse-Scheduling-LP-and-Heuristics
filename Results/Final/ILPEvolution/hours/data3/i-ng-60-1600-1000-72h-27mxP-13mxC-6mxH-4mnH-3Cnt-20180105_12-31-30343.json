@@ -1,0 +1,6 @@
+[
+{ "/home/homero/localgoogledrive/MIRI-DS/AMMM-Project/Results/Final/ILPEvolution/hours/extra/i-ng-60-1600-1000-72h-27mxP-13mxC-6mxH-4mnH-3Cnt-20180105_12-31-30343.dat" : {"expected_output" : "SUCCESS",
+"computed_output" : "false",
+"desired_objfunc" : "1",
+"Data" : "maxConsec = 13;\nmaxPresence = 27;\nmaxHours = 6;\nminHours = 4;\nhours = 72;\ndemand = [751 1000 1000 762 742 507 238 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\n         0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\n         0 0 0 0 0 0 0 0 0 0 0 0 0 0];\nnNurses = 1600;\n"
+}},

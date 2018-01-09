@@ -141,6 +141,8 @@ def run(instancepath, solverType,
     # pass a set of params **kargvs
     # pass the results folder path
 
+    wlog = Writelog(solverType, os.path.basename(instancepath))
+
     data = readInstance(instancepath)
     # pp.pprint(data)
     # exit()
@@ -153,7 +155,8 @@ def run(instancepath, solverType,
                          alpha=grasp_alpha,
                          iterations=grasp_iterations,
                          lstype=grasp_lstype,
-                         lsiterations=grasp_lsiterations)
+                         lsiterations=grasp_lsiterations,
+                         logger=wlog)
     elif solverType == "brkga":
         solution = brkga_run(data,
                              generations=brkga_generations,
@@ -161,7 +164,8 @@ def run(instancepath, solverType,
                              mutantprop=brkga_mutantprop,
                              population=brkga_population,
                              inheritance=brkga_inheritance,
-                             decoder=brkga_decoder)
+                             decoder=brkga_decoder,
+                             logger=wlog)
     
     else:
         print('You need to define a solving method: grasp or brkga')
