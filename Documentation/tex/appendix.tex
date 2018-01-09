@@ -1,0 +1,40 @@
+\appendix
+\section{Appendices}
+\thispagestyle{empty}
+\subsection{Running the launcher}
+
+To solve instances of the problem with the models run, from ./Tools/Launcher:
+
+For ILP (calls oplrun from commandline) python launcher.py --solver ILP
+
+For GRASP python launcher.py --solver grasp For BRKGA
+
+python launcher.py --solver brkga
+
+These commands solve all instances from the default folder ./Instances/Pending and save the results in a json format to ./Results/Pending Options:
+
+Instances folder and results folder (paths must be relative to ./Tools/Launcher) : python launcher.py --solver grasp --instances ../../Instances/Final/MediumSet --results ../../Results/Final/MediumSet
+
+GRASP parameters: python launcher.py --solver grasp --iterations 5 --alpha 0.15 --ls best
+
+BRKGA parameters: python launcher.py --solver brkga --generations 1 --eliteprop 0.3 --mutantprop 0.2 --population 2 --inheritance 0.1 --decoder <hini,horder,hexcess>
+
+\subsection{Parameter validation (LargeSet)}
+
+$ cd Tools/Launcher python megalauncher_grasp.py ../../Instances/Final/LargeSet_20180106/$
+
+Quick demo of the files and dirs created in ../../Results/Final/LargeSet\_20180103/. It does not execute any solver, just time.sleep(0.5) cd Tools/Launcher python megalauncher.py --demo ../../Instances/Final/LargeSet
+
+Real execution cd Tools/Launcher python megalauncher.py ../../Instances/Final/LargeSet See results in ../../Results/Final/LargeSet\_20180103/ See progress files in ../../Results/Progress/
+
+\subsubsection{Other options}
+
+Other options that can be used are to use the ./Metaheuristics/main.py file from it's 'main' section, calling any of the "entry points" of the Metaheuristics algorithms.
+
+\subsection{Reporting}
+
+mediumSetGraph.py, takes all json files in a folder and creates 2 graphs, one comparing the solving times for differents instances for the 3 algorithms (ILP, GRASP and BRKGA). It expects to find json files with results from executions of the 3 algorithms in the indicated folder: python mediumSetGraph.py ../../Results/MediumSet
+
+summary\_of\_executions.py, example file that reads json results files from a folder and plots all the resutls in a graph
+
+classifier.py script used to organize the executions of instances by the ILP, it saves the instances files (.dat) to the Instances/Final/ with a name that reflects the time it takes for the ILP to solve it.
