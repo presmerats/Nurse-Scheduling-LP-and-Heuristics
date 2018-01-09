@@ -12,7 +12,7 @@ Recapping, the greedy algorithm is based on the idea to bring for every candidat
 
 This means that the gens are affecting to the position of the hours to fulfill in the assignment phase. Once we have all the hours sorted, the first one is picked. Notice that the decoder is deterministic. The randomness in BRKGA is not in the greedy part but in the generation of mutants.
 
-diversify by excess of assignments per hour
+The essential idea of the decoder algorithm described in $Algorithm$ $5$ is to diversify the solution by using the excess of nurses assignments per hour. To do so, the decoder starts by looping over each individual in the population (line 1), then compute the starting hours to fulfill demand for the individual (see $Algorithm$ $6$), and creating a solution which starts assigning nurses to hours using the computed starting hours (line 3). As said, this is repeated until all the individuals in the population have been iterated and then a fully valid solution has been built. Finally the population with the calculated assignments per individual and their fitness is returned.
 
 \begin{algorithm}[H]
 \KwIn{population, nNurses, hours, demand}
@@ -34,6 +34,8 @@ fitness $\leftarrow$ computeObjectiveFunctionCost(solution)\\
 $\textbf{return}$ population
 \caption{BRKGA Decoder algorithm}\label{alg.mainLoop}
 \end{algorithm}
+
+As illustrated in $Algorithm$ $6$, the function to compute the starting hours goes as follows: the function receives as input an individual, the number of nurses available in the problem instance, the hours (number of hours for the schedule) and the demands per hour. In the line 1, the algorithm starts by initializing the startingHours set to be empty, then, for each gene in the individual chromosome (line 2). Then, to compute the initial range of starting hours, we use the demanded nurses at the hour with the index corresponding to the index of the currently iterated gene. In the case that the gene value is less than 0.2 (line 5), which in a uniformly distributed context happens the 20\% of the times. On this case the range is going to be the 80\% of the total number of nurses (line 6). After this the candidate starting hour is finally computed (line 7) by multiplying the range by the gene value, taking the result as an integer value (line 7). This value represents an starting hour. Finally the starting hour is appended to the startingHours array (line 9). This whole calculation process is repeated while the chromosome has not yet been fully traversed (loop of line 2). At the end, the array with the order which will be used in order to fulfill the demands (startingHours) is returned as output (line 11).
 
 \begin{algorithm}[H]
 \KwIn{individual, nNurses, hours, demand}
